@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProjectHub.Data;
+using ProjectHub.Data.Models;
 
 namespace ProjectHub
 {
@@ -21,21 +22,21 @@ namespace ProjectHub
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddDbContext<ApplicationDbContext>(options => options
+                .AddDbContext<ProjectHubDbContext>(options => options
                     .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services
                 .AddDatabaseDeveloperPageExceptionFilter();
 
             services
-                .AddDefaultIdentity<IdentityUser>(options =>
+                .AddDefaultIdentity<User>(options =>
                 {
                     options.Password.RequireDigit = true;
                     options.Password.RequireLowercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                 })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ProjectHubDbContext>();
 
             services
                 .AddControllersWithViews();
