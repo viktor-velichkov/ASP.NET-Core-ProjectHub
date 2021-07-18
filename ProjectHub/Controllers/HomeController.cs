@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using ProjectHub.Data;
 using ProjectHub.Models;
 using System;
 using System.Collections.Generic;
