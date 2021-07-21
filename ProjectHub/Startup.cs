@@ -41,6 +41,9 @@ namespace ProjectHub
 
             services
                 .AddControllersWithViews();
+
+            services.AddScoped(typeof(PasswordHasher<ApplicationUser>));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,7 +63,7 @@ namespace ProjectHub
             }
             app
                 .UseHttpsRedirection()
-                .UseStaticFiles()                
+                .UseStaticFiles()
                 .UseRouting()
                 .UseAuthentication()
                 .UseAuthorization()
@@ -70,7 +73,7 @@ namespace ProjectHub
                      endpoints.MapRazorPages();
                  });
 
-            
+
         }
     }
 }

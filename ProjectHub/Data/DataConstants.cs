@@ -18,6 +18,9 @@ namespace ProjectHub.Data
         public const int UserTypeNameMinLength = 3;
         public const int UserTypeNameMaxLength = 20;
 
+        public const int PasswordMinLength = 8;
+        public const int PasswordMaxLength = 20;
+
         public const int WebSiteAddresMinLength = 7;
         public const int WebSiteAddresMaxLength = 50;
 
