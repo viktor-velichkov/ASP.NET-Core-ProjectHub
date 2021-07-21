@@ -60,10 +60,10 @@ namespace ProjectHub
             }
             app
                 .UseHttpsRedirection()
-                .UseStaticFiles()
-                .UseAuthorization()
+                .UseStaticFiles()                
                 .UseRouting()
                 .UseAuthentication()
+                .UseAuthorization()
                 .UseEndpoints(endpoints =>
                  {
                      endpoints.MapDefaultControllerRoute();

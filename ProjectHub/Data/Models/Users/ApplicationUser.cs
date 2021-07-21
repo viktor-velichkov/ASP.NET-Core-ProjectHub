@@ -8,16 +8,18 @@ namespace ProjectHub.Data.Models
 
     public class ApplicationUser : IdentityUser<int>
     {
-        public string UserType { get; set; }
+        [ForeignKey(nameof(UserType))]
+        public int UserTypeId { get; set; }
+        public UserType UserType { get; set; }
 
-        [Required]
+        
         public string ImageUrl { get; set; }
 
-        [Required]
+        
         [MaxLength(DataConstants.UserFirstNameMaxLength)]
         public string FirstName { get; set; }
 
-        [Required]
+        
         [MaxLength(DataConstants.UserLastNameMaxLength)]
         public string LastName { get; set; }
 
@@ -27,7 +29,7 @@ namespace ProjectHub.Data.Models
         [MaxLength(DataConstants.DescriptionMaxLength)]
         public string Description { get; set; }
 
-        [Required]
+        
         [MaxLength(DataConstants.WebSiteAddresMaxLength)]
         public string WebSite { get; set; }
 

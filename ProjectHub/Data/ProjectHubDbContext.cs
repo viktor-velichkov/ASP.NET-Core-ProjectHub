@@ -8,7 +8,8 @@ namespace ProjectHub.Data
 {
     public class ProjectHubDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
-       public DbSet<Activity> Activities { get; set; }
+        public DbSet<UserType> UserTypes { get; set; }
+        public DbSet<Activity> Activities { get; set; }
 
         public DbSet<Discipline> Disciplines { get; set; }
 
