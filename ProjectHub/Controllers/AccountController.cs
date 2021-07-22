@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.Data;
@@ -11,16 +12,22 @@ namespace ProjectHub.Controllers
     public class AccountController : Controller
     {
         private readonly ProjectHubDbContext data;
-        private readonly PasswordHasher<ApplicationUser> passwordHasher;
 
-        public AccountController(ProjectHubDbContext data, PasswordHasher<ApplicationUser> passwordHasher)
+        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly UserManager<ApplicationUser> userManager;
+
+
+
+        public AccountController(ProjectHubDbContext data,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
             this.data = data;
-            this.passwordHasher = passwordHasher;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
-        [HttpGet]
-        public IActionResult Register()             
+        public IActionResult Register()
         {
             var userTypes = GetUserTypes();
             return View(new UserRegisterFormModel
@@ -30,39 +37,63 @@ namespace ProjectHub.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(UserRegisterFormModel user)
+        public async Task<IActionResult> Register(UserRegisterFormModel user)
         {
-            if (!this.data.UserTypes.Any(ut=>ut.Id.Equals(user.UserTypeId)))
+            if (!this.data.UserTypes.Any(ut => ut.Id.Equals(user.UserTypeId)))
             {
-                this.ModelState.AddModelError(nameof(user.UserTypeId),ValidationErrorMessages.InvalidUserTypeMessage);
+                this.ModelState.AddModelError(nameof(user.UserTypeId), ValidationErrorMessages.InvalidUserTypeMessage);
             }
 
             if (!ModelState.IsValid)
             {
                 user.UserTypes = GetUserTypes();
-
-                //var selectedUserType = this.data.UserTypes.FirstOrDefault(ut => ut.Id.Equals(user.UserTypeId));
-
-                //user.UserTypes.ToList().Add(new UserTypeRegisterFormModel
-                //{
-                //    Id = selectedUserType.Id,
-                //    Name = selectedUserType.Name
-                //});
+                               
 
                 return View(user);
             }
 
             var newUser = new ApplicationUser
             {
+                UserName = user.Email,
                 Email = user.Email,
                 UserTypeId = user.UserTypeId
             };
 
-            newUser.PasswordHash = this.passwordHasher.HashPassword(newUser, user.Password);
+            await userManager.CreateAsync(newUser, user.Password);
 
-            this.data.Users.Add(newUser);
+            return RedirectToAction("Index", "Home");
+        }
 
-            this.data.SaveChanges();
+        public IActionResult Login() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> Login(UserLoginViewModel user)
+        {
+            var userDb = this.data.Users.FirstOrDefault(u => u.Email.Equals(user.Email));
+
+            if (userDb == null)
+            {
+                this.ModelState.AddModelError(nameof(user), ValidationErrorMessages.UserInvalidEmailGivenMessage);
+            }
+
+            var passwordMatch = ((int)this.userManager.PasswordHasher.VerifyHashedPassword(userDb, userDb.PasswordHash, user.Password));// != 0;
+
+            if (passwordMatch == 0)
+            {
+                this.ModelState.AddModelError(nameof(user), ValidationErrorMessages.UserInvalidPasswordGivenMessage);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(user);
+            }
+
+            if (userDb.UserName != user.Email)
+            {
+                return View(user);
+            }
+
+            await signInManager.SignInAsync(userDb, user.RememberMe);
 
             return RedirectToAction("Index", "Home");
         }

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using ProjectHub.Data;
 using ProjectHub.Data.Models;
 using ProjectHub.Infrastructure;
+using ProjectHub.Models.User;
 
 namespace ProjectHub
 {
@@ -42,7 +43,10 @@ namespace ProjectHub
             services
                 .AddControllersWithViews();
 
-            services.AddScoped(typeof(PasswordHasher<ApplicationUser>));
+            services
+                .AddScoped(typeof(UserManager<ApplicationUser>));
+            services
+                .AddScoped(typeof(SignInManager<ApplicationUser>));
 
         }
 
