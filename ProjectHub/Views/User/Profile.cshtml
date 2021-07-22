@@ -1,9 +1,11 @@
 ﻿<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-@*<link rel="stylesheet" href="~/css/profile_page.css" />*@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
+@{
+    ViewData["Title"] = "Profile";
+}
 
 <div class="container emp-profile">
     <form method="post">
@@ -17,7 +19,7 @@
                     <input type="submit" class="btn btn-primary" value="Edit Profile" style="margin-bottom: 15px; margin-top: 15px;" />
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div class="profile-head">
                     <h5>
                         Kshiti Ghelani
@@ -34,18 +36,35 @@
         </div>
         <div class="row">
             <div class="col-md-4">
-                <div class="profile-work">
-                    <p>WORK LINK</p>
-                    <a href="">Website Link</a><br />
-                    <a href="">Bootsnipp Profile</a><br />
-                    <a href="">Bootply Profile</a>
-                    <p />
-                    <p>SOCIAL LINKS</p>
-                    <ul class="social-links list-inline">
-                        <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Facebook"><i class="fa fa-facebook fa-2x"></i></a></li>
-                        <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Twitter"><i class="fa fa-linkedin fa-2x" aria-></i></a></li>
-                        <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Skype"><i class="fa fa-skype fa-2x"></i></a></li>
-                    </ul>
+                <div class="left">
+                    <div class="profile-work">
+                        <p>WORK LINK</p>
+                        <a href="">Website Link</a><br />
+                        <a href="">Bootsnipp Profile</a><br />
+                        <a href="">Bootply Profile</a>
+                        <p />
+                        <p>SOCIAL LINKS</p>
+                        <ul class="social-links list-inline">
+                            <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Facebook"><i class="fa fa-facebook fa-2x"></i></a></li>
+                            <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Twitter"><i class="fa fa-linkedin fa-2x" aria-></i></a></li>
+                            <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Skype"><i class="fa fa-skype fa-2x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col">
+                            Column
+                        </div>
+                        <div class="col">
+                            Column
+                        </div>
+                        <div class="col">
+                            Column
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

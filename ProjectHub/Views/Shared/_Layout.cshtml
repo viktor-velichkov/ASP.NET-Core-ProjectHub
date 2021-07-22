@@ -30,13 +30,14 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
+    <main class="flex-shrink-0">
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    </main>
+    <footer class="footer mt-auto py-3 bg-light" style="position: relative;">
         <div class="container">
             &copy; 2021 - ProjectHub - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
