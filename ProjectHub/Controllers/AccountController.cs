@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.Data;
+using ProjectHub.Data.Factories;
 using ProjectHub.Data.Models;
 using ProjectHub.Models.User;
 
@@ -47,7 +49,7 @@ namespace ProjectHub.Controllers
             if (!ModelState.IsValid)
             {
                 user.UserTypes = GetUserTypes();
-                               
+
 
                 return View(user);
             }
@@ -59,7 +61,13 @@ namespace ProjectHub.Controllers
                 UserTypeId = user.UserTypeId
             };
 
+            
+
             await userManager.CreateAsync(newUser, user.Password);
+
+            CreateUserTypeEntityRecord(this.data.UserTypes.FirstOrDefault(ut => ut.Id.Equals(user.UserTypeId)), newUser.Id);
+
+            this.data.SaveChanges();
 
             return RedirectToAction("Index", "Home");
         }
@@ -108,5 +116,26 @@ namespace ProjectHub.Controllers
                         Name = ut.Name
                     })
                     .ToList();
+
+        private void CreateUserTypeEntityRecord(UserType userType, int userId)
+        {
+            switch (userType.Name)
+            {
+                case "Investor":
+                    this.data.Investors.Add(new Investor { UserId = userId });
+                    break;
+                case "Designer":
+                    this.data.Designers.Add(new Designer { UserId = userId });
+                    break;
+                case "Manager":
+                    this.data.Managers.Add(new Manager { UserId = userId });
+                    break;
+                case "Contractor":
+                    this.data.Contractors.Add(new Contractor { UserId = userId });
+                    break;
+                default:
+                    throw new ArgumentException(ValidationErrorMessages.InvalidUserTypeMessage);
+            }
+        }
     }
 }

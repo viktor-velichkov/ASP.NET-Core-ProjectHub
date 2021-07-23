@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProjectHub.Data;
+using ProjectHub.Data.Factories;
 using ProjectHub.Data.Models;
 using ProjectHub.Infrastructure;
 using ProjectHub.Models.User;
@@ -47,6 +48,7 @@ namespace ProjectHub
                 .AddScoped(typeof(UserManager<ApplicationUser>));
             services
                 .AddScoped(typeof(SignInManager<ApplicationUser>));
+            
 
         }
 

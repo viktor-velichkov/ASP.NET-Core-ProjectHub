@@ -59,7 +59,7 @@ namespace ProjectHub.Data.Models
 
         public ICollection<Discussion> Discussions => new HashSet<Discussion>();
 
-        public ICollection<Message> Messages { get; set; }
+        public ICollection<Message> Messages => new HashSet<Message>();
 
     }
 }

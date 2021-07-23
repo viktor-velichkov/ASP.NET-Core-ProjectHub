@@ -15,13 +15,11 @@ namespace ProjectHub.Data.Models
         public ApplicationUser User { get; set; }
 
         [ForeignKey(nameof(Discipline))]
-        public int DisciplineId { get; set; }
+        public int? DisciplineId { get; set; }
 
-        [Required]
         public Discipline Discipline { get; set; }
 
-        [Required]
-        public int WorkExperience { get; set; }
+        public int? WorkExperience { get; set; }
 
         public ICollection<ProjectDesigner> Projects { get; set; }
     }

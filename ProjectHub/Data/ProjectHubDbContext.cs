@@ -20,9 +20,13 @@ namespace ProjectHub.Data
         public DbSet<ProjectPosition> ProjectPositions { get; set; }
 
         public DbSet<Investor> Investors { get; set; }
+
         public DbSet<ProjectInvestor> ProjectInvestors { get; set; }
 
+        public DbSet<Manager> Managers { get; set; }
+
         public DbSet<Contractor> Contractors { get; set; }
+
         public DbSet<ProjectContractor> ProjectContractors { get; set; }
 
         public DbSet<Designer> Designers { get; set; }
@@ -118,6 +122,7 @@ namespace ProjectHub.Data
             builder.Entity<Offer>()
                    .Property(nameof(Offer.Price))
                    .HasColumnType("decimal");
+
         }
 
 
