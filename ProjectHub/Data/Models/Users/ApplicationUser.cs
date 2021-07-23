@@ -39,7 +39,16 @@ namespace ProjectHub.Data.Models
         [InverseProperty(nameof(Rate.Author))]
         public ICollection<Rate> RatesSent { get; set; }
 
+        [Url]
+        public string FacebookPage { get; set; }
         
+        [Url]
+        public string LinkedinPage { get; set; }
+        
+        [Url]
+        public string SkypeProfile { get; set; }
+
+
         public ICollection<Offer> Offers => new HashSet<Offer>();
 
         [InverseProperty(nameof(Review.Recipient))]
