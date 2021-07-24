@@ -2,12 +2,12 @@
 
 namespace ProjectHub.Data.Models
 {
-    public class UserType
+    public class UserKind
     {
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(DataConstants.UserTypeNameMaxLength)]
+        [MaxLength(DataConstants.UserKindNameMaxLength)]
         public string Name { get; set; }
 
     }

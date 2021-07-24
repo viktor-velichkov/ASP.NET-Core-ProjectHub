@@ -253,7 +253,7 @@ namespace ProjectHub.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("UserTypeId")
+                    b.Property<int>("UserKindId")
                         .HasColumnType("int");
 
                     b.Property<string>("WebSite")
@@ -270,7 +270,7 @@ namespace ProjectHub.Data.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("UserTypeId");
+                    b.HasIndex("UserKindId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -642,7 +642,7 @@ namespace ProjectHub.Data.Migrations
                     b.ToTable("UserDiscussions");
                 });
 
-            modelBuilder.Entity("ProjectHub.Data.Models.UserType", b =>
+            modelBuilder.Entity("ProjectHub.Data.Models.UserKind", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -656,7 +656,7 @@ namespace ProjectHub.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserTypes");
+                    b.ToTable("UserKinds");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -719,13 +719,13 @@ namespace ProjectHub.Data.Migrations
 
             modelBuilder.Entity("ProjectHub.Data.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("ProjectHub.Data.Models.UserType", "UserType")
+                    b.HasOne("ProjectHub.Data.Models.UserKind", "UserKind")
                         .WithMany()
-                        .HasForeignKey("UserTypeId")
+                        .HasForeignKey("UserKindId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("UserType");
+                    b.Navigation("UserKind");
                 });
 
             modelBuilder.Entity("ProjectHub.Data.Models.Contractor", b =>

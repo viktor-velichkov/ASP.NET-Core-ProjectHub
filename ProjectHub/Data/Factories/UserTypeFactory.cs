@@ -2,12 +2,12 @@
 
 namespace ProjectHub.Data.Factories
 {
-    public abstract class UserTypeFactory
+    public abstract class UserKindFactory
     {
-        private UserType userType;
+        private UserKind userType;
         internal int userId;
 
-        public UserTypeFactory(UserType userType, int userId)
+        public UserKindFactory(UserKind userType, int userId)
         {
             this.userType = userType;
             this.userId = userId;

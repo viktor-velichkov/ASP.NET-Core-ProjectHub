@@ -15,8 +15,8 @@ namespace ProjectHub.Data
         public const int UserLastNameMinLength = 3;
         public const int UserLastNameMaxLength = 20;
 
-        public const int UserTypeNameMinLength = 3;
-        public const int UserTypeNameMaxLength = 20;
+        public const int UserKindNameMinLength = 3;
+        public const int UserKindNameMaxLength = 20;
 
         public const int PasswordMinLength = 8;
         public const int PasswordMaxLength = 20;

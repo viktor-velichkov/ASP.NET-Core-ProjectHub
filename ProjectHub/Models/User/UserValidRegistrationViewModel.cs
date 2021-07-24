@@ -6,6 +6,6 @@
 
         public string Password { get; set; }
        
-        public int UserTypeId { get; set; }
+        public int UserKindId { get; set; }
     }
 }

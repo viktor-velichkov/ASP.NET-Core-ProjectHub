@@ -2,9 +2,9 @@
 
 namespace ProjectHub.Data.Factories
 {
-    public class ManagerFactory : UserTypeFactory
+    public class ManagerFactory : UserKindFactory
     {
-        public ManagerFactory(UserType userType, int userId) : base(userType, userId)
+        public ManagerFactory(UserKind userType, int userId) : base(userType, userId)
         {
         }
         public Manager Create()

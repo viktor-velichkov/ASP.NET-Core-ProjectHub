@@ -27,14 +27,14 @@
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UserTypeId"></label>
-                <select asp-for="UserTypeId" class="form-control">
-                    @foreach (var userType in Model.UserTypes)
+                <label asp-for="UserKindId"></label>
+                <select asp-for="UserKindId" class="form-control">
+                    @foreach (var userType in Model.UserKinds)
                     {
                         <option value="@userType.Id">@userType.Name</option>
                     }
                 </select>
-                <span asp-validation-for="UserTypeId" class="text-danger"></span>
+                <span asp-validation-for="UserKindId" class="text-danger"></span>
             </div>
             <button formmethod="post" type="submit" class="btn btn-primary" >Register</button>
         </form>

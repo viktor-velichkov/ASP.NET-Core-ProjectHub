@@ -1,4 +1,6 @@
-﻿<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+﻿@model UserProfileViewModel
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -14,10 +16,13 @@
                 <div class="profile-img">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" class="img-thumbnail" alt="" />
                 </div>
-                <div class="left">
-                    <input type="submit" class="btn btn-primary" value="Change Photo" style="margin-bottom: 15px; margin-top: 15px;" />
-                    <input type="submit" class="btn btn-primary" value="Edit Profile" style="margin-bottom: 15px; margin-top: 15px;" />
-                </div>
+                @if (Model.IsLoggedUser)
+                {
+                    <div class="left">
+                        <input type="submit" class="btn btn-primary" value="Change Photo" style="margin-bottom: 15px; margin-top: 15px;" />
+                        <input type="submit" class="btn btn-primary" value="Edit Profile" style="margin-bottom: 15px; margin-top: 15px;" />
+                    </div>
+                }
             </div>
             <div class="col-md-8">
                 <div class="profile-head">

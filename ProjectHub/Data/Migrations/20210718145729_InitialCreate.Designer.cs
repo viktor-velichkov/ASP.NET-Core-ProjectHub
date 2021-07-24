@@ -247,7 +247,7 @@ namespace ProjectHub.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("UserType")
+                    b.Property<string>("UserKind")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WebSite")

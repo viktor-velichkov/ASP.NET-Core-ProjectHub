@@ -2,9 +2,9 @@
 
 namespace ProjectHub.Data.Factories
 {
-    public class InvestorFactory : UserTypeFactory
+    public class InvestorFactory : UserKindFactory
     {
-        public InvestorFactory(UserType userType, int userId) : base(userType, userId)
+        public InvestorFactory(UserKind userType, int userId) : base(userType, userId)
         {
         }
 

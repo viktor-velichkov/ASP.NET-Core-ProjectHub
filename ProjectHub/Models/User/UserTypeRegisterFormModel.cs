@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ProjectHub.Models.User
 {
-    public class UserTypeRegisterFormModel
+    public class UserKindRegisterFormModel
     {
         public int Id { get; set; }
 

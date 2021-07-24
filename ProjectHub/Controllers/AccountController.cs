@@ -31,24 +31,24 @@ namespace ProjectHub.Controllers
 
         public IActionResult Register()
         {
-            var userTypes = GetUserTypes();
+            var userTypes = GetUserKinds();
             return View(new UserRegisterFormModel
             {
-                UserTypes = userTypes
+                UserKinds = userTypes
             });
         }
 
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterFormModel user)
         {
-            if (!this.data.UserTypes.Any(ut => ut.Id.Equals(user.UserTypeId)))
+            if (!this.data.UserKinds.Any(ut => ut.Id.Equals(user.UserKindId)))
             {
-                this.ModelState.AddModelError(nameof(user.UserTypeId), ValidationErrorMessages.InvalidUserTypeMessage);
+                this.ModelState.AddModelError(nameof(user.UserKindId), ValidationErrorMessages.InvalidUserKindMessage);
             }
 
             if (!ModelState.IsValid)
             {
-                user.UserTypes = GetUserTypes();
+                user.UserKinds = GetUserKinds();
 
 
                 return View(user);
@@ -58,14 +58,14 @@ namespace ProjectHub.Controllers
             {
                 UserName = user.Email,
                 Email = user.Email,
-                UserTypeId = user.UserTypeId
+                UserKindId = user.UserKindId
             };
 
             
 
             await userManager.CreateAsync(newUser, user.Password);
 
-            CreateUserTypeEntityRecord(this.data.UserTypes.FirstOrDefault(ut => ut.Id.Equals(user.UserTypeId)), newUser.Id);
+            CreateUserKindEntityRecord(this.data.UserKinds.FirstOrDefault(ut => ut.Id.Equals(user.UserKindId)), newUser.Id);
 
             this.data.SaveChanges();
 
@@ -107,17 +107,17 @@ namespace ProjectHub.Controllers
         }
 
 
-        private IEnumerable<UserTypeRegisterFormModel> GetUserTypes()
+        private IEnumerable<UserKindRegisterFormModel> GetUserKinds()
              => this.data
-                    .UserTypes
-                    .Select(ut => new UserTypeRegisterFormModel
+                    .UserKinds
+                    .Select(ut => new UserKindRegisterFormModel
                     {
                         Id = ut.Id,
                         Name = ut.Name
                     })
                     .ToList();
 
-        private void CreateUserTypeEntityRecord(UserType userType, int userId)
+        private void CreateUserKindEntityRecord(UserKind userType, int userId)
         {
             switch (userType.Name)
             {
@@ -134,7 +134,7 @@ namespace ProjectHub.Controllers
                     this.data.Contractors.Add(new Contractor { UserId = userId });
                     break;
                 default:
-                    throw new ArgumentException(ValidationErrorMessages.InvalidUserTypeMessage);
+                    throw new ArgumentException(ValidationErrorMessages.InvalidUserKindMessage);
             }
         }
     }

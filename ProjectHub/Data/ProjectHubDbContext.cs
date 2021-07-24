@@ -8,7 +8,7 @@ namespace ProjectHub.Data
 {
     public class ProjectHubDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
-        public DbSet<UserType> UserTypes { get; set; }
+        public DbSet<UserKind> UserKinds { get; set; }
         public DbSet<Activity> Activities { get; set; }
 
         public DbSet<Discipline> Disciplines { get; set; }
@@ -62,7 +62,7 @@ namespace ProjectHub.Data
             base.OnModelCreating(builder);
 
             //builder.Entity<ApplicationUser>()
-            //       .HasDiscriminator<string>(au => au.UserType)
+            //       .HasDiscriminator<string>(au => au.UserKind)
             //       .HasValue<Contractor>(nameof(Contractor))
             //       .HasValue<Designer>(nameof(Designer))
             //       .HasValue<Investor>(nameof(Investor))

@@ -2,23 +2,23 @@
 
 namespace ProjectHub.Data.Migrations
 {
-    public partial class ChangeUserTypeType : Migration
+    public partial class ChangeUserKindType : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "UserType",
+                name: "UserKind",
                 table: "AspNetUsers");
 
             migrationBuilder.AddColumn<int>(
-                name: "UserTypeId",
+                name: "UserKindId",
                 table: "AspNetUsers",
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
 
             migrationBuilder.CreateTable(
-                name: "UserType",
+                name: "UserKind",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -27,19 +27,19 @@ namespace ProjectHub.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserType", x => x.Id);
+                    table.PrimaryKey("PK_UserKind", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_UserTypeId",
+                name: "IX_AspNetUsers_UserKindId",
                 table: "AspNetUsers",
-                column: "UserTypeId");
+                column: "UserKindId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_UserType_UserTypeId",
+                name: "FK_AspNetUsers_UserKind_UserKindId",
                 table: "AspNetUsers",
-                column: "UserTypeId",
-                principalTable: "UserType",
+                column: "UserKindId",
+                principalTable: "UserKind",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -47,22 +47,22 @@ namespace ProjectHub.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_AspNetUsers_UserType_UserTypeId",
+                name: "FK_AspNetUsers_UserKind_UserKindId",
                 table: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "UserType");
+                name: "UserKind");
 
             migrationBuilder.DropIndex(
-                name: "IX_AspNetUsers_UserTypeId",
+                name: "IX_AspNetUsers_UserKindId",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
-                name: "UserTypeId",
+                name: "UserKindId",
                 table: "AspNetUsers");
 
             migrationBuilder.AddColumn<string>(
-                name: "UserType",
+                name: "UserKind",
                 table: "AspNetUsers",
                 type: "nvarchar(max)",
                 nullable: true);

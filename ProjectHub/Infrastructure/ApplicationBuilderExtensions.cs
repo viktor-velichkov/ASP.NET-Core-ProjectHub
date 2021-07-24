@@ -17,24 +17,24 @@ namespace ProjectHub.Infrastructure
 
             data.Database.Migrate();
 
-            SeedUserTypes(data);
+            SeedUserKinds(data);
 
             return app;
         }
 
-        private static void SeedUserTypes(ProjectHubDbContext data)
+        private static void SeedUserKinds(ProjectHubDbContext data)
         {
-            if (data.UserTypes.Any())
+            if (data.UserKinds.Any())
             {
                 return;
             }
 
-            data.UserTypes.AddRange(new[] 
+            data.UserKinds.AddRange(new[] 
             {
-                new UserType { Name = "Investor"},
-                new UserType { Name = "Manager"},
-                new UserType { Name = "Designer"},
-                new UserType { Name = "Contractor"},
+                new UserKind { Name = "Investor"},
+                new UserKind { Name = "Manager"},
+                new UserKind { Name = "Designer"},
+                new UserKind { Name = "Contractor"},
             });
 
             data.SaveChanges();

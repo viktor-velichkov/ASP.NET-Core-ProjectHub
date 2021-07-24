@@ -2,32 +2,32 @@
 
 namespace ProjectHub.Data.Migrations
 {
-    public partial class AddUserTypeDbSet : Migration
+    public partial class AddUserKindDbSet : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_AspNetUsers_UserType_UserTypeId",
+                name: "FK_AspNetUsers_UserKind_UserKindId",
                 table: "AspNetUsers");
 
             migrationBuilder.DropPrimaryKey(
-                name: "PK_UserType",
-                table: "UserType");
+                name: "PK_UserKind",
+                table: "UserKind");
 
             migrationBuilder.RenameTable(
-                name: "UserType",
-                newName: "UserTypes");
+                name: "UserKind",
+                newName: "UserKinds");
 
             migrationBuilder.AddPrimaryKey(
-                name: "PK_UserTypes",
-                table: "UserTypes",
+                name: "PK_UserKinds",
+                table: "UserKinds",
                 column: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_UserTypes_UserTypeId",
+                name: "FK_AspNetUsers_UserKinds_UserKindId",
                 table: "AspNetUsers",
-                column: "UserTypeId",
-                principalTable: "UserTypes",
+                column: "UserKindId",
+                principalTable: "UserKinds",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -35,27 +35,27 @@ namespace ProjectHub.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_AspNetUsers_UserTypes_UserTypeId",
+                name: "FK_AspNetUsers_UserKinds_UserKindId",
                 table: "AspNetUsers");
 
             migrationBuilder.DropPrimaryKey(
-                name: "PK_UserTypes",
-                table: "UserTypes");
+                name: "PK_UserKinds",
+                table: "UserKinds");
 
             migrationBuilder.RenameTable(
-                name: "UserTypes",
-                newName: "UserType");
+                name: "UserKinds",
+                newName: "UserKind");
 
             migrationBuilder.AddPrimaryKey(
-                name: "PK_UserType",
-                table: "UserType",
+                name: "PK_UserKind",
+                table: "UserKind",
                 column: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_UserType_UserTypeId",
+                name: "FK_AspNetUsers_UserKind_UserKindId",
                 table: "AspNetUsers",
-                column: "UserTypeId",
-                principalTable: "UserType",
+                column: "UserKindId",
+                principalTable: "UserKind",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }

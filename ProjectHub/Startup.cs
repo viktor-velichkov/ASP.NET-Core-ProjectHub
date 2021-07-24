@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -5,11 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ProjectHub.AutoMapper;
 using ProjectHub.Data;
-using ProjectHub.Data.Factories;
 using ProjectHub.Data.Models;
 using ProjectHub.Infrastructure;
-using ProjectHub.Models.User;
 
 namespace ProjectHub
 {
@@ -48,7 +48,8 @@ namespace ProjectHub
                 .AddScoped(typeof(UserManager<ApplicationUser>));
             services
                 .AddScoped(typeof(SignInManager<ApplicationUser>));
-            
+
+            services.AddSingleton(InitializeMapper());
 
         }
 
@@ -80,6 +81,16 @@ namespace ProjectHub
                  });
 
 
+        }
+
+        private IMapper InitializeMapper()
+        {
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new AutoMapperProfile());
+            });
+
+            return mapperConfig.CreateMapper();
         }
     }
 }

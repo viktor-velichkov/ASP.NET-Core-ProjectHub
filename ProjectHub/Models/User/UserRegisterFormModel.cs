@@ -8,7 +8,7 @@ namespace ProjectHub.Models.User
     {
         public UserRegisterFormModel()
         {
-            this.UserTypes = new List<UserTypeRegisterFormModel>();
+            this.UserKinds = new List<UserKindRegisterFormModel>();
         }
 
         [Required]
@@ -30,8 +30,8 @@ namespace ProjectHub.Models.User
         public string ConfirmPassword { get; set; }
 
         [Display(Name = "Choose User Type")]
-        public int UserTypeId { get; set; }
+        public int UserKindId { get; set; }
 
-        public IEnumerable<UserTypeRegisterFormModel> UserTypes { get; set; }
+        public IEnumerable<UserKindRegisterFormModel> UserKinds { get; set; }
     }
 }

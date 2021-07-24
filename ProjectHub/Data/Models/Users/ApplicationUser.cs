@@ -8,9 +8,9 @@ namespace ProjectHub.Data.Models
 
     public class ApplicationUser : IdentityUser<int>
     {
-        [ForeignKey(nameof(UserType))]
-        public int UserTypeId { get; set; }
-        public UserType UserType { get; set; }
+        [ForeignKey(nameof(UserKind))]
+        public int UserKindId { get; set; }
+        public UserKind UserKind { get; set; }
 
         
         public string ImageUrl { get; set; }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ProjectHub.Models.Message
 {
-    public class MessageViewModel
+    public class DiscussionViewModel
     {
     }
 }

@@ -2,9 +2,9 @@
 
 namespace ProjectHub.Data.Factories
 {
-    public class DesignerFactory : UserTypeFactory
+    public class DesignerFactory : UserKindFactory
     {
-        public DesignerFactory(UserType userType, int userId) : base(userType, userId)
+        public DesignerFactory(UserKind userType, int userId) : base(userType, userId)
         {
         }
 

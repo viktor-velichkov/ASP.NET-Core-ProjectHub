@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using ProjectHub.Data.Models;
+using ProjectHub.Models.Contractor;
+using ProjectHub.Models.Designer;
+using ProjectHub.Models.Investor;
+using ProjectHub.Models.Manager;
 using ProjectHub.Models.User;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ProjectHub.AutoMapper
 {
@@ -12,16 +13,26 @@ namespace ProjectHub.AutoMapper
     {
         public AutoMapperProfile()
         {
-            CreateMap<ApplicationUser, UserProfileViewModel>()
+            CreateMap<ApplicationUser, AppUserProfileViewModel>()
                 .ForMember(
-                          u => u.UserType,
-                          opt => opt.MapFrom(au => au.UserType.ToString()))
+                          u => u.UserKindName,
+                          opt => opt.MapFrom(au => au.UserKind.Name))
                 .ForMember(
                           u => u.Recomendations,
                           opt => opt.MapFrom(au => au.RatesReceived.Where(rr => rr.IsPositive).Count()))
                 .ForMember(
                           u => u.Disapprovals,
                           opt => opt.MapFrom(au => au.RatesReceived.Where(rr => !rr.IsPositive).Count()));
+
+            CreateMap<object, UserProfileViewModel>();
+
+            CreateMap<Investor, UserProfileViewModel>();
+
+            CreateMap<Manager, UserProfileViewModel>();
+
+            CreateMap<Contractor, UserProfileViewModel>();
+
+            CreateMap<Designer, UserProfileViewModel>();                
         }
     }
 }
