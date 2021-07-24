@@ -56,12 +56,12 @@ namespace ProjectHub.Controllers
 
             var newUser = new ApplicationUser
             {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 UserName = user.Email,
                 Email = user.Email,
                 UserKindId = user.UserKindId
             };
-
-            
 
             await userManager.CreateAsync(newUser, user.Password);
 

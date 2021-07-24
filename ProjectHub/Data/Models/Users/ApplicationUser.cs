@@ -15,11 +15,11 @@ namespace ProjectHub.Data.Models
         
         public string ImageUrl { get; set; }
 
-        
+        [Required]
         [MaxLength(DataConstants.UserFirstNameMaxLength)]
         public string FirstName { get; set; }
 
-        
+        [Required]
         [MaxLength(DataConstants.UserLastNameMaxLength)]
         public string LastName { get; set; }
 

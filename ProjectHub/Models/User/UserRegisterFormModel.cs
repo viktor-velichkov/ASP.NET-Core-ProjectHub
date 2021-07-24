@@ -12,13 +12,27 @@ namespace ProjectHub.Models.User
         }
 
         [Required]
+        [StringLength(DataConstants.UserFirstNameMaxLength,
+                      ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
+                      MinimumLength = DataConstants.UserFirstNameMinLength)]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [StringLength(DataConstants.UserLastNameMaxLength,
+                      ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
+                      MinimumLength = DataConstants.UserLastNameMinLength)]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(DataConstants.PasswordMaxLength, 
-                      ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
+        [StringLength(DataConstants.PasswordMaxLength,
+                      ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
                       MinimumLength = DataConstants.PasswordMinLength)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
