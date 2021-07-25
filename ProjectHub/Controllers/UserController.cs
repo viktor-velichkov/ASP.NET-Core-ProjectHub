@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -46,7 +47,7 @@ namespace ProjectHub.Controllers
                            .Include(u => u.UserKind)
                            .FirstOrDefault(u => u.Id.Equals(userId));
 
-            if (userDb==null)
+            if (userDb == null)
             {
                 return NotFound();
             }
@@ -65,23 +66,73 @@ namespace ProjectHub.Controllers
             return View(userViewModel);
         }
 
-        private object GetUserKindEntityByUserId(string userType, int userId)
+
+        public IActionResult EditUserProfile(int userId, string userKind)
+        {
+            if (!this.User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var userDb = GetUserKindEntityByUserId(userKind, userId);
+
+            var currentUser = this.mapper.Map<object, UserEditProfileViewModel>(userDb);
+
+            if (int.Parse(this.userManager.GetUserId(this.User)) == userId)
+            {
+                currentUser.IsLoggedUser = true;
+            }
+
+            return View(currentUser);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditUserProfile(UserEditProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var userDbToUpdate = GetUserKindEntityByUserId(model.UserKindName, model.User.Id);
+
+            
+            return RedirectToAction("Profile", "User");
+        }
+
+        private object GetUserKindEntityByUserId(string userKind, int userId)
         {
             object result = null;
 
-            switch (userType)
+            switch (userKind)
             {
                 case "Investor":
-                    result = this.data.Investors.FirstOrDefault(i => i.UserId.Equals(userId));
+                    result = this.data
+                                 .Investors
+                                 .Include(i => i.User)
+                                 .Include(i => i.User.UserKind)
+                                 .FirstOrDefault(i => i.UserId.Equals(userId));
                     break;
                 case "Manager":
-                    result = this.data.Managers.FirstOrDefault(i => i.UserId.Equals(userId));
+                    result = this.data
+                                 .Managers
+                                 .Include(m => m.User)
+                                 .Include(m => m.User.UserKind)
+                                 .FirstOrDefault(i => i.UserId.Equals(userId));
                     break;
                 case "Designer":
-                    result = this.data.Designers.FirstOrDefault(i => i.UserId.Equals(userId));
+                    result = this.data
+                                 .Designers
+                                 .Include(d => d.User)
+                                 .Include(d => d.User.UserKind)
+                                 .FirstOrDefault(i => i.UserId.Equals(userId));
                     break;
                 case "Contractor":
-                    result = this.data.Contractors.FirstOrDefault(i => i.UserId.Equals(userId));
+                    result = this.data
+                                 .Contractors
+                                 .Include(c => c.User)
+                                 .Include(c => c.User.UserKind)
+                                 .FirstOrDefault(i => i.UserId.Equals(userId));
                     break;
                 default:
                     break;

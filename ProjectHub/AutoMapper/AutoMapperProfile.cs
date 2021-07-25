@@ -1,9 +1,5 @@
 ﻿using AutoMapper;
 using ProjectHub.Data.Models;
-using ProjectHub.Models.Contractor;
-using ProjectHub.Models.Designer;
-using ProjectHub.Models.Investor;
-using ProjectHub.Models.Manager;
 using ProjectHub.Models.User;
 using System.Linq;
 
@@ -24,15 +20,24 @@ namespace ProjectHub.AutoMapper
                           u => u.Disapprovals,
                           opt => opt.MapFrom(au => au.RatesReceived.Where(rr => !rr.IsPositive).Count()));
 
+            CreateMap<ApplicationUser, AppUserEditProfileViewModel>()
+                .ForMember(
+                          u => u.UserKindName,
+                          opt => opt.MapFrom(au => au.UserKind.Name));
+
             CreateMap<object, UserProfileViewModel>();
 
+            CreateMap<object, UserEditProfileViewModel>();
+
             CreateMap<Investor, UserProfileViewModel>();
+
+            CreateMap<Investor, UserEditProfileViewModel>();
 
             CreateMap<Manager, UserProfileViewModel>();
 
             CreateMap<Contractor, UserProfileViewModel>();
 
-            CreateMap<Designer, UserProfileViewModel>();                
+            CreateMap<Designer, UserProfileViewModel>();
         }
     }
 }

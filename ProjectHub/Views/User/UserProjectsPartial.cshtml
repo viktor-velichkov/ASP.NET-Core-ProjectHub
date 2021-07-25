@@ -1,0 +1,35 @@
+﻿@model UserProfileViewModel
+
+<div role="tabpanel" class="tab-pane active" id="projects">
+    @{
+        if (!Model.Projects.Any())
+        {
+            <h6 style="margin-top:15px">There is not any project assosciated with this @Model.User.UserKindName.ToLower().</h6>
+        }
+        else
+        {
+            <div class="container-fluid">
+                @{
+                    int projectsCount = Model.Projects.Count;
+                    int rowsCount = projectsCount % 3 == 0 ? projectsCount % 3 : projectsCount % 3 + 1;
+                    @for (int i = 0; i < rowsCount; i++)
+                    {
+                        int projectsOnRow = (projectsCount - i * 3) >= 3 ? 3 : (projectsCount - i * 3);
+                        if (projectsOnRow <= 0)
+                        {
+                            break;
+                        }
+                        <div class="row">
+                            @for (int j = 0; projectsOnRow < 3; j++)
+                            {
+                                <div class="col-md-4">
+                                    @Model.Projects[i * 3 + j]
+                                </div>
+                            }
+                        </div>
+                    }
+                }
+            </div>
+        }
+    }
+</div>

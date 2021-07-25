@@ -2,11 +2,14 @@
 using ProjectHub.Models.Offer;
 using ProjectHub.Models.Review;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace ProjectHub.Models.User
 {
     public class AppUserProfileViewModel
     {
+        public int Id { get; set; }
+
         public string UserKindName { get; set; }
 
         public string ImageUrl { get; set; }
@@ -25,15 +28,18 @@ namespace ProjectHub.Models.User
 
         public string Description { get; set; }
 
+        [DisplayName("Facebook Profile:")]
         public string FacebookPage { get; set; }
 
+        [DisplayName("LinkedIn Profile:")]
         public string LinkedinPage { get; set; }
 
+        [DisplayName("Skype Profile:")]
         public string SkypeProfile { get; set; }
 
-        public ICollection<ReviewViewModel> Reviews { get; set; }
-        public ICollection<OfferViewModel> Offers { get; set; }
-        public ICollection<DiscussionViewModel> Discussions { get; set; }
+        public List<ReviewViewModel> Reviews => new List<ReviewViewModel>();
+        public List<OfferViewModel> Offers => new List<OfferViewModel>();
+        public List<DiscussionViewModel> Discussions => new List<DiscussionViewModel>();
 
     }
 }

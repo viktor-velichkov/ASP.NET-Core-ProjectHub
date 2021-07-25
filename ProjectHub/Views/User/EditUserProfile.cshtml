@@ -1,4 +1,4 @@
-﻿@model UserProfileViewModel
+﻿@model UserEditProfileViewModel
 
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -6,10 +6,9 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "Edit Profile";
 }
 
-@{ }
 <div class="container emp-profile">
     <form method="post">
         <div class="row">
@@ -27,107 +26,79 @@
                 @if (Model.IsLoggedUser)
                 {
                     <div class="left">
-                        @*<input type="file" class="btn btn-primary" value="Change Photo" style="margin-bottom: 15px; margin-top: 15px;" />*@
-                        <input type="hidden" name="userId" value="@Model.User.Id" />
-                        <input type="hidden" name="userKind" value="@Model.User.UserKindName" />
-                        <input asp-controller="User" asp-action="EditUserProfile" type="submit" formmethod="get" class="btn btn-primary" value="Edit Profile" style="margin-bottom: 10px; margin-top: 10px;" />
+                        <button class="btn btn-primary" id="files" onclick="document.getElementById('file').click(); return false;" style="margin-bottom: 15px; margin-top: 15px;">Change Photo</button>
+                        <input type="file" accept="image/*" style="visibility:hidden; height:10%; width:10%" />
                     </div>
                 }
                 <div class="row" style="padding-left: 15px">
                     <div class="left">
                         <div class="profile-work">
                             <p>SOCIAL LINKS</p>
-                            <ul class="social-links list-inline">
-                                @{
-                                    if (Model.User.FacebookPage != null)
-                                    {
-                                        <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="@Model.User.FacebookPage" data-original-title="Facebook"><i class="fa fa-facebook fa-2x"></i></a></li>
-                                    }
-                                    else
-                                    {
-                                        <li class="list-inline-item"><div data-placement="top" class="tooltips"><i style="color:gray" class="fa fa-facebook fa-2x"></i></div></li>
-                                    }
-                                    if (Model.User.LinkedinPage != null)
-                                    {
-                                        <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="@Model.User.LinkedinPage" data-original-title="LinkedIn"><i class="fa fa-linkedin fa-2x" aria-></i></a></li>
-                                    }
-                                    else
-                                    {
-                                        <li class="list-inline-item"><div data-placement="top" class="tooltips"><i style="color:gray" class="fa fa-linkedin fa-2x"></i></div></li>
-                                    }
-                                    if (Model.User.SkypeProfile != null)
-                                    {
-                                        <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="@Model.User.SkypeProfile" data-original-title="Skype"><i class="fa fa-skype fa-2x"></i></a></li>
-                                    }
-                                    {
-                                        <li class="list-inline-item"><div data-placement="top" class="tooltips"><i style="color:gray" class="fa fa-skype fa-2x"></i></div></li>
-                                    }
-                                }
-                            </ul>
+                            <div class="form-group" style="margin-bottom:0">
+                                <label asp-for="User.FacebookPage" title="Facebook:"></label>
+                                <input asp-for="User.FacebookPage" class="form-control" placeholder="https://...." />
+                                <span asp-validation-for="User.FacebookPage" class="text-danger"></span>
+                            </div>
+                            <div class="form-group" style="margin-bottom:0">
+                                <label asp-for="User.LinkedinPage" title="Facebook:"></label>
+                                <input asp-for="User.LinkedinPage" class="form-control" placeholder="https://...." />
+                                <span asp-validation-for="User.LinkedinPage" class="text-danger"></span>
+                            </div>
+                            <div class="form-group" style="margin-bottom:0">
+                                <label asp-for="User.SkypeProfile" title="Facebook:"></label>
+                                <input asp-for="User.SkypeProfile" class="form-control" placeholder="https://...." />
+                                <span asp-validation-for="User.SkypeProfile" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-4">
                 <div class="profile-head">
-                    <h5>
-                        @Model.User.FullName
-                    </h5>
-                    <h6>
-                        @Model.User.UserKindName
-                        @if (Model.Discipline != null)
-                        {
-                            @Model.Discipline.Name
-                        }
-                    </h6>
-                    <p class="proile-rating" style="margin-bottom:10px">
-                        Email :
-                        <span>
-                            @if (Model.User.Email != null)
-                            {
-                                @Model.User.Email
-                            }
-                        </span>
-                    </p>
-                    <p class="proile-rating" style="margin-bottom:10px">
-                        Phone :
-                        <span>
-                            @{
-                                if (Model.User.PhoneNumber != null)
-                                {
-                                    @Model.User.PhoneNumber
-                                }
-                                else
-                                {
-                                    @:Not added yet
-                                }
-                            }
-                        </span>
-                    </p>
-                    <p class="proile-rating" style="margin-bottom:10px">
-                        Recomendations : <span style="margin-right:50px">@Model.User.Recomendations</span>
-                        Disapprovals : <span>@Model.User.Disapprovals</span>
-                    </p>
-
-                    <p class="proile-rating" style="margin-bottom:10px">
-                        Description :<br />
-                        <span style="margin-right:50px">@Model.User.Description</span>
-                    </p>
-
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#projects" aria-controls="projects" role="tab" data-toggle="tab">Projects</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#reviews" aria-controls="reviews" role="tab" data-toggle="tab">Reviews</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <partial name="UserProjectsPartial" model="@Model" />
-                        <div role="tabpanel" class="tab-pane" id="reviews">
-                            <partial name="UserReviewsPartial" model="@Model" />
-                        </div>
+                    <input type="hidden" name="User.Id" value="@Model.User.Id" />
+                    <input type="hidden" name="User.UserKindName" value="@Model.User.UserKindName" />
+                    <div class="form-group" style="margin-bottom:0; margin-top:5px;">
+                        <label asp-for="User.FirstName"></label>
+                        <input asp-for="User.FirstName" class="form-control" placeholder="@Model.User.FirstName" />
+                        <span asp-validation-for="User.FirstName" class="text-danger"></span>
                     </div>
+                    <div class="form-group" style="margin-bottom: 0; margin-top: 5px">
+                        <label asp-for="User.LastName"></label>
+                        <input asp-for="User.LastName" class="form-control" placeholder="@Model.User.LastName" />
+                        <span asp-validation-for="User.LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; margin-top: 5px">
+                        <label asp-for="User.Email"></label>
+                        <input asp-for="User.Email" class="form-control" placeholder="@Model.User.Email" />
+                        <span asp-validation-for="User.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; margin-top: 5px">
+                        <label asp-for="User.PhoneNumber" title="Facebook:"></label>
+                        @{
+                            var phonePlaceholder = Model.User.PhoneNumber != null ? Model.User.PhoneNumber : "+359...";
+
+                            <input asp-for="User.PhoneNumber" class="form-control" placeholder="@phonePlaceholder" />
+                            <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
+                        }
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; margin-top: 5px">
+                        <label asp-for="User.WebSite"></label>
+                        @{
+                            var sitePlaceholder = Model.User.WebSite != null ? Model.User.WebSite : "https://...";
+
+                            <input asp-for="User.WebSite" class="form-control" placeholder="@sitePlaceholder" />
+                            <span asp-validation-for="User.WebSite" class="text-danger"></span>
+                        }
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; margin-top: 5px">
+                        <label asp-for="User.Description"></label>
+                        @{
+                            var descriptionPlaceholder = Model.User.Description != null ? Model.User.Description : "I am...";
+                            <textarea asp-for="User.Description" class="form-control" id="desription" rows="4" placeholder="@descriptionPlaceholder"></textarea>                            
+                            <span asp-validation-for="User.Description" class="text-danger"></span>
+                        }
+                    </div>                    
+                    <button formmethod="post" type="submit" class="btn btn-primary float-right" style="margin-top: 10px; align-self:end">Apply</button>
                 </div>
             </div>
         </div>
