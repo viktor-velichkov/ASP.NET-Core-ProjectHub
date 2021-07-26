@@ -1,5 +1,4 @@
 ﻿using ProjectHub.Data.Models;
-using ProjectHub.Models.Project;
 using System.Collections.Generic;
 
 namespace ProjectHub.Models.User
@@ -8,7 +7,6 @@ namespace ProjectHub.Models.User
     {
         public bool IsLoggedUser { get; set; }
         public AppUserEditProfileViewModel User { get; set; }
-        public string UserKindName { get; set; }
 
         public Discipline Discipline { get; set; }
 

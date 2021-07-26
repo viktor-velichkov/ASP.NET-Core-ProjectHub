@@ -1,16 +1,19 @@
-﻿@model UserProfileViewModel
+﻿@model Tuple<List<ProjectGeneralViewModel>, string>
 
+@{ 
+    Layout = "";
+}
 <div role="tabpanel" class="tab-pane active" id="projects">
     @{
-        if (!Model.Projects.Any())
+        if (!Model.Item1.Any())
         {
-            <h6 style="margin-top:15px">There is not any project assosciated with this @Model.User.UserKindName.ToLower().</h6>
+            <h6 style="margin-top:15px">There is not any project assosciated with this @Model.Item2.</h6>
         }
         else
         {
             <div class="container-fluid">
                 @{
-                    int projectsCount = Model.Projects.Count;
+                    int projectsCount = Model.Item1.Count;
                     int rowsCount = projectsCount % 3 == 0 ? projectsCount % 3 : projectsCount % 3 + 1;
                     @for (int i = 0; i < rowsCount; i++)
                     {
@@ -23,7 +26,7 @@
                             @for (int j = 0; projectsOnRow < 3; j++)
                             {
                                 <div class="col-md-4">
-                                    @Model.Projects[i * 3 + j]
+                                    @Model.Item1[i * 3 + j]
                                 </div>
                             }
                         </div>

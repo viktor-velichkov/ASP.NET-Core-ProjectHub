@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using ProjectHub.Data.Models;
+using ProjectHub.Data.Models.Projects;
+using ProjectHub.Models.Project;
 using ProjectHub.Models.User;
 using System.Linq;
 
@@ -9,6 +11,7 @@ namespace ProjectHub.AutoMapper
     {
         public AutoMapperProfile()
         {
+            //USERS MAPPING
             CreateMap<ApplicationUser, AppUserProfileViewModel>()
                 .ForMember(
                           u => u.UserKindName,
@@ -35,9 +38,14 @@ namespace ProjectHub.AutoMapper
 
             CreateMap<Manager, UserProfileViewModel>();
 
+            CreateMap<Designer, UserProfileViewModel>();
+
             CreateMap<Contractor, UserProfileViewModel>();
 
-            CreateMap<Designer, UserProfileViewModel>();
+
+            //PROJECTS MAPPING
+            CreateMap<Project, ProjectGeneralViewModel>();
+            
         }
     }
 }

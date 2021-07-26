@@ -1,18 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectHub.Data;
 using ProjectHub.Data.Models;
-using ProjectHub.Models.Contractor;
-using ProjectHub.Models.Designer;
-using ProjectHub.Models.Investor;
-using ProjectHub.Models.Manager;
+using ProjectHub.Models.Project;
 using ProjectHub.Models.User;
+using ProjectHub.Services.User;
 
 namespace ProjectHub.Controllers
 {
@@ -21,14 +18,17 @@ namespace ProjectHub.Controllers
         private readonly ProjectHubDbContext data;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IMapper mapper;
+        private readonly IUserService userService;
 
         public UserController(ProjectHubDbContext data,
                               UserManager<ApplicationUser> userManager,
-                              IMapper mapper)
+                              IMapper mapper,
+                              IUserService userService)
         {
             this.data = data;
             this.userManager = userManager;
             this.mapper = mapper;
+            this.userService = userService;
         }
 
         public IActionResult Profile()
@@ -54,7 +54,7 @@ namespace ProjectHub.Controllers
 
             var userTypeName = userDb.UserKind.Name;
 
-            var userTypeEntity = GetUserKindEntityByUserId(userTypeName, userId);
+            var userTypeEntity = this.userService.GetUserKindEntityByUserId(userTypeName, userId);
 
             var userViewModel = this.mapper.Map<object, UserProfileViewModel>(userTypeEntity);
 
@@ -74,7 +74,7 @@ namespace ProjectHub.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var userDb = GetUserKindEntityByUserId(userKind, userId);
+            var userDb = this.userService.GetUserKindEntityByUserId(userKind, userId);
 
             var currentUser = this.mapper.Map<object, UserEditProfileViewModel>(userDb);
 
@@ -87,87 +87,26 @@ namespace ProjectHub.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditUserProfile(UserEditProfileViewModel model)
+        public IActionResult EditUserProfile(UserEditProfileViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var userDbToUpdate = GetUserKindEntityByUserId(model.UserKindName, model.User.Id);
+            this.userService.EditUser(model);
 
-            
-            return RedirectToAction("Profile", "User");
+            return RedirectToAction("Profile", "User", new { id = model.User.Id });
         }
 
-        private object GetUserKindEntityByUserId(string userKind, int userId)
+        public IActionResult UserProjectsPartial(int id, string userKind)
         {
-            object result = null;
+            var projects = this.userService.GetUserProjects(id, userKind).ToList();
 
-            switch (userKind)
-            {
-                case "Investor":
-                    result = this.data
-                                 .Investors
-                                 .Include(i => i.User)
-                                 .Include(i => i.User.UserKind)
-                                 .FirstOrDefault(i => i.UserId.Equals(userId));
-                    break;
-                case "Manager":
-                    result = this.data
-                                 .Managers
-                                 .Include(m => m.User)
-                                 .Include(m => m.User.UserKind)
-                                 .FirstOrDefault(i => i.UserId.Equals(userId));
-                    break;
-                case "Designer":
-                    result = this.data
-                                 .Designers
-                                 .Include(d => d.User)
-                                 .Include(d => d.User.UserKind)
-                                 .FirstOrDefault(i => i.UserId.Equals(userId));
-                    break;
-                case "Contractor":
-                    result = this.data
-                                 .Contractors
-                                 .Include(c => c.User)
-                                 .Include(c => c.User.UserKind)
-                                 .FirstOrDefault(i => i.UserId.Equals(userId));
-                    break;
-                default:
-                    break;
-            }
+            Tuple<List<ProjectGeneralViewModel>, string> tuple = new Tuple<List<ProjectGeneralViewModel>, string>(projects, userKind);
 
-            return result;
+            return PartialView(tuple);
         }
-
-        private UserProfileViewModel MapToViewModel(string userTypeName, object obj)
-        {
-            UserProfileViewModel result = null;
-
-            switch (userTypeName)
-            {
-                case "Investor":
-                    result = this.mapper.Map<Investor, UserProfileViewModel>(obj as Investor);
-                    break;
-                case "Manager":
-                    result = this.mapper.Map<Manager, UserProfileViewModel>(obj as Manager);
-                    break;
-                case "Designer":
-                    result = this.mapper.Map<Designer, UserProfileViewModel>(obj as Designer);
-                    break;
-                case "Constractor":
-                    result = this.mapper.Map<Contractor, UserProfileViewModel>(obj as Contractor);
-                    break;
-                default:
-                    break;
-            }
-
-            return result;
-        }
-
-
-
 
     }
 }

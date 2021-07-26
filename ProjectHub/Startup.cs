@@ -10,6 +10,7 @@ using ProjectHub.AutoMapper;
 using ProjectHub.Data;
 using ProjectHub.Data.Models;
 using ProjectHub.Infrastructure;
+using ProjectHub.Services.User;
 
 namespace ProjectHub
 {
@@ -49,7 +50,11 @@ namespace ProjectHub
             services
                 .AddScoped(typeof(SignInManager<ApplicationUser>));
 
-            services.AddSingleton(InitializeMapper());
+            services
+                .AddSingleton(InitializeMapper());
+
+            services
+                .AddTransient<IUserService, UserService>();
 
         }
 

@@ -8,8 +8,6 @@ namespace ProjectHub.Models.User
     {
         public bool IsLoggedUser { get; set; }
         public AppUserProfileViewModel User { get; set; }
-        public string UserKindName { get; set; }
-
         public Discipline Discipline { get; set; }
 
         public int? WorkExperience { get; set; }
