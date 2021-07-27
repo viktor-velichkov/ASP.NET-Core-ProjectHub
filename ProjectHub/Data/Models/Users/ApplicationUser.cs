@@ -11,9 +11,9 @@ namespace ProjectHub.Data.Models
         [ForeignKey(nameof(UserKind))]
         public int UserKindId { get; set; }
         public UserKind UserKind { get; set; }
-
         
-        public string ImageUrl { get; set; }
+        //[Column(TypeName = "Binary")]
+        public byte[] Image { get; set; }
 
         [Required]
         [MaxLength(DataConstants.UserFirstNameMaxLength)]

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ProjectHub.Models.Message
+﻿namespace ProjectHub.Models.Discussion
 {
     public class DiscussionViewModel
     {

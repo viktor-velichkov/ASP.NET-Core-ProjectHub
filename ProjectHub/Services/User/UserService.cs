@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using ProjectHub.Data;
 using ProjectHub.Data.Models;
 using ProjectHub.Data.Models.Projects;
+using ProjectHub.Models.Discussion;
 using ProjectHub.Models.Project;
+using ProjectHub.Models.Review;
 using ProjectHub.Models.User;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace ProjectHub.Services.User
 {
@@ -67,6 +71,7 @@ namespace ProjectHub.Services.User
         {
             var userDb = this.data.Users.FirstOrDefault(u => u.Id.Equals(model.User.Id));
 
+            userDb.Image = model.User.Image;
             userDb.FirstName = model.User.FirstName;
             userDb.LastName = model.User.LastName;
             userDb.Email = model.User.Email;
@@ -159,8 +164,50 @@ namespace ProjectHub.Services.User
             }
         }
 
+        public IEnumerable<ReviewViewModel> GetUserReviews(int id)
+        {
+            var userReviews = this.data
+                                  .Users
+                                  .SelectMany(u => u.ReviewsReceived)
+                                  .Where(r => r.RecipientId.Equals(id))
+                                  .Select(r => this.mapper.Map<Review, ReviewViewModel>(r))
+                                  .ToList();
+
+            return userReviews;
+        }
+
+        public IEnumerable<DiscussionViewModel> GetUserDiscussions(int id)
+        {
+            var userDiscussions = this.data
+                                      .UserDiscussions
+                                      .Where(ud => ud.UserId.Equals(id))
+                                      .Select(ud => ud.Discussion)
+                                      .Select(d => this.mapper.Map<Discussion, DiscussionViewModel>(d))
+                                      .ToList();
+            return userDiscussions;
+        }
+
+        public byte[] GetUserImage(int id)
+            => this.data.Users.FirstOrDefault(u => u.Id.Equals(id)).Image;
+
+        public byte[] ProcessUploadedFile(IFormFile file)
+        {
+            byte[] result = null;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                file.CopyTo(memoryStream);
 
 
 
+                // Upload the file if less than 2 MB
+                if (memoryStream.Length < 2097152)
+                {
+                    result = memoryStream.ToArray();
+                }
+            }
+
+            return result;
+        }
     }
 }

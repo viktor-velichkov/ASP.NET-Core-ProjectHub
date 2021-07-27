@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectHub.Data;
 using ProjectHub.Data.Models;
+using ProjectHub.Models.Discussion;
 using ProjectHub.Models.Project;
+using ProjectHub.Models.Review;
 using ProjectHub.Models.User;
 using ProjectHub.Services.User;
 
@@ -89,9 +91,25 @@ namespace ProjectHub.Controllers
         [HttpPost]
         public IActionResult EditUserProfile(UserEditProfileViewModel model)
         {
+            var uploadedImage = model.User.ImageUpload;
+
+            if (uploadedImage != null && uploadedImage.Length > 2097152)
+            {
+                ModelState.AddModelError(nameof(uploadedImage), "The file is too large");
+
+            }
             if (!ModelState.IsValid)
             {
                 return View(model);
+            }
+
+            if (uploadedImage != null)
+            {
+                model.User.Image = this.userService.ProcessUploadedFile(uploadedImage);
+            }
+            else
+            {
+                model.User.Image = this.userService.GetUserImage(model.User.Id);
             }
 
             this.userService.EditUser(model);
@@ -99,13 +117,35 @@ namespace ProjectHub.Controllers
             return RedirectToAction("Profile", "User", new { id = model.User.Id });
         }
 
-        public IActionResult UserProjectsPartial(int id, string userKind)
+
+        public IActionResult Projects(int id, string userKind)
         {
             var projects = this.userService.GetUserProjects(id, userKind).ToList();
 
             Tuple<List<ProjectGeneralViewModel>, string> tuple = new Tuple<List<ProjectGeneralViewModel>, string>(projects, userKind);
 
-            return PartialView(tuple);
+            return PartialView("UserProjectsPartial", tuple);
+        }
+
+        [HttpGet]
+        public IActionResult Reviews(int id, string userKind)
+        {
+            var userReviews = this.userService.GetUserReviews(id).ToList();
+
+            Tuple<List<ReviewViewModel>, string> tuple =
+                new Tuple<List<ReviewViewModel>, string>(userReviews, userKind);
+
+            return PartialView("UserReviewsPartial", tuple);
+        }
+
+        public IActionResult Discussions(int id, string userKind)
+        {
+            var userDiscussions = this.userService.GetUserDiscussions(id).ToList();
+
+            Tuple<List<DiscussionViewModel>, string> tuple =
+                new Tuple<List<DiscussionViewModel>, string>(userDiscussions, userKind);
+
+            return PartialView("UserDiscussionsPartial", tuple);
         }
 
     }

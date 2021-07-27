@@ -61,12 +61,7 @@ namespace ProjectHub.Data
         {
             base.OnModelCreating(builder);
 
-            //builder.Entity<ApplicationUser>()
-            //       .HasDiscriminator<string>(au => au.UserKind)
-            //       .HasValue<Contractor>(nameof(Contractor))
-            //       .HasValue<Designer>(nameof(Designer))
-            //       .HasValue<Investor>(nameof(Investor))
-            //       .HasValue<Manager>(nameof(Manager));
+            builder.Entity<ApplicationUser>().Property("Image").HasColumnType("varbinary(MAX)");
 
             builder.Entity<Rate>()
                    .HasOne(nameof(Rate.Recipient))

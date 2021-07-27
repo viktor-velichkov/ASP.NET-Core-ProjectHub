@@ -1,4 +1,4 @@
-﻿using ProjectHub.Models.Message;
+﻿using ProjectHub.Models.Discussion;
 using ProjectHub.Models.Offer;
 using ProjectHub.Models.Review;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ namespace ProjectHub.Models.User
 
         public string UserKindName { get; set; }
 
-        public string ImageUrl { get; set; }
+        public byte[] Image { get; set; }
 
         public string FullName { get; set; }
 

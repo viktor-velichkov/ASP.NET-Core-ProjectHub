@@ -1,10 +1,10 @@
-﻿@model Tuple<List<ReviewViewModel>,string>
+﻿@model Tuple<List<DiscussionViewModel>, string>
 
-<div role="tabpanel" class="tab-pane active" id="reviews">
+<div role="tabpanel" class="tab-pane active" id="discussions">
     @{
         if (!Model.Item1.Any())
         {
-            <h6 style="margin-top:15px">There are not any reviews for this @Model.Item2.ToLower() yet.</h6>
+            <h6 style="margin-top:15px">There are not any discussions for this @Model.Item2.ToLower() yet.</h6>
         }
         else
         {

@@ -1,6 +1,9 @@
-﻿using ProjectHub.Data;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using ProjectHub.Data;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace ProjectHub.Models.User
 {
@@ -10,8 +13,9 @@ namespace ProjectHub.Models.User
 
         public string UserKindName { get; set; }
 
-        [Url]
-        public string ImageUrl { get; set; }
+        public byte[] Image { get; set; }
+        
+        public IFormFile ImageUpload { get; set; }
 
         [Required]
         [StringLength(DataConstants.UserFirstNameMaxLength,
