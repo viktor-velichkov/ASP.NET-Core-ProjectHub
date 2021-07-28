@@ -143,20 +143,20 @@
         $('.nav-link').on('click', function () {
 
             var action = $(this).attr('data-action');
-            var userKind = '@Model.User.UserKindName';
-            var userId = @Model.User.Id;
-            $.get('/User/'+action,
+
+            if (action == 'Description') {
+                $('.js-tab-content').html('<div role="tabpanel" class="tab-pane active"><h6 style="margin-top:15px">@Model.User.Description</h6></div>');
+            }
+            else {
+                var userKind = '@Model.User.UserKindName';
+                var userId = @Model.User.Id;
+                $.get('/User/'+action,
                 { id:userId, userKind:userKind},
                 function (response) {
                     console.log(response)
                     $('.js-tab-content').html(response);
                 });
-        });
-
-        $(function () {
-            var $profilePicture = $('.js-profile-picture');
-            var width = $profilePicture.innerWidth();
-            var height = $profilePicture.innerHeight();
-        });
+            }
+        });        
     </script>
 }

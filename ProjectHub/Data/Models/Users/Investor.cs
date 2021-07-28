@@ -13,6 +13,6 @@ namespace ProjectHub.Data.Models
 
         public ApplicationUser User { get; set; }
 
-        public ICollection<ProjectInvestor> Projects => new HashSet<ProjectInvestor>();
+        public ICollection<Project> Projects => new HashSet<Project>();
     }
 }

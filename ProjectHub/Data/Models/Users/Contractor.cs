@@ -1,5 +1,4 @@
-﻿using ProjectHub.Data.Models.Projects;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjectHub.Data.Models
@@ -15,6 +14,6 @@ namespace ProjectHub.Data.Models
 
         public ICollection<Activity> Activities { get; set; }
 
-        public ICollection<ProjectContractor> Projects => new HashSet<ProjectContractor>();
+        public ICollection<Project> Projects => new HashSet<Project>();
     }
 }

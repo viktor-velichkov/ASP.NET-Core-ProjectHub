@@ -122,7 +122,7 @@ namespace ProjectHub.Controllers
         {
             var projects = this.userService.GetUserProjects(id, userKind).ToList();
 
-            Tuple<List<ProjectGeneralViewModel>, string> tuple = new Tuple<List<ProjectGeneralViewModel>, string>(projects, userKind);
+            Tuple<List<ProjectListingViewModel>, string> tuple = new Tuple<List<ProjectListingViewModel>, string>(projects, userKind);
 
             return PartialView("UserProjectsPartial", tuple);
         }

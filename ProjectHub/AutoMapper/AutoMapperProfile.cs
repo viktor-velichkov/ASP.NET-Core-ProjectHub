@@ -3,6 +3,7 @@ using ProjectHub.Data.Models;
 using ProjectHub.Data.Models.Projects;
 using ProjectHub.Models.Project;
 using ProjectHub.Models.User;
+using System;
 using System.Linq;
 
 namespace ProjectHub.AutoMapper
@@ -44,7 +45,11 @@ namespace ProjectHub.AutoMapper
 
 
             //PROJECTS MAPPING
-            CreateMap<Project, ProjectGeneralViewModel>();
+            CreateMap<Project, ProjectListingViewModel>()
+                .ForMember(
+                          p => p.Investor,
+                          opt => opt.MapFrom(pl => pl.Investor.User.FullName));
+                
             
         }
     }

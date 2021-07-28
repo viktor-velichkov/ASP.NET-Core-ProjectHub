@@ -33,6 +33,9 @@ namespace ProjectHub.Data
         public const int ProjectNameMinLength = 10;
         public const int ProjectNameMaxLength = 150;
 
+        public const int ProjectCityMinLength = 3;
+        public const int ProjectCityMaxLength = 50;
+
         public const int ProjectAddresMinLength = 10;
         public const int ProjectAddresMaxLength = 300;
 

@@ -13,7 +13,7 @@ namespace ProjectHub.Services.User
 
         public void EditUser(UserEditProfileViewModel model);
 
-        public IEnumerable<ProjectGeneralViewModel> GetUserProjects(int id, string userKind);
+        public IEnumerable<ProjectListingViewModel> GetUserProjects(int id, string userKind);
 
         public IEnumerable<ReviewViewModel> GetUserReviews(int id);
 

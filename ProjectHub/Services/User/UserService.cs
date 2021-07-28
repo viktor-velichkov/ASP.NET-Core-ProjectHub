@@ -87,53 +87,45 @@ namespace ProjectHub.Services.User
             this.data.SaveChanges();
         }
 
-        public IEnumerable<ProjectGeneralViewModel> GetUserProjects(int id, string userKind)
+        public IEnumerable<ProjectListingViewModel> GetUserProjects(int id, string userKind)
         {
-            List<ProjectGeneralViewModel> projects = new();
+            List<Project> projects = new();
             switch (userKind)
             {
                 case "Investor":
-                    var investorProjects = this.data
-                                               .Investors
-                                               .FirstOrDefault(i => i.UserId.Equals(id))
-                                               .Projects
-                                               .Select(p => p.Project)
-                                               .ToList();
-
-                    projects = this.mapper.Map<List<Project>, List<ProjectGeneralViewModel>>(investorProjects);
+                    projects = this.data
+                                   .Investors
+                                   .FirstOrDefault(i => i.UserId.Equals(id))
+                                   .Projects
+                                   .ToList();                    
                     break;
                 case "Manager":
-                    var managerProjects = this.data
-                                               .Managers
-                                               .FirstOrDefault(i => i.UserId.Equals(id))
-                                               .Projects
-                                               .ToList();
-
-                    projects = this.mapper.Map<List<Project>, List<ProjectGeneralViewModel>>(managerProjects);
+                    projects = this.data
+                                   .Managers
+                                   .FirstOrDefault(i => i.UserId.Equals(id))
+                                   .Projects
+                                   .ToList();                    
                     break;
                 case "Designer":
-                    var designerProjects = this.data
-                                               .Designers
-                                               .FirstOrDefault(i => i.UserId.Equals(id))
-                                               .Projects
-                                               .ToList();
-
-                    projects = this.mapper.Map<List<ProjectDesigner>, List<ProjectGeneralViewModel>>(designerProjects);
+                    projects = this.data
+                                   .Designers
+                                   .FirstOrDefault(i => i.UserId.Equals(id))
+                                   .Projects
+                                   .Select(up => up.Project)
+                                   .ToList();                    
                     break;
                 case "Contractor":
-                    var contractorProjects = this.data
-                                                 .Contractors
-                                                 .FirstOrDefault(i => i.UserId.Equals(id))
-                                                 .Projects
-                                                 .ToList();
-
-                    projects = this.mapper.Map<List<ProjectContractor>, List<ProjectGeneralViewModel>>(contractorProjects);
+                    projects = this.data
+                                   .Contractors
+                                   .FirstOrDefault(i => i.UserId.Equals(id))
+                                   .Projects
+                                   .ToList();
                     break;
                 default:
                     break;
             }
 
-            return projects;
+            return this.mapper.Map<List<Project>,List<ProjectListingViewModel>>(projects);
         }
 
         private void UpdateUserKindEntityModel(UserEditProfileViewModel model, ApplicationUser user)

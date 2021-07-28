@@ -15,19 +15,17 @@ namespace ProjectHub.Data
 
         public DbSet<Project> Projects { get; set; }
 
-        public DbSet<Position> Positions { get; set; }
-
-        public DbSet<ProjectPosition> ProjectPositions { get; set; }
+        
+        
 
         public DbSet<Investor> Investors { get; set; }
 
-        public DbSet<ProjectInvestor> ProjectInvestors { get; set; }
+        
 
         public DbSet<Manager> Managers { get; set; }
 
         public DbSet<Contractor> Contractors { get; set; }
 
-        public DbSet<ProjectContractor> ProjectContractors { get; set; }
 
         public DbSet<Designer> Designers { get; set; }
 
@@ -77,16 +75,7 @@ namespace ProjectHub.Data
                    .HasOne(nameof(Offer.Project))
                    .WithMany(nameof(Project.Offers))
                    .OnDelete(DeleteBehavior.NoAction);
-
-            builder.Entity<ProjectContractor>()
-                   .HasOne(nameof(ProjectContractor.Project))
-                   .WithMany(nameof(Project.Contractors))
-                   .OnDelete(DeleteBehavior.NoAction);
-
-            builder.Entity<ProjectInvestor>()
-                   .HasOne(nameof(ProjectInvestor.Project))
-                   .WithMany(nameof(Project.Investors))
-                   .OnDelete(DeleteBehavior.NoAction);
+            
 
             builder.Entity<ProjectDesigner>()
                    .HasOne(nameof(ProjectDesigner.Project))
@@ -98,22 +87,10 @@ namespace ProjectHub.Data
             builder.Entity<UserDiscussion>()
                    .HasKey(ud => new { ud.UserId, ud.DiscussionId });
 
-            builder.Entity<ProjectPosition>()
-                   .HasKey(pp => new { pp.ProjectId, pp.PositionId });
-
-            builder.Entity<ProjectInvestor>()
-                   .HasKey(pi => new { pi.ProjectId, pi.InvestorId });
-
-            builder.Entity<ProjectContractor>()
-                   .HasKey(pc => new { pc.ProjectId, pc.ContractorId });
-
+            
             builder.Entity<ProjectDesigner>()
                    .HasKey(pd => new { pd.ProjectId, pd.DesignerId });
-
-            builder.Entity<Project>()
-                   .Property(nameof(Project.Budget))
-                   .HasColumnType("decimal");
-
+                        
             builder.Entity<Offer>()
                    .Property(nameof(Offer.Price))
                    .HasColumnType("decimal");

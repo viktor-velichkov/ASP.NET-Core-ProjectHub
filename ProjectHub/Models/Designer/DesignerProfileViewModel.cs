@@ -12,6 +12,6 @@ namespace ProjectHub.Models.Designer
 
         public int? WorkExperience { get; set; }
 
-        public ICollection<ProjectGeneralViewModel> Projects { get; set; }
+        public ICollection<ProjectListingViewModel> Projects { get; set; }
     }
 }

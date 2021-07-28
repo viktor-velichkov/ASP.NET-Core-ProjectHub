@@ -11,6 +11,6 @@ namespace ProjectHub.Models.Contractor
 
         public ICollection<Activity> Activities { get; set; }
 
-        public ICollection<ProjectGeneralViewModel> Projects { get; set; }
+        public ICollection<ProjectListingViewModel> Projects { get; set; }
     }
 }

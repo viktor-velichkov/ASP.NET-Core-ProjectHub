@@ -1,0 +1,50 @@
+﻿@model List<ProjectListingViewModel>
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+    .center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    }
+</style>
+
+<div class="container">
+    @{
+        foreach(var item in @Model)
+        {
+                <div class="row" style="background-color: lightblue;
+            margin-right: 0;
+            margin-left: 0px;
+            border-radius: 15px;
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 5px;
+            padding-bottom: 5px;">
+                <div class="col-6">
+                    <div class="row" style="font-weight: bold">Name :</div>
+                    <div class="row" style="margin-left: 0px; margin-right: 0px;">@item.Name</div>
+                    <div class="row" style="font-weight: bold">Investor :</div>
+                    <div class="row" style="margin-left: 0px; margin-right: 0px;">@item.Investor</div>
+                </div>
+                <div class="col-3">
+                    <div class="row" style="font-weight: bold">City :</div>
+                    <div class="row" style="margin-left: 0px; margin-right: 0px;">@item.City</div>
+                    <div class="row" style="font-weight: bold">Deadline :</div>
+                    <div class="row" style="margin-left: 0px; margin-right: 0px;">@item.Deadline</div>
+                </div>
+                <div class="col-3">
+                    <div class="center">
+                        <button class="btn btn-primary">Details</button>
+                    </div>
+                </div>
+            </div>
+        }        
+    }
+</div>

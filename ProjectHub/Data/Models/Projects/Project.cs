@@ -15,27 +15,22 @@ namespace ProjectHub.Data.Models
         public string Name { get; set; }
 
         [Required]
-        [MaxLength(DataConstants.ProjectAddresMaxLength)]
-        public string Address { get; set; }
+        [MaxLength(DataConstants.ProjectCityMaxLength)]
+        public string City { get; set; }
 
         [Required]
-        [Range(0, int.MaxValue)]
-        public decimal Budget { get; set; }
-
-
-        public DateTime? StartingDate { get; set; }
-
-        public TimeSpan ExecutionTime { get; set; }
-
-        public DateTime? Deadline => this.StartingDate != null ? this.StartingDate + this.ExecutionTime : null;
+        [MaxLength(DataConstants.ProjectAddresMaxLength)]
+        public string Address { get; set; }
+                
+        public DateTime Deadline { get; set; }
 
         [Required]
         [MaxLength(DataConstants.DescriptionMaxLength)]
         public string Description { get; set; }
-
-        public bool IsFinnished { get; set; }
-
-        public ICollection<ProjectInvestor> Investors => new HashSet<ProjectInvestor>();
+                
+        [ForeignKey(nameof(Investor))]
+        public int InvestorId { get; set; }
+        public Investor Investor { get; set; }
 
         [ForeignKey(nameof(Manager))]
         public int ManagerId { get; set; }
@@ -43,9 +38,7 @@ namespace ProjectHub.Data.Models
 
         public ICollection<ProjectDesigner> Designers => new HashSet<ProjectDesigner>();
 
-        public ICollection<ProjectContractor> Contractors => new HashSet<ProjectContractor>();
-
-        public ICollection<ProjectPosition> FreePositions => new HashSet<ProjectPosition>();
+        public Contractor Contractor { get; set; }        
 
         public ICollection<Offer> Offers => new HashSet<Offer>();
     }

@@ -8,6 +8,6 @@ namespace ProjectHub.Models.Investor
     {
         public AppUserProfileViewModel User { get; set; }
 
-        public ICollection<ProjectGeneralViewModel> Projects { get; set; }
+        public ICollection<ProjectListingViewModel> Projects { get; set; }
     }
 }
