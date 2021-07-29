@@ -38,10 +38,13 @@ namespace ProjectHub.AutoMapper
             CreateMap<Investor, UserEditProfileViewModel>();
 
             CreateMap<Manager, UserProfileViewModel>();
+            CreateMap<Manager, UserEditProfileViewModel>();
 
             CreateMap<Designer, UserProfileViewModel>();
+            CreateMap<Designer, UserEditProfileViewModel>();
 
             CreateMap<Contractor, UserProfileViewModel>();
+            CreateMap<Contractor, UserEditProfileViewModel>();
 
 
             //PROJECTS MAPPING
