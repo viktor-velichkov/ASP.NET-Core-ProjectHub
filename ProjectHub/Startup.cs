@@ -10,6 +10,7 @@ using ProjectHub.AutoMapper;
 using ProjectHub.Data;
 using ProjectHub.Data.Models;
 using ProjectHub.Infrastructure;
+using ProjectHub.Services.Projects;
 using ProjectHub.Services.User;
 
 namespace ProjectHub
@@ -55,6 +56,9 @@ namespace ProjectHub
 
             services
                 .AddTransient<IUserService, UserService>();
+
+            services
+                .AddTransient<IProjectService, ProjectService>();
 
         }
 

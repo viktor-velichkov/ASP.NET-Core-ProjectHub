@@ -12,26 +12,7 @@
         else
         {
             <div class="container-fluid">
-                @{
-                    int projectsCount = Model.Item1.Count;
-                    int rowsCount = projectsCount % 3 == 0 ? projectsCount % 3 : projectsCount % 3 + 1;
-                    @for (int i = 0; i < rowsCount; i++)
-                    {
-                        int projectsOnRow = (projectsCount - i * 3) >= 3 ? 3 : (projectsCount - i * 3);
-                        if (projectsOnRow <= 0)
-                        {
-                            break;
-                        }
-                        <div class="row">
-                            @for (int j = 0; projectsOnRow < 3; j++)
-                            {
-                                <div class="col-md-4">
-                                    @Model.Item1[i * 3 + j]
-                                </div>
-                            }
-                        </div>
-                    }
-                }
+                <partial name="~/Views/Projects/List.cshtml" model="@Model.Item1" />
             </div>
         }
     }

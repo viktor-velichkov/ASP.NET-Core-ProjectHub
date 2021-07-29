@@ -90,42 +90,46 @@ namespace ProjectHub.Services.User
         public IEnumerable<ProjectListingViewModel> GetUserProjects(int id, string userKind)
         {
             List<Project> projects = new();
+
             switch (userKind)
             {
                 case "Investor":
                     projects = this.data
-                                   .Investors
-                                   .FirstOrDefault(i => i.UserId.Equals(id))
                                    .Projects
-                                   .ToList();                    
+                                   .Include(p => p.Investor)
+                                   .ThenInclude(i => i.User)
+                                   .Where(i => i.InvestorId.Equals(id))
+                                   .ToList();
                     break;
                 case "Manager":
                     projects = this.data
-                                   .Managers
-                                   .FirstOrDefault(i => i.UserId.Equals(id))
                                    .Projects
-                                   .ToList();                    
+                                   .Include(p => p.Investor)
+                                   .ThenInclude(i=>i.User)
+                                   .Where(i => i.ManagerId.Equals(id))
+                                   .ToList();
                     break;
                 case "Designer":
                     projects = this.data
-                                   .Designers
-                                   .FirstOrDefault(i => i.UserId.Equals(id))
                                    .Projects
-                                   .Select(up => up.Project)
-                                   .ToList();                    
+                                   .Include(p => p.Investor)
+                                   .ThenInclude(i => i.User)
+                                   .Where(p => p.Designers.Select(pd => pd.DesignerId).Contains(id))
+                                   .ToList();
                     break;
                 case "Contractor":
                     projects = this.data
-                                   .Contractors
-                                   .FirstOrDefault(i => i.UserId.Equals(id))
                                    .Projects
+                                   .Include(p => p.Investor)
+                                   .ThenInclude(i => i.User)
+                                   .Where(i => i.ContractorId.Equals(id))
                                    .ToList();
                     break;
                 default:
                     break;
             }
 
-            return this.mapper.Map<List<Project>,List<ProjectListingViewModel>>(projects);
+            return this.mapper.Map<List<Project>, List<ProjectListingViewModel>>(projects);
         }
 
         private void UpdateUserKindEntityModel(UserEditProfileViewModel model, ApplicationUser user)

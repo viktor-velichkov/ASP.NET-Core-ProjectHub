@@ -33,11 +33,13 @@ namespace ProjectHub.Data.Models
         public Investor Investor { get; set; }
 
         [ForeignKey(nameof(Manager))]
-        public int ManagerId { get; set; }
+        public int? ManagerId { get; set; }
         public Manager Manager { get; set; }
 
         public ICollection<ProjectDesigner> Designers => new HashSet<ProjectDesigner>();
 
+        [ForeignKey(nameof(Contractor))]
+        public int? ContractorId { get; set; }
         public Contractor Contractor { get; set; }        
 
         public ICollection<Offer> Offers => new HashSet<Offer>();

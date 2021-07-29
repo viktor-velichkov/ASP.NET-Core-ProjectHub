@@ -1,1 +1,81 @@
-﻿
+﻿@model ProjectAddViewModel
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+    .timer {
+        font-size: medium
+    }
+
+    .field-title {
+        font-size: larger;
+        font-weight: bold;
+        padding-bottom: 5px;
+        text-align: center;
+    }
+
+    .small-text-normal {
+        text-decoration: none;
+        font-size: medium;
+        font-weight: normal
+    }
+
+    .small-text-bold {
+        text-decoration: none;
+        font-size: medium;
+        font-weight: bold
+    }
+
+    .small-text {
+        font-size: medium;
+    }
+</style>
+<div class="row">
+    <p class="field-title offset-3 col-6" style="background-color: lightblue; border-radius: 5px;">Project Info</p>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="field-title offset-3 col-6" style="background-color: lightblue; border-radius: 5px; padding-bottom:10px">
+            <div class="form-group" style="margin-bottom: 0; margin-top: 5px; text-align:start">
+                <label class="small-text-bold" asp-for="@Model.Name"></label>
+                <input asp-for="@Model.Name" class="form-control" placeholder="Жилищна сграда, Търговски център..." />
+                <span asp-validation-for="@Model.Name" class="text-danger small-text-normal"></span>
+            </div>
+            <div class="form-group" style="margin-bottom: 0; margin-top: 5px; text-align:start">
+                <label class="small-text-bold" asp-for="@Model.City"></label>
+                <input asp-for="@Model.City" class="form-control" placeholder="София,Пловдив,Бургас.." />
+                <span asp-validation-for="@Model.City" class="text-danger  small-text-normal"></span>
+            </div>
+            <div class="form-group" style="margin-bottom: 0; margin-top: 5px; text-align:start">
+                <label class="small-text-bold" asp-for="@Model.Address"></label>
+                <input asp-for="@Model.Address" class="form-control" placeholder="кв...ул..." />
+                <span asp-validation-for="@Model.Address" class="text-danger  small-text-normal"></span>
+            </div>
+            <div class="form-group" style="margin-bottom: 0; margin-top: 5px; text-align:start">
+                <label class="small-text-bold" asp-for="@Model.Deadline"></label>
+                <input asp-for="@Model.Deadline" class="form-control" placeholder="31.08.2021" />
+                <span asp-validation-for="@Model.Deadline" class="text-danger  small-text-normal"></span>
+            </div>
+            <div class="form-group" style="margin-bottom: 0; margin-top: 5px">
+                <label asp-for="@Model.Description"></label>
+                <textarea asp-for="@Model.Description" class="form-control" id="desription" rows="4" placeholder="Project is..."></textarea>
+                <span asp-validation-for="@Model.Description" class="text-danger  small-text-normal"></span>
+            </div>
+        </div>
+    </div>
+    <div class="field-title offset-3 col-6" style="text-align: end;
+                                               padding-right: 0px;
+                                               padding-left: 0px;">
+        <input type="submit" class="btn" value="Add" style="background-color: lightgrey;
+                                                                                margin-top: 10px;
+                                                                                margin-right: 0px;">
+
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="~/Views/_ValidationScriptsPartial.cshtml" />
+}

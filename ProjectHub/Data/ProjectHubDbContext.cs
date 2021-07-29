@@ -15,12 +15,12 @@ namespace ProjectHub.Data
 
         public DbSet<Project> Projects { get; set; }
 
-        
-        
+
+
 
         public DbSet<Investor> Investors { get; set; }
 
-        
+
 
         public DbSet<Manager> Managers { get; set; }
 
@@ -61,6 +61,11 @@ namespace ProjectHub.Data
 
             builder.Entity<ApplicationUser>().Property("Image").HasColumnType("varbinary(MAX)");
 
+            builder.Entity<Project>()
+                    .HasOne(nameof(Project.Investor))
+                    .WithMany(nameof(Investor.Projects))
+                    .OnDelete(DeleteBehavior.NoAction);
+
             builder.Entity<Rate>()
                    .HasOne(nameof(Rate.Recipient))
                    .WithMany(nameof(ApplicationUser.RatesReceived))
@@ -75,7 +80,7 @@ namespace ProjectHub.Data
                    .HasOne(nameof(Offer.Project))
                    .WithMany(nameof(Project.Offers))
                    .OnDelete(DeleteBehavior.NoAction);
-            
+
 
             builder.Entity<ProjectDesigner>()
                    .HasOne(nameof(ProjectDesigner.Project))
@@ -87,10 +92,10 @@ namespace ProjectHub.Data
             builder.Entity<UserDiscussion>()
                    .HasKey(ud => new { ud.UserId, ud.DiscussionId });
 
-            
+
             builder.Entity<ProjectDesigner>()
                    .HasKey(pd => new { pd.ProjectId, pd.DesignerId });
-                        
+
             builder.Entity<Offer>()
                    .Property(nameof(Offer.Price))
                    .HasColumnType("decimal");

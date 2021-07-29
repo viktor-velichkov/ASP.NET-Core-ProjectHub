@@ -3,6 +3,10 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
+    .timer {
+        font-size: medium
+    }
+
     .field-title {
         font-size: larger;
         font-weight: bold;
@@ -27,36 +31,90 @@
     }
 </style>
 <div class="row">
-    <p class="field-title offset-lg-3 offset-md-2 offset-sm-2 offset-1 col-lg-6 col-md-8 col-sm-8 col-10" style="background-color: lightblue; border-radius: 15px;">Жилищна сграда</p>
+    <p class="field-title offset-lg-3 offset-md-2 offset-sm-2 offset-1 col-lg-6 col-md-8 col-sm-8 col-10" style="background-color: lightblue; border-radius: 5px;">Жилищна сграда</p>
 </div>
 
 <div class="row">
     <div class="field-title offset-lg-2 offset-md-1 offset-sm-1 offset-0 col-lg-8 col-md-10 col-sm-10 col-12" style="padding-left: 0px; padding-right: 0px;">
         <div class="row" style="margin-left: 0px; margin-right: 0px;">
-            <div class="col-5" style="width: 90%; background-color: lightblue; border-radius: 15px; padding-left: 15px; left:5%">
+            <div class="col-5" style="background-color: lightblue; border-radius: 5px; padding: 2.5%; left:5%">
                 <div>Team</div>
                 <div class="row small-text-bold" style="margin-left: 0px; text-decoration: none">Investor :</div>
-                <div class="row small-text-normal" style="margin-left: 15px; margin-right: 0px;">Viktor Velichkov</div>
+                <div class="row small-text-normal" style="margin-left: 20%; margin-right: 0px;">Viktor Velichkov</div>
                 <div class="row small-text-bold" style="margin-left: 0px; text-decoration: none">Manager :</div>
-                <div class="row small-text-normal" style="margin-left: 15px; margin-right: 0px;">Viktor Velichkov</div>
+                <div class="row small-text-normal" style="margin-left: 20%; margin-right: 0px;">Viktor Velichkov</div>
                 <div class="row small-text-bold" style="margin-left: 0px; text-decoration: none">Designers :</div>
-                <div class="row small-text-normal" style="margin-left: 15px; text-decoration: none">• Architect :</div>
-                <div class="row small-text-normal" style="margin-left: 30px; margin-right: 0px;">Viktor Velichkov</div>
-                <div class="row small-text-normal" style="margin-left: 15px; text-decoration: none">• Structural Engineer :</div>
-                <div class="row small-text-normal" style="margin-left: 30px; margin-right: 0px;">Viktor Velichkov</div>
+                <div class="row small-text-normal" style="margin-left: 5%; text-decoration: none">• Architect :</div>
+                <div class="row small-text-normal" style="margin-left: 20%; margin-right: 0px;">Viktor Velichkov</div>
+                <div class="row small-text-normal" style="margin-left: 5%; text-decoration: none">• Structural Engineer :</div>
+                <div class="row small-text-normal" style="margin-left: 20%; margin-right: 0px;">Viktor Velichkov</div>
+                <div class="row small-text-normal" style="margin-left: 5%; text-decoration: none">• Electro :</div>
+                <div class="row small-text-normal" style="margin-left: 20%; margin-right: 0px;">Viktor Velichkov</div>
+                <div class="row small-text-normal" style="margin-left: 5%; text-decoration: none">• WSS :</div>
+                <div class="row small-text-normal" style="margin-left: 20%; margin-right: 0px;">Viktor Velichkov</div>
+                <div class="row small-text-normal" style="margin-left: 5%; text-decoration: none">• HVAC :</div>
+                <div class="row small-text-normal" style="margin-left: 20%; margin-right: 0px;">Viktor Velichkov</div>
+                <div class="row small-text-normal" style="margin-left: 5%; text-decoration: none">• Geodesy :</div>
+                <div class="row small-text-normal" style="margin-left: 20%; margin-right: 0px;">Viktor Velichkov</div>
+                <div class="row small-text-normal" style="margin-left: 5%; text-decoration: none">• Landscaping :</div>
+                <div class="row small-text-normal" style="margin-left: 20%; margin-right: 0px;">Viktor Velichkov</div>
+                <div class="row small-text-bold" style="margin-left: 0px; text-decoration: none">Main contractor :</div>
+                <div class="row small-text-normal" style="margin-left: 20%; margin-right: 0px;">Viktor Velichkov</div>
             </div>
             <div class="col-2"></div>
-            <div class="col-5" style="width: 90%; background-color: lightblue; border-radius: 15px; padding-left: 15px; right: 5%;">
-                <div>Team</div>
-                <div class="row small-text-bold" style="margin-left: 0px; text-decoration: none">Investor :</div>
-                <div class="row small-text-normal" style="margin-left: 15px; margin-right: 0px;">Viktor Velichkov</div>
-                <div class="row small-text-bold" style="margin-left: 0px; text-decoration: none">Investor :</div>
-                <div class="row small-text-normal" style="margin-left: 15px; margin-right: 0px;">Viktor Velichkov</div>
+            <div class="col-5" style="background-color: lightblue; border-radius: 5px; padding: 2.5%; right: 5%;">
+                <div>Info</div>
+                <div class="row small-text-bold offset-lg-1" style="padding-bottom:25px; margin-left: 0px; text-decoration: none">
+                    City :
+                    <div class="row small-text-normal" style="margin-left:5px; margin-right: 0px;">Sofia</div>
+                </div>
+                <div class="row small-text-bold offset-lg-1" style="margin-left: 0px; text-decoration: none">Addres :</div>
+                <div class="row small-text-normal" style="margin-left: 20%; margin-right: 0px;">42 Todor Dzhebarov str.</div>
+                <div class="row small-text-bold offset-lg-1" style="margin-left: 0px; text-decoration: none">Description :</div>
+                <div class="row small-text-normal" style="margin-left: 5%; margin-right: 0px;">Viktor Velichkov Viktor Velichkov Viktor Velichkov Viktor Velichkov</div>
             </div>
-
+        </div>
+        <div style="text-align: end;">
+            <input asp-controller="Offers" asp-action="Send" type="submit" formmethod="get" class="btn" value="Send Offer" style="background-color: lightgrey;
+                                                                                                                                  margin-top: 10px;
+                                                                                                                                  margin-right: 5%;">
+            <p class="timer" id="timer" style="margin-right: 5%; text-align: end;"></p>
         </div>
     </div>
 </div>
+
+<script>
+    // Set the date we're counting down to
+    var countDownDate = new Date("Jul 28, 2021 15:37:25").getTime();
+
+    // Update the count down every 1 second
+    var x = setInterval(function () {
+
+        // Get today's date and time
+        var now = new Date().getTime();
+
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Output the result in an element with id="demo"
+        document.getElementById("timer").innerHTML = days + "дни " + hours + "часа "
+            + minutes + "мин. " + seconds + "с. ";
+
+        // If the count down is over, write some text
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById('timer').innerHTML = "The time that you were able to send offers for this project has expired.";
+        }
+    }, 1000);
+</script>
+
+
 
 
 

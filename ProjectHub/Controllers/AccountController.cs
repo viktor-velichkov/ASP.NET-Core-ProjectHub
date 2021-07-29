@@ -50,7 +50,6 @@ namespace ProjectHub.Controllers
             {
                 user.UserKinds = GetUserKinds();
 
-
                 return View(user);
             }
 
@@ -122,16 +121,16 @@ namespace ProjectHub.Controllers
             switch (userType.Name)
             {
                 case "Investor":
-                    this.data.Investors.Add(new Investor { UserId = userId });
+                    this.data.Investors.Add(new Investor { Id = userId, UserId = userId });
                     break;
                 case "Designer":
-                    this.data.Designers.Add(new Designer { UserId = userId });
+                    this.data.Designers.Add(new Designer { Id = userId, UserId = userId });
                     break;
                 case "Manager":
-                    this.data.Managers.Add(new Manager { UserId = userId });
+                    this.data.Managers.Add(new Manager { Id = userId, UserId = userId });
                     break;
                 case "Contractor":
-                    this.data.Contractors.Add(new Contractor { UserId = userId });
+                    this.data.Contractors.Add(new Contractor { Id = userId, UserId = userId });
                     break;
                 default:
                     throw new ArgumentException(ValidationErrorMessages.InvalidUserKindMessage);

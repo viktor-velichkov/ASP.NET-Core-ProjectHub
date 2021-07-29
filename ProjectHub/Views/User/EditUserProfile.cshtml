@@ -11,11 +11,11 @@
         overflow: hidden;
     }
 
-    .crop img {
-        width: 400px;
-        height: 300px;
-        margin: -75px 0 0 -100px;
-    }
+        .crop img {
+            width: 400px;
+            height: 300px;
+            margin: -75px 0 0 -100px;
+        }
 </style>
 
 @{
@@ -74,7 +74,7 @@
                 <div class="profile-head">
                     <input type="hidden" name="User.Id" value="@Model.User.Id" />
                     <input type="hidden" name="User.UserKindName" value="@Model.User.UserKindName" />
-                   
+
                     <div class="form-group" style="margin-bottom:0; margin-top:5px;">
                         <label asp-for="User.FirstName"></label>
                         <input asp-for="User.FirstName" class="form-control" placeholder="@Model.User.FirstName" />
@@ -122,3 +122,7 @@
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <partial name="~/Views/_ValidationScriptsPartial.cshtml" />
+}
