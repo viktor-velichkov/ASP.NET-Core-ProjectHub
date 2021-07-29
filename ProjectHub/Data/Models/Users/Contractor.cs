@@ -5,6 +5,7 @@ namespace ProjectHub.Data.Models
 {
     public class Contractor
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         [ForeignKey(nameof(User))]

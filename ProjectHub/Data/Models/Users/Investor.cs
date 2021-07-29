@@ -6,6 +6,7 @@ namespace ProjectHub.Data.Models
 {
     public class Investor
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         [ForeignKey(nameof(User))]

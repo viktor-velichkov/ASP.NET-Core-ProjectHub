@@ -10,8 +10,8 @@ using ProjectHub.Data;
 namespace ProjectHub.Data.Migrations
 {
     [DbContext(typeof(ProjectHubDbContext))]
-    [Migration("20210722195324_AddPagesToUser")]
-    partial class AddPagesToUser
+    [Migration("20210729224837_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -204,13 +204,15 @@ namespace ProjectHub.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("varbinary(MAX)");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
@@ -249,12 +251,12 @@ namespace ProjectHub.Data.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
+                    b.Property<int>("UserKindId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<int>("UserKindId")
-                        .HasColumnType("int");
 
                     b.Property<string>("WebSite")
                         .HasMaxLength(50)
@@ -278,9 +280,7 @@ namespace ProjectHub.Data.Migrations
             modelBuilder.Entity("ProjectHub.Data.Models.Contractor", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -295,17 +295,15 @@ namespace ProjectHub.Data.Migrations
             modelBuilder.Entity("ProjectHub.Data.Models.Designer", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
-                    b.Property<int>("DisciplineId")
+                    b.Property<int?>("DisciplineId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("WorkExperience")
+                    b.Property<int?>("WorkExperience")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -354,9 +352,7 @@ namespace ProjectHub.Data.Migrations
             modelBuilder.Entity("ProjectHub.Data.Models.Investor", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -371,9 +367,7 @@ namespace ProjectHub.Data.Migrations
             modelBuilder.Entity("ProjectHub.Data.Models.Manager", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -382,7 +376,7 @@ namespace ProjectHub.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Manager");
+                    b.ToTable("Managers");
                 });
 
             modelBuilder.Entity("ProjectHub.Data.Models.Message", b =>
@@ -450,24 +444,6 @@ namespace ProjectHub.Data.Migrations
                     b.ToTable("Offers");
                 });
 
-            modelBuilder.Entity("ProjectHub.Data.Models.Position", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("IsFree")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Positions");
-                });
-
             modelBuilder.Entity("ProjectHub.Data.Models.Project", b =>
                 {
                     b.Property<int>("Id")
@@ -480,21 +456,26 @@ namespace ProjectHub.Data.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<decimal>("Budget")
-                        .HasColumnType("decimal");
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("ContractorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(10000)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan>("ExecutionTime")
-                        .HasColumnType("time");
+                    b.Property<int>("InvestorId")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsFinnished")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ManagerId")
+                    b.Property<int?>("ManagerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -502,44 +483,15 @@ namespace ProjectHub.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<DateTime?>("StartingDate")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("ContractorId");
+
+                    b.HasIndex("InvestorId");
 
                     b.HasIndex("ManagerId");
 
                     b.ToTable("Projects");
-                });
-
-            modelBuilder.Entity("ProjectHub.Data.Models.ProjectPosition", b =>
-                {
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PositionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProjectId", "PositionId");
-
-                    b.HasIndex("PositionId");
-
-                    b.ToTable("ProjectPositions");
-                });
-
-            modelBuilder.Entity("ProjectHub.Data.Models.Projects.ProjectContractor", b =>
-                {
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ContractorId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProjectId", "ContractorId");
-
-                    b.HasIndex("ContractorId");
-
-                    b.ToTable("ProjectContractors");
                 });
 
             modelBuilder.Entity("ProjectHub.Data.Models.Projects.ProjectDesigner", b =>
@@ -555,21 +507,6 @@ namespace ProjectHub.Data.Migrations
                     b.HasIndex("DesignerId");
 
                     b.ToTable("ProjectDesigners");
-                });
-
-            modelBuilder.Entity("ProjectHub.Data.Models.Projects.ProjectInvestor", b =>
-                {
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InvestorId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProjectId", "InvestorId");
-
-                    b.HasIndex("InvestorId");
-
-                    b.ToTable("ProjectInvestors");
                 });
 
             modelBuilder.Entity("ProjectHub.Data.Models.Rate", b =>
@@ -743,9 +680,7 @@ namespace ProjectHub.Data.Migrations
                 {
                     b.HasOne("ProjectHub.Data.Models.Discipline", "Discipline")
                         .WithMany()
-                        .HasForeignKey("DisciplineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DisciplineId");
 
                     b.HasOne("ProjectHub.Data.Models.ApplicationUser", "User")
                         .WithMany()
@@ -823,51 +758,25 @@ namespace ProjectHub.Data.Migrations
 
             modelBuilder.Entity("ProjectHub.Data.Models.Project", b =>
                 {
-                    b.HasOne("ProjectHub.Data.Models.Manager", "Manager")
-                        .WithMany("Projects")
-                        .HasForeignKey("ManagerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Manager");
-                });
-
-            modelBuilder.Entity("ProjectHub.Data.Models.ProjectPosition", b =>
-                {
-                    b.HasOne("ProjectHub.Data.Models.Position", "Position")
-                        .WithMany()
-                        .HasForeignKey("PositionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProjectHub.Data.Models.Project", "Project")
-                        .WithMany("FreePositions")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Position");
-
-                    b.Navigation("Project");
-                });
-
-            modelBuilder.Entity("ProjectHub.Data.Models.Projects.ProjectContractor", b =>
-                {
                     b.HasOne("ProjectHub.Data.Models.Contractor", "Contractor")
                         .WithMany("Projects")
-                        .HasForeignKey("ContractorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ContractorId");
 
-                    b.HasOne("ProjectHub.Data.Models.Project", "Project")
-                        .WithMany("Contractors")
-                        .HasForeignKey("ProjectId")
+                    b.HasOne("ProjectHub.Data.Models.Investor", "Investor")
+                        .WithMany("Projects")
+                        .HasForeignKey("InvestorId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("ProjectHub.Data.Models.Manager", "Manager")
+                        .WithMany("Projects")
+                        .HasForeignKey("ManagerId");
+
                     b.Navigation("Contractor");
 
-                    b.Navigation("Project");
+                    b.Navigation("Investor");
+
+                    b.Navigation("Manager");
                 });
 
             modelBuilder.Entity("ProjectHub.Data.Models.Projects.ProjectDesigner", b =>
@@ -885,25 +794,6 @@ namespace ProjectHub.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Designer");
-
-                    b.Navigation("Project");
-                });
-
-            modelBuilder.Entity("ProjectHub.Data.Models.Projects.ProjectInvestor", b =>
-                {
-                    b.HasOne("ProjectHub.Data.Models.Investor", "Investor")
-                        .WithMany("Projects")
-                        .HasForeignKey("InvestorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProjectHub.Data.Models.Project", "Project")
-                        .WithMany("Investors")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Investor");
 
                     b.Navigation("Project");
                 });
@@ -1013,13 +903,7 @@ namespace ProjectHub.Data.Migrations
 
             modelBuilder.Entity("ProjectHub.Data.Models.Project", b =>
                 {
-                    b.Navigation("Contractors");
-
                     b.Navigation("Designers");
-
-                    b.Navigation("FreePositions");
-
-                    b.Navigation("Investors");
 
                     b.Navigation("Offers");
                 });

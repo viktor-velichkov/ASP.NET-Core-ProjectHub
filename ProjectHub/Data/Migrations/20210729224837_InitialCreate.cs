@@ -23,38 +23,6 @@ namespace ProjectHub.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserKind = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", maxLength: 10000, nullable: true),
-                    WebSite = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Disciplines",
                 columns: table => new
                 {
@@ -68,17 +36,16 @@ namespace ProjectHub.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Positions",
+                name: "UserKinds",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsFree = table.Column<bool>(type: "bit", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Positions", x => x.Id);
+                    table.PrimaryKey("PK_UserKinds", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -98,6 +65,47 @@ namespace ProjectHub.Data.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserKindId = table.Column<int>(type: "int", nullable: false),
+                    Image = table.Column<byte[]>(type: "varbinary(MAX)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", maxLength: 10000, nullable: true),
+                    WebSite = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    FacebookPage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LinkedinPage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SkypeProfile = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_UserKinds_UserKindId",
+                        column: x => x.UserKindId,
+                        principalTable: "UserKinds",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -191,8 +199,7 @@ namespace ProjectHub.Data.Migrations
                 name: "Contractors",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -204,6 +211,32 @@ namespace ProjectHub.Data.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Designers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    DisciplineId = table.Column<int>(type: "int", nullable: true),
+                    WorkExperience = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Designers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Designers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Designers_Disciplines_DisciplineId",
+                        column: x => x.DisciplineId,
+                        principalTable: "Disciplines",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -229,8 +262,7 @@ namespace ProjectHub.Data.Migrations
                 name: "Investors",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -245,18 +277,17 @@ namespace ProjectHub.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Manager",
+                name: "Managers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Manager", x => x.Id);
+                    table.PrimaryKey("PK_Managers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Manager_AspNetUsers_UserId",
+                        name: "FK_Managers_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -314,33 +345,6 @@ namespace ProjectHub.Data.Migrations
                         column: x => x.RecipientId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Designers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    DisciplineId = table.Column<int>(type: "int", nullable: false),
-                    WorkExperience = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Designers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Designers_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Designers_Disciplines_DisciplineId",
-                        column: x => x.DisciplineId,
-                        principalTable: "Disciplines",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -422,23 +426,34 @@ namespace ProjectHub.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
-                    Budget = table.Column<decimal>(type: "decimal", nullable: false),
-                    StartingDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ExecutionTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", maxLength: 10000, nullable: false),
-                    IsFinnished = table.Column<bool>(type: "bit", nullable: false),
-                    ManagerId = table.Column<int>(type: "int", nullable: false)
+                    InvestorId = table.Column<int>(type: "int", nullable: false),
+                    ManagerId = table.Column<int>(type: "int", nullable: true),
+                    ContractorId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Projects", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Projects_Manager_ManagerId",
-                        column: x => x.ManagerId,
-                        principalTable: "Manager",
+                        name: "FK_Projects_Contractors_ContractorId",
+                        column: x => x.ContractorId,
+                        principalTable: "Contractors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Projects_Investors_InvestorId",
+                        column: x => x.InvestorId,
+                        principalTable: "Investors",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Projects_Managers_ManagerId",
+                        column: x => x.ManagerId,
+                        principalTable: "Managers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -470,29 +485,6 @@ namespace ProjectHub.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProjectContractors",
-                columns: table => new
-                {
-                    ProjectId = table.Column<int>(type: "int", nullable: false),
-                    ContractorId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProjectContractors", x => new { x.ProjectId, x.ContractorId });
-                    table.ForeignKey(
-                        name: "FK_ProjectContractors_Contractors_ContractorId",
-                        column: x => x.ContractorId,
-                        principalTable: "Contractors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProjectContractors_Projects_ProjectId",
-                        column: x => x.ProjectId,
-                        principalTable: "Projects",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ProjectDesigners",
                 columns: table => new
                 {
@@ -513,53 +505,6 @@ namespace ProjectHub.Data.Migrations
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProjectInvestors",
-                columns: table => new
-                {
-                    ProjectId = table.Column<int>(type: "int", nullable: false),
-                    InvestorId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProjectInvestors", x => new { x.ProjectId, x.InvestorId });
-                    table.ForeignKey(
-                        name: "FK_ProjectInvestors_Investors_InvestorId",
-                        column: x => x.InvestorId,
-                        principalTable: "Investors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProjectInvestors_Projects_ProjectId",
-                        column: x => x.ProjectId,
-                        principalTable: "Projects",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProjectPositions",
-                columns: table => new
-                {
-                    ProjectId = table.Column<int>(type: "int", nullable: false),
-                    PositionId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProjectPositions", x => new { x.ProjectId, x.PositionId });
-                    table.ForeignKey(
-                        name: "FK_ProjectPositions_Positions_PositionId",
-                        column: x => x.PositionId,
-                        principalTable: "Positions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProjectPositions_Projects_ProjectId",
-                        column: x => x.ProjectId,
-                        principalTable: "Projects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -600,6 +545,11 @@ namespace ProjectHub.Data.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_UserKindId",
+                table: "AspNetUsers",
+                column: "UserKindId");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -632,8 +582,8 @@ namespace ProjectHub.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Manager_UserId",
-                table: "Manager",
+                name: "IX_Managers_UserId",
+                table: "Managers",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -657,24 +607,19 @@ namespace ProjectHub.Data.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectContractors_ContractorId",
-                table: "ProjectContractors",
-                column: "ContractorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProjectDesigners_DesignerId",
                 table: "ProjectDesigners",
                 column: "DesignerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectInvestors_InvestorId",
-                table: "ProjectInvestors",
-                column: "InvestorId");
+                name: "IX_Projects_ContractorId",
+                table: "Projects",
+                column: "ContractorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectPositions_PositionId",
-                table: "ProjectPositions",
-                column: "PositionId");
+                name: "IX_Projects_InvestorId",
+                table: "Projects",
+                column: "InvestorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Projects_ManagerId",
@@ -734,16 +679,7 @@ namespace ProjectHub.Data.Migrations
                 name: "Offers");
 
             migrationBuilder.DropTable(
-                name: "ProjectContractors");
-
-            migrationBuilder.DropTable(
                 name: "ProjectDesigners");
-
-            migrationBuilder.DropTable(
-                name: "ProjectInvestors");
-
-            migrationBuilder.DropTable(
-                name: "ProjectPositions");
 
             migrationBuilder.DropTable(
                 name: "Rates");
@@ -758,16 +694,7 @@ namespace ProjectHub.Data.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Contractors");
-
-            migrationBuilder.DropTable(
                 name: "Designers");
-
-            migrationBuilder.DropTable(
-                name: "Investors");
-
-            migrationBuilder.DropTable(
-                name: "Positions");
 
             migrationBuilder.DropTable(
                 name: "Projects");
@@ -779,10 +706,19 @@ namespace ProjectHub.Data.Migrations
                 name: "Disciplines");
 
             migrationBuilder.DropTable(
-                name: "Manager");
+                name: "Contractors");
+
+            migrationBuilder.DropTable(
+                name: "Investors");
+
+            migrationBuilder.DropTable(
+                name: "Managers");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "UserKinds");
         }
     }
 }

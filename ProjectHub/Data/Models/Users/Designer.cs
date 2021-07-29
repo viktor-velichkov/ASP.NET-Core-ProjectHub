@@ -7,6 +7,7 @@ namespace ProjectHub.Data.Models
 {
     public class Designer
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         [ForeignKey(nameof(User))]
