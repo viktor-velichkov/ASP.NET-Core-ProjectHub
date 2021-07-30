@@ -514,13 +514,13 @@ namespace ProjectHub.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AuthorId")
+                    b.Property<int?>("AuthorId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsPositive")
                         .HasColumnType("bit");
 
-                    b.Property<int>("RecipientId")
+                    b.Property<int?>("RecipientId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -801,14 +801,12 @@ namespace ProjectHub.Data.Migrations
                     b.HasOne("ProjectHub.Data.Models.ApplicationUser", "Author")
                         .WithMany("RatesSent")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("ProjectHub.Data.Models.ApplicationUser", "Recipient")
                         .WithMany("RatesReceived")
                         .HasForeignKey("RecipientId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Author");
 
@@ -820,7 +818,7 @@ namespace ProjectHub.Data.Migrations
                     b.HasOne("ProjectHub.Data.Models.ApplicationUser", "Author")
                         .WithMany("ReviewsSent")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("ProjectHub.Data.Models.ApplicationUser", "Recipient")

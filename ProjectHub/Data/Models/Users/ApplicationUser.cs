@@ -34,10 +34,10 @@ namespace ProjectHub.Data.Models
         public string WebSite { get; set; }
 
         [InverseProperty(nameof(Rate.Recipient))]
-        public ICollection<Rate> RatesReceived { get; set; }
+        public ICollection<Rate> RatesReceived => new HashSet<Rate>();
 
         [InverseProperty(nameof(Rate.Author))]
-        public ICollection<Rate> RatesSent { get; set; }
+        public ICollection<Rate> RatesSent => new HashSet<Rate>();
 
         [Url]
         public string FacebookPage { get; set; }

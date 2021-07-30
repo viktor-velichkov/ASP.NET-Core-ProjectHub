@@ -1,4 +1,4 @@
-﻿@model UserProfileViewModel
+﻿@model Tuple<UserProfileViewModel,int>
 
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -15,24 +15,32 @@
             <div class="col-md-4">
                 <div class="profile-img">
                     @{
-                        if (Model.User.Image.Length == 0)
+                        if (Model.Item1.User.Image.Length == 0)
                         {
                             <img src="data:image/jpeg;base64,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" class="img-thumbnail" alt="" />
                         }
                         else
                         {
-                            <img src="data:image/png;base64,@Convert.ToBase64String(Model.User.Image)" class="js-profile-picture img-thumbnail" alt="" />
+                            <img src="data:image/png;base64,@Convert.ToBase64String(Model.Item1.User.Image)" class="js-profile-picture img-thumbnail" alt="" />
                         }
                     }
                 </div>
-                @if (Model.IsLoggedUser)
-                {
-                    <div class="left">
-                        @*<input type="file" class="btn btn-primary" value="Change Photo" style="margin-bottom: 15px; margin-top: 15px;" />*@
-                        <input type="hidden" name="userId" value="@Model.User.Id" />
-                        <input type="hidden" name="userKind" value="@Model.User.UserKindName" />
-                        <input asp-controller="User" asp-action="EditUserProfile" type="submit" formmethod="get" class="btn btn-primary" value="Edit Profile" style="margin-bottom: 10px; margin-top: 10px;" />
-                    </div>
+                @{
+                    if (Model.Item1.IsLoggedUser)
+                    {
+                        <div class="left">
+                            @*<input type="file" class="btn btn-primary" value="Change Photo" style="margin-bottom: 15px; margin-top: 15px;" />*@
+                            <input type="hidden" name="userId" value="@Model.Item1.User.Id" />
+                            <input type="hidden" name="userKind" value="@Model.Item1.User.UserKindName" />
+                            <input asp-controller="User" asp-action="EditUserProfile" type="submit" formmethod="get" class="btn btn-primary" value="Edit Profile" style="margin-bottom: 10px; margin-top: 10px;" />
+                        </div>
+                    }
+                    else
+                    {
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16">
+                            <path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2.144 2.144 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a9.84 9.84 0 0 0-.443.05 9.365 9.365 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111L8.864.046zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a8.908 8.908 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.224 2.224 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.866.866 0 0 1-.121.416c-.165.288-.503.56-1.066.56z" />
+                        </svg>
+                    }
                 }
                 <div class="row" style="padding-left: 15px">
                     <div class="left">
@@ -40,25 +48,25 @@
                             <p>SOCIAL LINKS</p>
                             <ul class="social-links list-inline">
                                 @{
-                                    if (Model.User.FacebookPage != null)
+                                    if (Model.Item1.User.FacebookPage != null)
                                     {
-                                        <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="@Model.User.FacebookPage" data-original-title="Facebook"><i class="fa fa-facebook fa-2x"></i></a></li>
+                                        <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="@Model.Item1.User.FacebookPage" data-original-title="Facebook"><i class="fa fa-facebook fa-2x"></i></a></li>
                                     }
                                     else
                                     {
                                         <li class="list-inline-item"><div data-placement="top" class="tooltips"><i style="color:gray" class="fa fa-facebook fa-2x"></i></div></li>
                                     }
-                                    if (Model.User.LinkedinPage != null)
+                                    if (Model.Item1.User.LinkedinPage != null)
                                     {
-                                        <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="@Model.User.LinkedinPage" data-original-title="LinkedIn"><i class="fa fa-linkedin fa-2x" aria-></i></a></li>
+                                        <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="@Model.Item1.User.LinkedinPage" data-original-title="LinkedIn"><i class="fa fa-linkedin fa-2x" aria-></i></a></li>
                                     }
                                     else
                                     {
                                         <li class="list-inline-item"><div data-placement="top" class="tooltips"><i style="color:gray" class="fa fa-linkedin fa-2x"></i></div></li>
                                     }
-                                    if (Model.User.SkypeProfile != null)
+                                    if (Model.Item1.User.SkypeProfile != null)
                                     {
-                                        <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="@Model.User.SkypeProfile" data-original-title="Skype"><i class="fa fa-skype fa-2x"></i></a></li>
+                                        <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="@Model.Item1.User.SkypeProfile" data-original-title="Skype"><i class="fa fa-skype fa-2x"></i></a></li>
                                     }
                                     else
                                     {
@@ -73,21 +81,21 @@
             <div class="col-md-8">
                 <div class="profile-head">
                     <h5>
-                        @Model.User.FullName
+                        @Model.Item1.User.FullName
                     </h5>
                     <h6>
-                        @Model.User.UserKindName
-                        @if (Model.Discipline != null)
+                        @Model.Item1.User.UserKindName
+                        @if (Model.Item1.Discipline != null)
                         {
-                            @Model.Discipline.Name
+                            @Model.Item1.Discipline.Name
                         }
                     </h6>
                     <p class="proile-rating" style="margin-bottom:10px">
                         Email :
                         <span>
-                            @if (Model.User.Email != null)
+                            @if (Model.Item1.User.Email != null)
                             {
-                                @Model.User.Email
+                                @Model.Item1.User.Email
                             }
                         </span>
                     </p>
@@ -95,9 +103,9 @@
                         Phone :
                         <span>
                             @{
-                                if (Model.User.PhoneNumber != null)
+                                if (Model.Item1.User.PhoneNumber != null)
                                 {
-                                    @Model.User.PhoneNumber
+                                    @Model.Item1.User.PhoneNumber
                                 }
                                 else
                                 {
@@ -107,8 +115,18 @@
                         </span>
                     </p>
                     <p class="proile-rating" style="margin-bottom:10px">
-                        Recomendations : <span style="margin-right: auto">@Model.User.Recomendations</span>
-                        Disapprovals : <span>@Model.User.Disapprovals</span>
+                        <btn class="btn btn-primary recommend" data-action="Reccomendations">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16" style="margin-bottom:5px">
+                                <path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2.144 2.144 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a9.84 9.84 0 0 0-.443.05 9.365 9.365 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111L8.864.046zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a8.908 8.908 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.224 2.224 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.866.866 0 0 1-.121.416c-.165.288-.503.56-1.066.56z" />
+                            </svg>
+                            <span class="reccomendations" style="margin-right: auto">@Model.Item1.User.Recomendations</span>
+                        </btn>
+                        <btn class="btn btn-primary disapprove">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-down" viewBox="0 0 16 16">
+                                <path d="M8.864 15.674c-.956.24-1.843-.484-1.908-1.42-.072-1.05-.23-2.015-.428-2.59-.125-.36-.479-1.012-1.04-1.638-.557-.624-1.282-1.179-2.131-1.41C2.685 8.432 2 7.85 2 7V3c0-.845.682-1.464 1.448-1.546 1.07-.113 1.564-.415 2.068-.723l.048-.029c.272-.166.578-.349.97-.484C6.931.08 7.395 0 8 0h3.5c.937 0 1.599.478 1.934 1.064.164.287.254.607.254.913 0 .152-.023.312-.077.464.201.262.38.577.488.9.11.33.172.762.004 1.15.069.13.12.268.159.403.077.27.113.567.113.856 0 .289-.036.586-.113.856-.035.12-.08.244-.138.363.394.571.418 1.2.234 1.733-.206.592-.682 1.1-1.2 1.272-.847.283-1.803.276-2.516.211a9.877 9.877 0 0 1-.443-.05 9.364 9.364 0 0 1-.062 4.51c-.138.508-.55.848-1.012.964l-.261.065zM11.5 1H8c-.51 0-.863.068-1.14.163-.281.097-.506.229-.776.393l-.04.025c-.555.338-1.198.73-2.49.868-.333.035-.554.29-.554.55V7c0 .255.226.543.62.65 1.095.3 1.977.997 2.614 1.709.635.71 1.064 1.475 1.238 1.977.243.7.407 1.768.482 2.85.025.362.36.595.667.518l.262-.065c.16-.04.258-.144.288-.255a8.34 8.34 0 0 0-.145-4.726.5.5 0 0 1 .595-.643h.003l.014.004.058.013a8.912 8.912 0 0 0 1.036.157c.663.06 1.457.054 2.11-.163.175-.059.45-.301.57-.651.107-.308.087-.67-.266-1.021L12.793 7l.353-.354c.043-.042.105-.14.154-.315.048-.167.075-.37.075-.581 0-.211-.027-.414-.075-.581-.05-.174-.111-.273-.154-.315l-.353-.354.353-.354c.047-.047.109-.176.005-.488a2.224 2.224 0 0 0-.505-.804l-.353-.354.353-.354c.006-.005.041-.05.041-.17a.866.866 0 0 0-.121-.415C12.4 1.272 12.063 1 11.5 1z" />
+                            </svg>
+                            <span style="margin-right: auto">@Model.Item1.User.Disapprovals</span>
+                        </btn>
                     </p>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
@@ -120,7 +138,7 @@
                         <li class="nav-item">
                             <a class="nav-link reviews-tab" data-action="Reviews" href="#reviews" aria-controls="reviews" role="tab" data-toggle="tab">Reviews</a>
                         </li>
-                        @if (Model.IsLoggedUser)
+                        @if (Model.Item1.IsLoggedUser)
                         {
                             <li class="nav-item">
                                 <a class="nav-link messages-tab" data-action="Discussions" href="#discussions" aria-controls="messages" role="tab" data-toggle="tab">Discussions</a>
@@ -129,7 +147,7 @@
                     </ul>
                     <div class="tab-content js-tab-content">
                         <div role="tabpanel" class="tab-pane active">
-                            <h6 style="margin-top:15px">@Model.User.Description</h6>
+                            <h6 style="margin-top:15px">@Model.Item1.User.Description</h6>
                         </div>
                     </div>
                 </div>
@@ -145,11 +163,11 @@
             var action = $(this).attr('data-action');
 
             if (action == 'Description') {
-                $('.js-tab-content').html('<div role="tabpanel" class="tab-pane active"><h6 style="margin-top:15px">@Model.User.Description</h6></div>');
+                $('.js-tab-content').html('<div role="tabpanel" class="tab-pane active"><h6 style="margin-top:15px">@Model.Item1.User.Description</h6></div>');
             }
             else {
-                var userKind = '@Model.User.UserKindName';
-                var userId = @Model.User.Id;
+                var userKind = '@Model.Item1.User.UserKindName';
+                var userId = @Model.Item1.User.Id;
                 $.get('/User/'+action,
                 { id:userId, userKind:userKind},
                 function (response) {
@@ -157,6 +175,24 @@
                     $('.js-tab-content').html(response);
                 });
             }
-        });        
+        });
+
+        $('.recommend').on('click', function () {
+            var action = $(this).attr('data-action');
+
+            var recipientId = @Model.Item1.User.Id;
+
+            var authorId = @Model.Item2;
+
+            $.get('/User/' + action,
+                {
+                    authorId:authorId,
+                    recipientId: recipientId
+                },
+                function (data) {
+                    console.log(response)
+                    $('.recommendations').contents(data);
+                });
+        });
     </script>
 }

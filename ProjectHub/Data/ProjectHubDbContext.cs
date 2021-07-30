@@ -15,17 +15,11 @@ namespace ProjectHub.Data
 
         public DbSet<Project> Projects { get; set; }
 
-
-
-
         public DbSet<Investor> Investors { get; set; }
-
-
 
         public DbSet<Manager> Managers { get; set; }
 
         public DbSet<Contractor> Contractors { get; set; }
-
 
         public DbSet<Designer> Designers { get; set; }
 
@@ -71,9 +65,19 @@ namespace ProjectHub.Data
                    .WithMany(nameof(ApplicationUser.RatesReceived))
                    .OnDelete(DeleteBehavior.NoAction);
 
+            builder.Entity<Rate>()
+                   .HasOne(nameof(Rate.Author))
+                   .WithMany(nameof(ApplicationUser.RatesSent))
+                   .OnDelete(DeleteBehavior.NoAction);
+
             builder.Entity<Review>()
                    .HasOne(nameof(Rate.Recipient))
                    .WithMany(nameof(ApplicationUser.ReviewsReceived))
+                   .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Review>()
+                   .HasOne(nameof(Rate.Author))
+                   .WithMany(nameof(ApplicationUser.ReviewsSent))
                    .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<Offer>()

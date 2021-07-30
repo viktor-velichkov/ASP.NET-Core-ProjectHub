@@ -4,6 +4,7 @@ using ProjectHub.Data.Models.Projects;
 using ProjectHub.Models.Project;
 using ProjectHub.Models.User;
 using System;
+using System.Globalization;
 using System.Linq;
 
 namespace ProjectHub.AutoMapper
@@ -50,8 +51,11 @@ namespace ProjectHub.AutoMapper
             //PROJECTS MAPPING
             CreateMap<Project, ProjectListingViewModel>()
                 .ForMember(
-                          p => p.Investor,
-                          opt => opt.MapFrom(pl => pl.Investor.User.FullName));
+                          pl => pl.Investor,
+                          opt => opt.MapFrom(p => p.Investor.User.FullName))
+                .ForMember(
+                          p=> p.Deadline,
+                          opt => opt.MapFrom(p=>p.Deadline.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture)));
                 
             
         }

@@ -15,5 +15,12 @@
                 <partial name="~/Views/Projects/List.cshtml" model="@Model.Item1" />
             </div>
         }
+
+        if (Model.Item2.Equals("Investor"))
+        {
+            <input asp-controller="Projects" asp-action="Add" method="get" type="submit" class="btn btn-primary" value="Add Project" style="margin-top: 10px;
+                                                                                                                                            margin-right: 0px;
+                                                                                                                                            margin-left: 5%;">
+        }
     }
 </div>

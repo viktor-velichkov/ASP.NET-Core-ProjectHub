@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -60,12 +61,15 @@ namespace ProjectHub.Controllers
 
             var userViewModel = this.mapper.Map<object, UserProfileViewModel>(userTypeEntity);
 
-            if (int.Parse(this.userManager.GetUserId(this.User)) == userId)
+            var loggedUserId = int.Parse(this.userManager.GetUserId(this.User));
+
+            if (loggedUserId == userId)
             {
                 userViewModel.IsLoggedUser = true;
             }
 
-            return View(userViewModel);
+            Tuple<UserProfileViewModel, int> tuple = new Tuple<UserProfileViewModel, int>(userViewModel, loggedUserId);
+            return View(tuple);
         }
 
 
@@ -148,5 +152,9 @@ namespace ProjectHub.Controllers
             return PartialView("UserDiscussionsPartial", tuple);
         }
 
+        public int Reccomendations(int authorId, int recipientId)
+        {
+            return 1;
+        }
     }
 }
