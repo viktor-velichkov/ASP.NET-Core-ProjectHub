@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectHub.Data;
 
 namespace ProjectHub.Data.Migrations
 {
     [DbContext(typeof(ProjectHubDbContext))]
-    partial class ProjectHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210803144445_ModifyDbSettings")]
+    partial class ModifyDbSettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -794,13 +796,13 @@ namespace ProjectHub.Data.Migrations
                     b.HasOne("ProjectHub.Data.Models.ApplicationUser", "Author")
                         .WithMany("RatesSent")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("ProjectHub.Data.Models.ApplicationUser", "Recipient")
                         .WithMany("RatesReceived")
                         .HasForeignKey("RecipientId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Author");

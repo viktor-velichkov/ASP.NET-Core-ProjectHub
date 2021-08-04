@@ -105,7 +105,7 @@ namespace ProjectHub.Services.User
                     projects = this.data
                                    .Projects
                                    .Include(p => p.Investor)
-                                   .ThenInclude(i=>i.User)
+                                   .ThenInclude(i => i.User)
                                    .Where(i => i.ManagerId.Equals(id))
                                    .ToList();
                     break;
@@ -204,6 +204,65 @@ namespace ProjectHub.Services.User
             }
 
             return result;
+        }
+
+        public ApplicationUser GetUserById(int userId)
+             => this.data
+                    .Users
+                    .Include(u => u.UserKind)
+                    .Include(u => u.RatesReceived)
+                    .FirstOrDefault(u => u.Id.Equals(userId));
+
+        public string GetUserRecommendationsCount(int authorId, int recipientId)
+        {
+            var currentRate = this.data
+                                  .Rates
+                                  .FirstOrDefault(r => r.AuthorId.Equals(authorId)
+                                                       && r.RecipientId.Equals(recipientId)
+                                                       && r.IsPositive);
+            if (currentRate == null)
+            {
+                this.data.Rates.Add(new Rate
+                {
+                    AuthorId = authorId,
+                    RecipientId = recipientId,
+                    IsPositive = true
+                });
+            }
+            else
+            {
+                this.data.Rates.Remove(currentRate);
+            }
+
+            this.data.SaveChanges();
+
+            return this.data.Rates.Where(r => r.RecipientId.Equals(recipientId) && r.IsPositive).Count().ToString();
+        }
+
+        public string GetUserDisapprovalsCount(int authorId, int recipientId)
+        {
+            var currentRate = this.data
+                                  .Rates
+                                  .FirstOrDefault(r => r.AuthorId.Equals(authorId)
+                                                       && r.RecipientId.Equals(recipientId)
+                                                       && !r.IsPositive);
+            if (currentRate == null)
+            {
+                this.data.Rates.Add(new Rate
+                {
+                    AuthorId = authorId,
+                    RecipientId = recipientId,
+                    IsPositive = false
+                });
+            }
+            else
+            {
+                this.data.Rates.Remove(currentRate);
+            }
+
+            this.data.SaveChanges();
+
+            return this.data.Rates.Where(r => r.RecipientId.Equals(recipientId) && !r.IsPositive).Count().ToString();
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ProjectHub.Data.Models.Projects;
 using ProjectHub.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjectHub.Services.Projects
 {
@@ -33,7 +34,7 @@ namespace ProjectHub.Services.Projects
                 Deadline = model.Deadline,
                 Description = model.Description
             });
-
+            
             this.data.SaveChanges();
         }
     }

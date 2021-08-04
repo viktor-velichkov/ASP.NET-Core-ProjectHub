@@ -51,9 +51,20 @@ namespace ProjectHub.Data
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
+            
 
             builder.Entity<ApplicationUser>().Property("Image").HasColumnType("varbinary(MAX)");
+                        
+            builder.Entity<ApplicationUser>()
+                   .HasMany(u=>u.RatesReceived)
+                   .WithOne(r=>r.Recipient)
+                   .HasForeignKey(r=>r.RecipientId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ApplicationUser>()
+                   .HasMany(u=>u.RatesSent)
+                   .WithOne(r=>r.Author)
+                   .HasForeignKey(r=>r.AuthorId);
 
             builder.Entity<Project>()
                     .HasOne(nameof(Project.Investor))
@@ -61,14 +72,16 @@ namespace ProjectHub.Data
                     .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<Rate>()
-                   .HasOne(nameof(Rate.Recipient))
-                   .WithMany(nameof(ApplicationUser.RatesReceived))
-                   .OnDelete(DeleteBehavior.NoAction);
+                   .HasOne(r=>r.Recipient)
+                   .WithMany(u=>u.RatesReceived)
+                   .HasForeignKey(r=>r.RecipientId)
+                   .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Rate>()
-                   .HasOne(nameof(Rate.Author))
-                   .WithMany(nameof(ApplicationUser.RatesSent))
-                   .OnDelete(DeleteBehavior.NoAction);
+                   .HasOne(r => r.Author)
+                   .WithMany(u => u.RatesSent)
+                   .HasForeignKey(r => r.AuthorId)
+                   .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Review>()
                    .HasOne(nameof(Rate.Recipient))
@@ -100,9 +113,14 @@ namespace ProjectHub.Data
             builder.Entity<ProjectDesigner>()
                    .HasKey(pd => new { pd.ProjectId, pd.DesignerId });
 
+            builder.Entity<Rate>()
+                   .HasKey(r => new { r.AuthorId, r.RecipientId });
+
             builder.Entity<Offer>()
                    .Property(nameof(Offer.Price))
                    .HasColumnType("decimal");
+
+            base.OnModelCreating(builder);
 
         }
 

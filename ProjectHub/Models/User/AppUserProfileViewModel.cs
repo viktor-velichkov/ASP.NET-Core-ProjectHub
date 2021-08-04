@@ -1,4 +1,5 @@
-﻿using ProjectHub.Models.Discussion;
+﻿using ProjectHub.Data.Models;
+using ProjectHub.Models.Discussion;
 using ProjectHub.Models.Offer;
 using ProjectHub.Models.Review;
 using System.Collections.Generic;
@@ -22,10 +23,8 @@ namespace ProjectHub.Models.User
 
         public string WebSite { get; set; }
 
-        public int Recomendations { get; set; }
-
-        public int Disapprovals { get; set; }
-
+        public ICollection<Rate> RatesReceived { get; set; }
+        
         public string Description { get; set; }
 
         [DisplayName("Facebook Profile:")]

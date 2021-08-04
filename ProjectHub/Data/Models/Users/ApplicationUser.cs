@@ -8,6 +8,11 @@ namespace ProjectHub.Data.Models
 
     public class ApplicationUser : IdentityUser<int>
     {
+        public ApplicationUser()
+        {
+            this.RatesReceived = new HashSet<Rate>();
+            this.RatesSent = new HashSet<Rate>();
+        }
         [ForeignKey(nameof(UserKind))]
         public int UserKindId { get; set; }
         public UserKind UserKind { get; set; }
@@ -34,10 +39,10 @@ namespace ProjectHub.Data.Models
         public string WebSite { get; set; }
 
         [InverseProperty(nameof(Rate.Recipient))]
-        public ICollection<Rate> RatesReceived => new HashSet<Rate>();
+        public ICollection<Rate> RatesReceived { get; set; }
 
-        [InverseProperty(nameof(Rate.Author))]
-        public ICollection<Rate> RatesSent => new HashSet<Rate>();
+            [InverseProperty(nameof(Rate.Author))]
+        public ICollection<Rate> RatesSent { get; set; }
 
         [Url]
         public string FacebookPage { get; set; }

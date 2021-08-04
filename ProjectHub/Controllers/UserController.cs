@@ -45,11 +45,8 @@ namespace ProjectHub.Controllers
                          int.Parse(this.Request.RouteValues["id"].ToString()) :
                          int.Parse(this.userManager.GetUserId(this.User));
 
-            var userDb = this.data
-                           .Users
-                           .Include(u => u.UserKind)
-                           .FirstOrDefault(u => u.Id.Equals(userId));
-
+            var userDb = this.userService.GetUserById(userId);
+                        
             if (userDb == null)
             {
                 return NotFound();
@@ -57,9 +54,9 @@ namespace ProjectHub.Controllers
 
             var userTypeName = userDb.UserKind.Name;
 
-            var userTypeEntity = this.userService.GetUserKindEntityByUserId(userTypeName, userId);
+            var userTypeEntity = this.userService.GetUserKindEntityByUserId(userTypeName, userId);            
 
-            var userViewModel = this.mapper.Map<object, UserProfileViewModel>(userTypeEntity);
+            var userViewModel = this.mapper.Map<object, UserProfileViewModel>(userTypeEntity);            
 
             var loggedUserId = int.Parse(this.userManager.GetUserId(this.User));
 
@@ -69,6 +66,7 @@ namespace ProjectHub.Controllers
             }
 
             Tuple<UserProfileViewModel, int> tuple = new Tuple<UserProfileViewModel, int>(userViewModel, loggedUserId);
+
             return View(tuple);
         }
 
@@ -152,9 +150,10 @@ namespace ProjectHub.Controllers
             return PartialView("UserDiscussionsPartial", tuple);
         }
 
-        public int Reccomendations(int authorId, int recipientId)
-        {
-            return 1;
-        }
+        public string Recommendations(int authorId, int recipientId)
+            => this.userService.GetUserRecommendationsCount(authorId, recipientId);
+
+        public string Disapprovals(int authorId, int recipientId)
+            => this.userService.GetUserDisapprovalsCount(authorId, recipientId);
     }
 }

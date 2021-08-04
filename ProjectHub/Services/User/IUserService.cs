@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using ProjectHub.Data.Models;
 using ProjectHub.Models.Discussion;
 using ProjectHub.Models.Project;
 using ProjectHub.Models.Review;
@@ -9,6 +10,7 @@ namespace ProjectHub.Services.User
 {
     public interface IUserService
     {
+        public ApplicationUser GetUserById(int userId);
         object GetUserKindEntityByUserId(string userKind, int userId);
 
         public void EditUser(UserEditProfileViewModel model);
@@ -21,5 +23,8 @@ namespace ProjectHub.Services.User
         public byte[] GetUserImage(int id);
 
         public byte[] ProcessUploadedFile(IFormFile file);
+
+        public string GetUserRecommendationsCount(int authorId, int recipientId);
+        public string GetUserDisapprovalsCount(int authorId, int recipientId);
     }
 }

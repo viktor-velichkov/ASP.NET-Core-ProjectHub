@@ -17,14 +17,8 @@ namespace ProjectHub.AutoMapper
             CreateMap<ApplicationUser, AppUserProfileViewModel>()
                 .ForMember(
                           u => u.UserKindName,
-                          opt => opt.MapFrom(au => au.UserKind.Name))
-                .ForMember(
-                          u => u.Recomendations,
-                          opt => opt.MapFrom(au => au.RatesReceived.Where(rr => rr.IsPositive).Count()))
-                .ForMember(
-                          u => u.Disapprovals,
-                          opt => opt.MapFrom(au => au.RatesReceived.Where(rr => !rr.IsPositive).Count()));
-
+                          opt => opt.MapFrom(au => au.UserKind.Name));
+                
             CreateMap<ApplicationUser, AppUserEditProfileViewModel>()
                 .ForMember(
                           u => u.UserKindName,
