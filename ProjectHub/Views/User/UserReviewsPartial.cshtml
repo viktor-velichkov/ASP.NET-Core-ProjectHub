@@ -1,35 +1,49 @@
-﻿@model Tuple<List<ReviewViewModel>,string>
+﻿@model Tuple<List<ReviewListingViewModel>, UserReviewsListViewModel>
 
-<div role="tabpanel" class="tab-pane active" id="reviews">
-    @{
-        if (!Model.Item1.Any())
-        {
-            <h6 style="margin-top:15px">There are not any reviews for this @Model.Item2.ToLower() yet.</h6>
+@{
+    Layout = "";
+}
+<div role="tabpanel" class="tab-pane active" id="projects">
+    <div class="js-reviews-container">
+        @{
+            if (!Model.Item1.Any())
+            {
+                <h6 style="margin-top:15px">There are not any reviews for this @Model.Item2.UserKind.ToLower() yet.</h6>
+            }
+            else
+            {
+                <div class="container-fluid" style="padding-left:0px; padding-right:0px;">
+                    <partial name="~/Views/Reviews/List.cshtml" model="@Model.Item1" />
+                </div>
+            }
         }
-        else
-        {
-            <div class="container-fluid">
-                @{
-                    int projectsCount = Model.Item1.Count;
-                    int rowsCount = projectsCount % 3 == 0 ? projectsCount % 3 : projectsCount % 3 + 1;
-                    @for (int i = 0; i < rowsCount; i++)
-                    {
-                        int projectsOnRow = (projectsCount - i * 3) >= 3 ? 3 : (projectsCount - i * 3);
-                        if (projectsOnRow <= 0)
-                        {
-                            break;
-                        }
-                        <div class="row">
-                            @for (int j = 0; projectsOnRow < 3; j++)
-                            {
-                                <div class="col-md-4">
-                                    @Model.Item1[i * 3 + j]
-                                </div>
-                            }
-                        </div>
-                    }
-                }
-            </div>
-        }
+    </div>
+    @if (!Model.Item2.IsLoggedUser)
+    {
+        <input method="get" data-action="Add" type="button" class="btn btn-primary js-review-add" value="Add Review" style="margin-top: 10px;
+                                                                                                                        margin-right: 0px;
+                                                                                                                        margin-left: 0%;">
     }
+
 </div>
+<script>
+    $('.js-review-add').on('click', function () {
+
+        $(this).attr("type","hidden");
+
+        var recipientId =@Model.Item2.Id;
+
+        var action = $(this).attr('data-action');
+
+        $.get('/Reviews/' + action, { recipientId:recipientId},
+            function (data) {
+                console.log(data);
+                $('.js-reviews-container').append(data);
+            });
+    });
+</script>
+
+
+
+
+

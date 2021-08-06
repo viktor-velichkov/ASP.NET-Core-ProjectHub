@@ -36,7 +36,7 @@ namespace ProjectHub.Models.User
         [DisplayName("Skype Profile:")]
         public string SkypeProfile { get; set; }
 
-        public List<ReviewViewModel> Reviews => new List<ReviewViewModel>();
+        public List<ReviewListingViewModel> Reviews => new List<ReviewListingViewModel>();
         public List<OfferViewModel> Offers => new List<OfferViewModel>();
         public List<DiscussionViewModel> Discussions => new List<DiscussionViewModel>();
 

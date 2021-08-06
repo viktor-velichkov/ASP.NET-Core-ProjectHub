@@ -134,8 +134,15 @@ namespace ProjectHub.Controllers
         {
             var userReviews = this.userService.GetUserReviews(id).ToList();
 
-            Tuple<List<ReviewViewModel>, string> tuple =
-                new Tuple<List<ReviewViewModel>, string>(userReviews, userKind);
+            UserReviewsListViewModel user = new UserReviewsListViewModel { 
+                Id=id,
+                UserKind=userKind,
+                IsLoggedUser=int.Parse(this.userManager.GetUserId(this.User))
+                                .Equals(id)
+            };
+
+            Tuple<List<ReviewListingViewModel>, UserReviewsListViewModel> tuple =
+                new Tuple<List<ReviewListingViewModel>, UserReviewsListViewModel>(userReviews, user);
 
             return PartialView("UserReviewsPartial", tuple);
         }

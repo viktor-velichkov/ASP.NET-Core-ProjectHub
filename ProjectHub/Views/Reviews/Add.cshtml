@@ -1,0 +1,62 @@
+﻿@model ReviewAddViewModel
+
+@{
+    Layout = null;
+}
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+    .field-title {
+        font-size: larger;
+        font-weight: bold;
+        padding-bottom: 5px;
+        text-align: center;
+    }
+</style>
+
+
+<form method="post" enctype="multipart/form-data">
+    <div class="col-12" style="background-color: lightblue;
+                               margin-right: 0;
+                               margin-left: 0px;
+                               margin-top: 2.5%;
+                               border-radius: 5px;
+                               padding: 2.5%;">
+        <input class="js-author-id" type="hidden" value="@Model.AuthorId" />
+        <input class="js-recipient-id" type="hidden" value="@Model.RecipientId" />
+        <div class="form-group" style="margin-bottom: 0; margin-top: 5px">
+            <textarea asp-for="Content" class="form-control js-review-content" rows="4" placeholder="He/She is..."></textarea>
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="field-title col-12" style="text-align: end;">
+        <input type="button" class="btn js-review-add-button" data-action="Add" value="Add" style="background-color: lightgrey;
+                                                                                                   margin-top: 10px;
+                                                                                                   margin-right: 0px;">
+    </div>
+</form>
+
+<script>
+    $('.js-review-add-button').on('click', function () {
+
+        var action = $(this).attr('data-action');
+
+        var authorId = $('.js-author-id').attr('value');
+
+        var recipientId = $('.js-recipient-id').attr('value');
+
+        var content = $('.js-review-content').val();
+
+        $.post('/Reviews/' + action, { authorId: authorId, recipientId: recipientId, content: content },
+            function (data) {
+                console.log(data);
+                $('.js-reviews-container').html(data);
+            });
+
+        $('.js-review-add').attr("type", "button");
+
+    });
+</script>

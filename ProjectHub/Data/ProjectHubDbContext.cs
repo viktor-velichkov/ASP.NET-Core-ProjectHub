@@ -51,20 +51,29 @@ namespace ProjectHub.Data
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            
-
             builder.Entity<ApplicationUser>().Property("Image").HasColumnType("varbinary(MAX)");
-                        
+
             builder.Entity<ApplicationUser>()
-                   .HasMany(u=>u.RatesReceived)
-                   .WithOne(r=>r.Recipient)
-                   .HasForeignKey(r=>r.RecipientId)
+                   .HasMany(u => u.RatesReceived)
+                   .WithOne(r => r.Recipient)
+                   .HasForeignKey(r => r.RecipientId)
                    .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<ApplicationUser>()
-                   .HasMany(u=>u.RatesSent)
-                   .WithOne(r=>r.Author)
-                   .HasForeignKey(r=>r.AuthorId);
+                   .HasMany(u => u.RatesSent)
+                   .WithOne(r => r.Author)
+                   .HasForeignKey(r => r.AuthorId);
+
+            builder.Entity<ApplicationUser>()
+                   .HasMany(u => u.ReviewsReceived)
+                   .WithOne(r => r.Recipient)
+                   .HasForeignKey(r => r.RecipientId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ApplicationUser>()
+                   .HasMany(u => u.ReviewsSent)
+                   .WithOne(r => r.Author)
+                   .HasForeignKey(r => r.AuthorId);
 
             builder.Entity<Project>()
                     .HasOne(nameof(Project.Investor))
@@ -72,43 +81,39 @@ namespace ProjectHub.Data
                     .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<Rate>()
-                   .HasOne(r=>r.Recipient)
-                   .WithMany(u=>u.RatesReceived)
-                   .HasForeignKey(r=>r.RecipientId)
+                   .HasOne(r => r.Recipient)
+                   .WithMany(u => u.RatesReceived)
+                   .HasForeignKey(r => r.RecipientId)
                    .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Rate>()
                    .HasOne(r => r.Author)
                    .WithMany(u => u.RatesSent)
-                   .HasForeignKey(r => r.AuthorId)
-                   .OnDelete(DeleteBehavior.Cascade);
+                   .HasForeignKey(r => r.AuthorId);
 
             builder.Entity<Review>()
-                   .HasOne(nameof(Rate.Recipient))
-                   .WithMany(nameof(ApplicationUser.ReviewsReceived))
-                   .OnDelete(DeleteBehavior.NoAction);
+                   .HasOne(r => r.Recipient)
+                   .WithMany(u => u.ReviewsReceived)
+                   .HasForeignKey(r => r.RecipientId)
+                   .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Review>()
-                   .HasOne(nameof(Rate.Author))
-                   .WithMany(nameof(ApplicationUser.ReviewsSent))
-                   .OnDelete(DeleteBehavior.NoAction);
+                   .HasOne(r => r.Author)
+                   .WithMany(u => u.ReviewsSent)
+                   .HasForeignKey(r => r.AuthorId);
 
             builder.Entity<Offer>()
                    .HasOne(nameof(Offer.Project))
                    .WithMany(nameof(Project.Offers))
                    .OnDelete(DeleteBehavior.NoAction);
 
-
             builder.Entity<ProjectDesigner>()
                    .HasOne(nameof(ProjectDesigner.Project))
                    .WithMany(nameof(Project.Designers))
                    .OnDelete(DeleteBehavior.NoAction);
-
-            //builder.Entity<UserProject>().HasKey(up => new { up.UserId, up.ProjectId });
-
+                        
             builder.Entity<UserDiscussion>()
                    .HasKey(ud => new { ud.UserId, ud.DiscussionId });
-
 
             builder.Entity<ProjectDesigner>()
                    .HasKey(pd => new { pd.ProjectId, pd.DesignerId });

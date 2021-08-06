@@ -2,6 +2,7 @@
 using ProjectHub.Data.Models;
 using ProjectHub.Data.Models.Projects;
 using ProjectHub.Models.Project;
+using ProjectHub.Models.Review;
 using ProjectHub.Models.User;
 using System;
 using System.Globalization;
@@ -50,6 +51,15 @@ namespace ProjectHub.AutoMapper
                 .ForMember(
                           p=> p.Deadline,
                           opt => opt.MapFrom(p=>p.Deadline.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture)));
+
+            //REVIEWS MAPPING
+            CreateMap<Review, ReviewListingViewModel>()
+                .ForMember(
+                          rl => rl.Author,
+                          opt => opt.MapFrom(r => r.Author.FullName))
+                .ForMember(
+                          rl => rl.Date,
+                          opt => opt.MapFrom(r => r.Date.ToString("HH:mm dd.MM.yyyy", CultureInfo.InvariantCulture)));
                 
             
         }

@@ -17,7 +17,7 @@ namespace ProjectHub.Services.User
 
         public IEnumerable<ProjectListingViewModel> GetUserProjects(int id, string userKind);
 
-        public IEnumerable<ReviewViewModel> GetUserReviews(int id);
+        public IEnumerable<ReviewListingViewModel> GetUserReviews(int id);
 
         public IEnumerable<DiscussionViewModel> GetUserDiscussions(int id);
         public byte[] GetUserImage(int id);

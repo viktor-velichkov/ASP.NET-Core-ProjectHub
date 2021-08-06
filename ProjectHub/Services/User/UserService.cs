@@ -160,13 +160,13 @@ namespace ProjectHub.Services.User
             }
         }
 
-        public IEnumerable<ReviewViewModel> GetUserReviews(int id)
+        public IEnumerable<ReviewListingViewModel> GetUserReviews(int id)
         {
             var userReviews = this.data
-                                  .Users
-                                  .SelectMany(u => u.ReviewsReceived)
+                                  .Reviews
+                                  .Include(r=>r.Author)
                                   .Where(r => r.RecipientId.Equals(id))
-                                  .Select(r => this.mapper.Map<Review, ReviewViewModel>(r))
+                                  .Select(r => this.mapper.Map<Review, ReviewListingViewModel>(r))
                                   .ToList();
 
             return userReviews;
