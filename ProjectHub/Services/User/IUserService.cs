@@ -26,5 +26,7 @@ namespace ProjectHub.Services.User
 
         public string GetUserRecommendationsCount(int authorId, int recipientId);
         public string GetUserDisapprovalsCount(int authorId, int recipientId);
+
+        public bool CheckIfUserIsAlreadyReviewedByTheLoggedUser(int recipientId, int loggedUserId);
     }
 }

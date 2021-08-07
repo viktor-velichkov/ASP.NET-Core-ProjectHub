@@ -11,6 +11,7 @@ using ProjectHub.Data;
 using ProjectHub.Data.Models;
 using ProjectHub.Infrastructure;
 using ProjectHub.Services.Projects;
+using ProjectHub.Services.Reviews;
 using ProjectHub.Services.User;
 
 namespace ProjectHub
@@ -59,6 +60,9 @@ namespace ProjectHub
 
             services
                 .AddTransient<IProjectService, ProjectService>();
+
+            services
+                .AddTransient<IReviewService, ReviewService>();
 
         }
 

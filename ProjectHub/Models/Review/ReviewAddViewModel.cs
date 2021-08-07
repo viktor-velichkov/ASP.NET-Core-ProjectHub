@@ -13,6 +13,9 @@ namespace ProjectHub.Models.Review
         public int RecipientId { get; set; }
 
         [Required]
+        public string RecipientUserKind { get; set; }
+
+        [Required]
         public DateTime Date { get; set; }
 
         [Required]

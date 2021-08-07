@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ProjectHub.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using ProjectHub.Data.Models;
 using ProjectHub.Models.Discussion;
 using ProjectHub.Models.Project;
@@ -18,17 +15,14 @@ namespace ProjectHub.Controllers
 {
     public class UserController : Controller
     {
-        private readonly ProjectHubDbContext data;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IMapper mapper;
         private readonly IUserService userService;
 
-        public UserController(ProjectHubDbContext data,
-                              UserManager<ApplicationUser> userManager,
+        public UserController(UserManager<ApplicationUser> userManager,
                               IMapper mapper,
                               IUserService userService)
         {
-            this.data = data;
             this.userManager = userManager;
             this.mapper = mapper;
             this.userService = userService;
@@ -134,11 +128,15 @@ namespace ProjectHub.Controllers
         {
             var userReviews = this.userService.GetUserReviews(id).ToList();
 
-            UserReviewsListViewModel user = new UserReviewsListViewModel { 
-                Id=id,
-                UserKind=userKind,
-                IsLoggedUser=int.Parse(this.userManager.GetUserId(this.User))
-                                .Equals(id)
+            var loggedUserId = int.Parse(this.userManager.GetUserId(this.User));
+
+            UserReviewsListViewModel user = new UserReviewsListViewModel {
+
+                LoggedUserId = loggedUserId,
+                Id = id,
+                UserKind = userKind,
+                IsLoggedUser = loggedUserId.Equals(id),
+                AlreadyIsReviewedByTheLoggedUser = this.userService.CheckIfUserIsAlreadyReviewedByTheLoggedUser(id, loggedUserId)
             };
 
             Tuple<List<ReviewListingViewModel>, UserReviewsListViewModel> tuple =

@@ -18,7 +18,7 @@
 </style>
 
 
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" class="js-review-add-form">
     <div class="col-12" style="background-color: lightblue;
                                margin-right: 0;
                                margin-left: 0px;
@@ -27,12 +27,16 @@
                                padding: 2.5%;">
         <input class="js-author-id" type="hidden" value="@Model.AuthorId" />
         <input class="js-recipient-id" type="hidden" value="@Model.RecipientId" />
+        <input class="js-recipient-userKind" type="hidden" value="@Model.RecipientUserKind" />
         <div class="form-group" style="margin-bottom: 0; margin-top: 5px">
             <textarea asp-for="Content" class="form-control js-review-content" rows="4" placeholder="He/She is..."></textarea>
             <span asp-validation-for="Content" class="text-danger"></span>
         </div>
     </div>
     <div class="field-title col-12" style="text-align: end;">
+        <input type="button" formmethod="get" class="btn js-review-add-cancel-button" data-action="Reviews" value="Cancel" style="background-color: lightgrey;
+                                                                                                                margin-top: 10px;
+                                                                                                                margin-right: 0px;">
         <input type="button" class="btn js-review-add-button" data-action="Add" value="Add" style="background-color: lightgrey;
                                                                                                    margin-top: 10px;
                                                                                                    margin-right: 0px;">
@@ -54,7 +58,13 @@
             function (data) {
                 console.log(data);
                 $('.js-reviews-container').html(data);
-            });
+            });       
+
+    });
+
+    $('.js-review-add-cancel-button').on('click', function () {
+
+        $('.js-reviews-container').find('.js-review-add-form').remove();
 
         $('.js-review-add').attr("type", "button");
 

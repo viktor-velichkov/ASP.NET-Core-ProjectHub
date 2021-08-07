@@ -1,9 +1,4 @@
-﻿1. Reviews
-	- list in user profile - done!
-	- option to add a review - done!
-	- Edit the tuple in UserReviewsPartial.cshtml
-
-2. Discussions
+﻿2. Discussions
 	- list in user profile
 	- option to start a discussion
 	- discussion window

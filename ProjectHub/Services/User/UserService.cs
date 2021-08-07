@@ -166,6 +166,7 @@ namespace ProjectHub.Services.User
                                   .Reviews
                                   .Include(r=>r.Author)
                                   .Where(r => r.RecipientId.Equals(id))
+                                  .OrderByDescending(r=>r.Date)
                                   .Select(r => this.mapper.Map<Review, ReviewListingViewModel>(r))
                                   .ToList();
 
@@ -264,5 +265,9 @@ namespace ProjectHub.Services.User
 
             return this.data.Rates.Where(r => r.RecipientId.Equals(recipientId) && !r.IsPositive).Count().ToString();
         }
+
+        public bool CheckIfUserIsAlreadyReviewedByTheLoggedUser(int recipientId, int loggedUserId)
+            => this.data.Reviews.Any(r => r.AuthorId.Equals(loggedUserId)
+                                          && r.RecipientId.Equals(recipientId));
     }
 }

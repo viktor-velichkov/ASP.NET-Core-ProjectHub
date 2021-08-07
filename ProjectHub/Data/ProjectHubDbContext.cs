@@ -121,6 +121,9 @@ namespace ProjectHub.Data
             builder.Entity<Rate>()
                    .HasKey(r => new { r.AuthorId, r.RecipientId });
 
+            builder.Entity<Review>()
+                   .HasKey(r => new { r.AuthorId, r.RecipientId });
+
             builder.Entity<Offer>()
                    .Property(nameof(Offer.Price))
                    .HasColumnType("decimal");

@@ -1,4 +1,4 @@
-﻿@model List<ReviewListingViewModel>
+﻿@model Tuple<List<ReviewListingViewModel>, int>
 
 @{
     Layout = null;
@@ -19,31 +19,103 @@
     }
 </style>
 
-<div class="container" style="margin-top:2.5%">
+<div class="container" style=" padding-left:0px; padding-right:0px; margin-top:2.5%">
     @{
-        foreach (var item in @Model)
+        foreach (var item in @Model.Item1)
         {
-            <div class="row" style="background-color: lightblue;
+            <div class="row @item.AuthorId" style="background-color: lightblue;
                                         margin-right: 0;
                                         margin-left: 0px;
                                         margin-top: 2.5%;
                                         border-radius: 5px;
                                         padding: 1.5%;">
-                <div class="col-6">
+                <div class="col-6 author">
                     <div class="font-weight-bold" style="text-align:start">@item.Author</div>
                 </div>
-                <div class="col-6">
+                <div class="col-6 date">
                     <div style="text-align:end">@item.Date</div>
                 </div>
-                <div class="col-12" style="background-color: azure;
-                                       border-radius: 5px;
-                                       padding: 2.5%;">
+                <div class="col-12 review-@item.AuthorId-content" style="background-color: azure;
+                                           border-radius: 5px;
+                                           padding: 2.5%;">
                     @item.Content
 
                 </div>
-            </div>
 
+                @if (item.AuthorId.Equals(Model.Item2))
+                {
+                    <div class="field-title col-12 review-edit-buttons" style="text-align: end; padding-right:0px">
+                        <input type="button" formmethod="get" class="btn js-review-edit-button" data-action="Edit" value="Edit" style="background-color: azure; margin-top: 10px; margin-right: 0px;">
+                        <input type="button" formmethod="post" class="btn js-review-remove-button" data-action="Remove" value="Remove" style="background-color: azure; margin-top: 10px; margin-right: 0px; ">
+                    </div>
+                }
+            </div>
         }
     }
 </div>
+
+<script>
+    $('.js-review-edit-button').on('click', function () {
+
+        var content = $('.review-@Model.Item2-content').html().toString().trim();
+
+        $('.review-@Model.Item2-content').replaceWith('<div class="form-group col-12" style="margin-bottom: 0; margin-top: 5px">'+
+                                                            '<textarea class= "form-control js-review-edit-content" rows = "4">' + content + '</textarea >' +
+                                                            '<span asp-validation-for="Content" class="text-danger"></span>' +
+                                                      '</div > ');
+
+        $('.review-edit-buttons').replaceWith('<div class="field-title col-12 review-edit-buttons" style="text-align: end; padding-right:0px">' +
+                                                    '<input type="button" formmethod="get" class="btn js-review-edit-cancel-button" data-action="Reviews" value="Cancel" style="background-color: azure; margin-top: 10px; margin-right: 1%;">' +
+                                                    '<input type="button" formmethod="post" class="btn js-review-edit-apply-button" data-action="Edit" value="Apply" style="background-color: azure; margin-top: 10px; margin-right: 0px; ">' +
+                                              '</div>')
+
+        $('.js-review-edit-cancel-button').on('click', function () {
+
+            var action = $(this).attr('data-action');
+
+            var userId = @Model.Item1.First().RecipientId;
+
+            $.get('/User/' + action,
+                { id:userId },
+                function (response) {
+                    console.log(response)
+                    $('.js-tab-content').html(response);
+                });
+        });
+
+        $('.js-review-edit-apply-button').on('click', function () {
+
+            var action = $(this).attr('data-action');
+
+            var recipientId = @Model.Item1.First().RecipientId;
+
+            var authorId = @Model.Item2;
+
+            var content = $('.js-review-edit-content').val();
+
+            $.post('/Reviews/' + action,
+                { recipientId: recipientId, authorId:authorId, content:content },
+                function (response) {
+                    console.log(response)
+                    $('.js-tab-content').html(response);
+                });
+        });
+    });
+
+    $('.js-review-remove-button').on('click', function () {
+
+            var action = $(this).attr('data-action');
+
+            var recipientId = @Model.Item1.First().RecipientId;
+
+            var authorId = @Model.Item2;            
+
+            $.post('/Reviews/' + action,
+                { recipientId: recipientId, authorId:authorId },
+                function (response) {
+                    console.log(response)
+                    $('.js-tab-content').html(response);
+                });
+    });
+</script>
 

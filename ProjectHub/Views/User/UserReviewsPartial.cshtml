@@ -1,7 +1,11 @@
 ﻿@model Tuple<List<ReviewListingViewModel>, UserReviewsListViewModel>
 
+
+
 @{
     Layout = "";
+
+    Tuple<List<ReviewListingViewModel>, int> listViewModel = new Tuple<List<ReviewListingViewModel>, int>(Model.Item1, Model.Item2.LoggedUserId);
 }
 <div role="tabpanel" class="tab-pane active" id="projects">
     <div class="js-reviews-container">
@@ -13,12 +17,12 @@
             else
             {
                 <div class="container-fluid" style="padding-left:0px; padding-right:0px;">
-                    <partial name="~/Views/Reviews/List.cshtml" model="@Model.Item1" />
+                    <partial name="~/Views/Reviews/List.cshtml" model="@listViewModel" />
                 </div>
             }
         }
     </div>
-    @if (!Model.Item2.IsLoggedUser)
+    @if (!Model.Item2.IsLoggedUser && !Model.Item2.AlreadyIsReviewedByTheLoggedUser)
     {
         <input method="get" data-action="Add" type="button" class="btn btn-primary js-review-add" value="Add Review" style="margin-top: 10px;
                                                                                                                         margin-right: 0px;
@@ -41,6 +45,8 @@
                 $('.js-reviews-container').append(data);
             });
     });
+
+
 </script>
 
 
