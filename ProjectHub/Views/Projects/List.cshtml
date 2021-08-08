@@ -1,48 +1,62 @@
-﻿@model List<ProjectListingViewModel>
-
+﻿@model Tuple<List<ProjectListingViewModel>, UserProjectsListingViewModel>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
     .center {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
     }
 </style>
 
-<div class="container" style="margin-top:2.5%">
+<div class="container" style="margin-top:2.5%; padding:0px;">
     @{
-        foreach(var item in @Model)
+        foreach (var item in @Model.Item1)
         {
-                <div class="row" style="background-color: lightblue;
+            <div class="col-12 col-lg-8" style="background-color: lightskyblue;
                                         margin-right: 0;
                                         margin-left: 0px;
                                         margin-top: 2.5%;
                                         border-radius: 5px;
                                         padding: 2.5%;">
-                <div class="col-5">
-                    <div class="row" style="font-weight: bold">Name :</div>
-                    <div class="row" style="margin-left: 0px; margin-right: 0px;">@item.Name</div>
-                    <div class="row" style="font-weight: bold">Investor :</div>
-                    <div class="row" style="margin-left: 0px; margin-right: 0px;">@item.Investor</div>
-                </div>
-                <div class="col-3">
-                    <div class="row" style="font-weight: bold">City :</div>
-                    <div class="row" style="margin-left: 0px; margin-right: 0px;">@item.City</div>
-                    <div class="row" style="font-weight: bold">Deadline :</div>
-                    <div class="row" style="margin-left: 0px; margin-right: 0px;">@item.Deadline</div>
-                </div>
-                <div class="col-4">
-                    <div class="center">
-                        <button asp-controller="Profile" asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</button>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="row" style="font-weight: bold">Name :</div>
+                            <div class="row" style="margin-left: 0px; margin-right: 0px;">@item.Name</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="row" style="font-weight: bold">Investor :</div>
+                            <div class="row" style="margin-left: 0px; margin-right: 0px;">@item.Investor</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="row" style="font-weight: bold">City :</div>
+                            <div class="row" style="margin-left: 0px; margin-right: 0px;">@item.City</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="row" style="font-weight: bold">Deadline :</div>
+                            <div class="row" style="margin-left: 0px; margin-right: 0px;">@item.Deadline</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12" style="text-align:end">
+                            @if (Model.Item2.IsLoggedUser && Model.Item2.UserKind.Equals("Investor"))
+                            {
+                                <input asp-controller="Projects" asp-action="Offers" asp-route-id="@item.Id" type="submit" formmethod="get" class="btn js-review-edit-button" data-action="Offers" value="Offers" style="background-color: azure; margin-top: 10px; margin-right: 0px;">
+                                <input asp-controller="Projects" asp-action="Remove" asp-route-id="@item.Id" type="submit" formmethod="post" class="btn js-review-edit-button" data-action="Remove" value="Remove" style="background-color: azure; margin-top: 10px; margin-right: 0px;">
+                            }
+                            <input asp-controller="Projects" asp-action="Details" asp-route-id="@item.Id" type="submit" formmethod="get" class="btn js-review-edit-button" data-action="Edit" value="Details" style="background-color: azure; margin-top: 10px; margin-right: 0px;">
+                        </div>
                     </div>
                 </div>
             </div>
-        }        
+        }
     }
 </div>

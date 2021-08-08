@@ -19,6 +19,8 @@ namespace ProjectHub.Infrastructure
 
             SeedUserKinds(data);
 
+            SeedDisciplines(data);
+
             return app;
         }
 
@@ -35,6 +37,27 @@ namespace ProjectHub.Infrastructure
                 new UserKind { Name = "Manager"},
                 new UserKind { Name = "Designer"},
                 new UserKind { Name = "Contractor"},
+            });
+
+            data.SaveChanges();
+        }
+
+        private static void SeedDisciplines(ProjectHubDbContext data)
+        {
+            if (data.Disciplines.Any())
+            {
+                return;
+            }
+
+            data.Disciplines.AddRange(new[]
+            {
+                new Discipline { Name = "Architecture"},
+                new Discipline { Name = "Structure"},
+                new Discipline { Name = "Electro"},
+                new Discipline { Name = "WS&S"},
+                new Discipline { Name = "HVAC"},
+                new Discipline { Name = "Geodesy"},
+                new Discipline { Name = "Landscaping"},
             });
 
             data.SaveChanges();

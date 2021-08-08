@@ -118,7 +118,14 @@ namespace ProjectHub.Controllers
         {
             var projects = this.userService.GetUserProjects(id, userKind).ToList();
 
-            Tuple<List<ProjectListingViewModel>, string> tuple = new Tuple<List<ProjectListingViewModel>, string>(projects, userKind);
+            var userModel = new UserProjectsListingViewModel
+            {
+                Id = id,
+                UserKind = userKind,
+                IsLoggedUser = int.Parse(this.userManager.GetUserId(this.User)).Equals(id)
+            };
+
+            var tuple = new Tuple<List<ProjectListingViewModel>, UserProjectsListingViewModel>(projects, userModel);
 
             return PartialView("UserProjectsPartial", tuple);
         }

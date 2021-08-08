@@ -29,7 +29,6 @@
                     if (Model.Item1.IsLoggedUser)
                     {
                         <div class="left">
-                            @*<input type="file" class="btn btn-primary" value="Change Photo" style="margin-bottom: 15px; margin-top: 15px;" />*@
                             <input type="hidden" name="userId" value="@Model.Item1.User.Id" />
                             <input type="hidden" name="userKind" value="@Model.Item1.User.UserKindName" />
                             <input asp-controller="User" asp-action="EditUserProfile" type="submit" formmethod="get" class="btn btn-primary" value="Edit Profile" style="margin-bottom: 10px; margin-top: 10px;" />
@@ -78,11 +77,11 @@
                         @Model.Item1.User.FullName
                     </h5>
                     <h6>
-                        @Model.Item1.User.UserKindName
                         @if (Model.Item1.Discipline != null)
                         {
                             @Model.Item1.Discipline.Name
                         }
+                        @Model.Item1.User.UserKindName
                     </h6>
                     <p class="proile-rating" style="margin-bottom:10px">
                         Email :
@@ -171,7 +170,7 @@
                             </p>
                         }
                     }
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist"style="width: max-content;">
                         <li class="nav-item">
                             <a class="nav-link active" data-action="Description" href="#about" aria-controls="about" role="tab" data-toggle="tab">About</a>
                         </li>

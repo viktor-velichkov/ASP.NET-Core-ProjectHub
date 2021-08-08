@@ -1,54 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using ProjectHub.Data;
-using ProjectHub.Data.Factories;
 using ProjectHub.Data.Models;
 using ProjectHub.Models.User;
+using ProjectHub.Services.Account;
 
 namespace ProjectHub.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly ProjectHubDbContext data;
+        
+        private readonly IAccountService accountService;
 
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
 
 
 
-        public AccountController(ProjectHubDbContext data,
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+        public AccountController(IAccountService accountService,
+                                 UserManager<ApplicationUser> userManager,
+                                 SignInManager<ApplicationUser> signInManager)
         {
-            this.data = data;
+            this.accountService = accountService;
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
 
         public IActionResult Register()
         {
-            var userTypes = GetUserKinds();
+            var userKinds = this.accountService.GetUserKinds();
+            var designerDisciplines = this.accountService.GetDisciplines();
             return View(new UserRegisterFormModel
             {
-                UserKinds = userTypes
+                UserKinds = userKinds,
+                Disciplines = designerDisciplines
             });
         }
 
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterFormModel user)
         {
-            if (!this.data.UserKinds.Any(ut => ut.Id.Equals(user.UserKindId)))
+            if (!this.accountService.ConfirmThatUserKindIsValid(user.UserKindId))
             {
                 this.ModelState.AddModelError(nameof(user.UserKindId), ValidationErrorMessages.InvalidUserKindMessage);
             }
 
+            if (this.accountService.GetUserKindId(nameof(Designer)).Equals(user.UserKindId)
+                && !this.accountService.ConfirmThatDisciplineIsValid(user.DisciplineId))
+            {
+                this.ModelState.AddModelError(nameof(user.DisciplineId), ValidationErrorMessages.InvalidDisciplineMessage);
+            }
+
             if (!ModelState.IsValid)
             {
-                user.UserKinds = GetUserKinds();
+                user.UserKinds = this.accountService.GetUserKinds();
+
+                user.Disciplines = this.accountService.GetDisciplines();
 
                 return View(user);
             }
@@ -64,11 +71,11 @@ namespace ProjectHub.Controllers
 
             await userManager.CreateAsync(newUser, user.Password);
 
-            CreateUserKindEntityRecord(this.data.UserKinds.FirstOrDefault(ut => ut.Id.Equals(user.UserKindId)), newUser.Id);
+            this.accountService.CreateUserKindEntityRecord(user.UserKindId, newUser.Id, user.DisciplineId);
 
-            this.data.SaveChanges();
+            
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         public IActionResult Login() => View();
@@ -76,7 +83,7 @@ namespace ProjectHub.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(UserLoginViewModel user)
         {
-            var userDb = this.data.Users.FirstOrDefault(u => u.Email.Equals(user.Email));
+            var userDb = this.userManager.FindByEmailAsync(user.Email).Result;
 
             if (userDb == null)
             {
@@ -102,39 +109,7 @@ namespace ProjectHub.Controllers
 
             await signInManager.SignInAsync(userDb, user.RememberMe);
 
-            return RedirectToAction("Index", "Home");
-        }
-
-
-        private IEnumerable<UserKindRegisterFormModel> GetUserKinds()
-             => this.data
-                    .UserKinds
-                    .Select(ut => new UserKindRegisterFormModel
-                    {
-                        Id = ut.Id,
-                        Name = ut.Name
-                    })
-                    .ToList();
-
-        private void CreateUserKindEntityRecord(UserKind userType, int userId)
-        {
-            switch (userType.Name)
-            {
-                case "Investor":
-                    this.data.Investors.Add(new Investor { Id = userId, UserId = userId });
-                    break;
-                case "Designer":
-                    this.data.Designers.Add(new Designer { Id = userId, UserId = userId });
-                    break;
-                case "Manager":
-                    this.data.Managers.Add(new Manager { Id = userId, UserId = userId });
-                    break;
-                case "Contractor":
-                    this.data.Contractors.Add(new Contractor { Id = userId, UserId = userId });
-                    break;
-                default:
-                    throw new ArgumentException(ValidationErrorMessages.InvalidUserKindMessage);
-            }
+            return RedirectToAction("Profile", "User");
         }
     }
 }

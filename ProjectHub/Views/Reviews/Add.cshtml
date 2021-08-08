@@ -19,7 +19,7 @@
 
 
 <form method="post" enctype="multipart/form-data" class="js-review-add-form">
-    <div class="col-12" style="background-color: lightblue;
+    <div class="col-12" style="background-color: lightskyblue;
                                margin-right: 0;
                                margin-left: 0px;
                                margin-top: 2.5%;
@@ -43,7 +43,12 @@
     </div>
 </form>
 
+@section Scripts {
+    <partial name="~/Views/_ValidationScriptsPartial.cshtml" />
+}
+
 <script>
+
     $('.js-review-add-button').on('click', function () {
 
         var action = $(this).attr('data-action');
@@ -58,7 +63,7 @@
             function (data) {
                 console.log(data);
                 $('.js-reviews-container').html(data);
-            });       
+            });
 
     });
 

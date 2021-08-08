@@ -19,29 +19,38 @@ namespace ProjectHub.AutoMapper
                 .ForMember(
                           u => u.UserKindName,
                           opt => opt.MapFrom(au => au.UserKind.Name));
-                
+
             CreateMap<ApplicationUser, AppUserEditProfileViewModel>()
                 .ForMember(
                           u => u.UserKindName,
                           opt => opt.MapFrom(au => au.UserKind.Name));
 
             CreateMap<object, UserProfileViewModel>();
-
             CreateMap<object, UserEditProfileViewModel>();
 
+            //INVESTORS
             CreateMap<Investor, UserProfileViewModel>();
-
             CreateMap<Investor, UserEditProfileViewModel>();
 
+            //MANAGERS
             CreateMap<Manager, UserProfileViewModel>();
             CreateMap<Manager, UserEditProfileViewModel>();
 
+
+            //DESIGNERS
             CreateMap<Designer, UserProfileViewModel>();
             CreateMap<Designer, UserEditProfileViewModel>();
+            CreateMap<Designer, DesignerProjectDetailsViewModel>()
+                .ForMember(
+                           m => m.Name,
+                           opt => opt.MapFrom(d => d.User.FullName))
+                .ForMember(
+                           m => m.Discipline,
+                           opt => opt.MapFrom(d => d.Discipline.Name));
 
+            //CONTRACTORS
             CreateMap<Contractor, UserProfileViewModel>();
             CreateMap<Contractor, UserEditProfileViewModel>();
-
 
             //PROJECTS MAPPING
             CreateMap<Project, ProjectListingViewModel>()
@@ -49,8 +58,22 @@ namespace ProjectHub.AutoMapper
                           pl => pl.Investor,
                           opt => opt.MapFrom(p => p.Investor.User.FullName))
                 .ForMember(
-                          p=> p.Deadline,
-                          opt => opt.MapFrom(p=>p.Deadline.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture)));
+                          p => p.Deadline,
+                          opt => opt.MapFrom(p => p.Deadline.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture)));
+
+            CreateMap<Project, ProjectDetailsViewModel>()
+                .ForMember(
+                           pvm => pvm.Deadline,
+                           opt => opt.MapFrom(p => p.Deadline.ToString("MMM dd, yyyy HH:mm:ss", CultureInfo.InvariantCulture)))
+                .ForMember(
+                           pvm => pvm.Investor,
+                           opt => opt.MapFrom(p => p.Investor.User.FullName))
+                .ForMember(
+                           pvm => pvm.Manager,
+                           opt => opt.MapFrom(p => p.Manager.User.FullName))
+                .ForMember(
+                           pvm => pvm.Contractor,
+                           opt => opt.MapFrom(p => p.Contractor.User.FullName));
 
             //REVIEWS MAPPING
             CreateMap<Review, ReviewListingViewModel>()
@@ -60,8 +83,8 @@ namespace ProjectHub.AutoMapper
                 .ForMember(
                           rl => rl.Date,
                           opt => opt.MapFrom(r => r.Date.ToString("HH:mm dd.MM.yyyy", CultureInfo.InvariantCulture)));
-                
-            
+
+
         }
     }
 }

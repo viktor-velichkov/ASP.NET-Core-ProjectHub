@@ -1,26 +1,26 @@
-﻿@model Tuple<List<ProjectListingViewModel>, string>
+﻿@model Tuple<List<ProjectListingViewModel>, UserProjectsListingViewModel>
 
-@{ 
+@{
     Layout = "";
 }
 <div role="tabpanel" class="tab-pane active" id="projects">
     @{
         if (!Model.Item1.Any())
         {
-            <h6 style="margin-top:15px">There is not any project assosciated with this @Model.Item2.</h6>
+            <h6 style="margin-top:15px">There is not any project assosciated with this @Model.Item2.UserKind.ToLower() yet.</h6>
         }
         else
         {
             <div class="container-fluid">
-                <partial name="~/Views/Projects/List.cshtml" model="@Model.Item1" />
+                <partial name="~/Views/Projects/List.cshtml" model="@Model" />
             </div>
         }
 
-        if (Model.Item2.Equals("Investor"))
+        if (Model.Item2.UserKind.Equals("Investor") && Model.Item2.IsLoggedUser)
         {
-            <input asp-controller="Projects" asp-action="Add" method="get" type="submit" class="btn btn-primary" value="Add Project" style="margin-top: 10px;
-                                                                                                                                            margin-right: 0px;
-                                                                                                                                            margin-left: 5%;">
+            <button asp-controller="Projects" asp-action="Add" formmethod="get" type="submit" class="btn btn-primary" style="margin-top: 10px;
+                                                                                                                             margin-right: 0px;
+                                                                                                                             margin-left: 0px;">Add Project</button>
         }
     }
 </div>

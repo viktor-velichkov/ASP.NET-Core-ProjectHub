@@ -51,6 +51,7 @@ namespace ProjectHub.Services.User
                                  .Designers
                                  .Include(d => d.User)
                                  .Include(d => d.User.UserKind)
+                                 .Include(d=>d.Discipline)
                                  .FirstOrDefault(i => i.UserId.Equals(userId));
                     break;
                 case "Contractor":

@@ -38,7 +38,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="UserKindId"></label>
-                <select asp-for="UserKindId" class="form-control">
+                <select asp-for="UserKindId" class="form-control js-user-kind">
                     @foreach (var userType in Model.UserKinds)
                     {
                         <option value="@userType.Id">@userType.Name</option>
@@ -46,13 +46,42 @@
                 </select>
                 <span asp-validation-for="UserKindId" class="text-danger"></span>
             </div>
+            <div class="form-group js-designer-discipline" style="display:none">
+                <label asp-for="DisciplineId"></label>
+                <select asp-for="DisciplineId" class="form-control">
+                    @foreach (var discipline in Model.Disciplines)
+                    {
+                        <option value="@discipline.Id">@discipline.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="DisciplineId" class="text-danger"></span>
+            </div>
             <button formmethod="post" type="submit" class="btn btn-primary">Register</button>
         </form>
     </div>
 </div>
 
 @section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.js-user-kind').change(function () {
+
+                var selection = $('.js-user-kind').val();
+                console.log(selection);
+                if (selection=='3') {
+                    $('.js-designer-discipline').show();
+                }
+                else {
+                    $('.js-designer-discipline').hide();
+                }
+            });
+        });
+    </script>
+
+
     <partial name="~/Views/_ValidationScriptsPartial.cshtml" />
 }
+
+
 
 

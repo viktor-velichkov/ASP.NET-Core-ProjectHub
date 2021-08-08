@@ -10,6 +10,7 @@ using ProjectHub.AutoMapper;
 using ProjectHub.Data;
 using ProjectHub.Data.Models;
 using ProjectHub.Infrastructure;
+using ProjectHub.Services.Account;
 using ProjectHub.Services.Projects;
 using ProjectHub.Services.Reviews;
 using ProjectHub.Services.User;
@@ -54,6 +55,9 @@ namespace ProjectHub
 
             services
                 .AddSingleton(InitializeMapper());
+
+            services
+                .AddTransient<IAccountService, AccountService>();
 
             services
                 .AddTransient<IUserService, UserService>();

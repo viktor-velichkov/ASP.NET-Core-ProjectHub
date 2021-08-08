@@ -34,8 +34,37 @@ namespace ProjectHub.Services.Projects
                 Deadline = model.Deadline,
                 Description = model.Description
             });
-            
+
             this.data.SaveChanges();
         }
+
+        public List<Discipline> GetAllDisciplines()
+            => this.data.Disciplines.ToList();
+
+        public Project GetProjectById(int id)
+            => this.data
+                   .Projects
+                   .Include(p => p.Investor)
+                   .ThenInclude(i => i.User)
+                   .Include(p => p.Manager)
+                   .ThenInclude(i => i.User)
+                   .Include(p => p.Contractor)
+                   .ThenInclude(i => i.User)
+                   .Include(p => p.Designers)
+                   .FirstOrDefault(p => p.Id.Equals(id));
+
+        public ApplicationUser GetUserById(int id)
+            => this.data
+                   .Users
+                   .Include(u=>u.UserKind)
+                   .FirstOrDefault(u => u.Id.Equals(id));
+
+        public string GetDesignerDisciplineName(int id)
+            => this.data
+                   .Designers
+                   .Include(d => d.Discipline)
+                   .FirstOrDefault(d => d.Id.Equals(id))
+                   .Discipline
+                   .Name;
     }
 }

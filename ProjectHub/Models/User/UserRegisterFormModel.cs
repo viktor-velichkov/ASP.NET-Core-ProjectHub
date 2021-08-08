@@ -1,4 +1,5 @@
 ﻿using ProjectHub.Data;
+using ProjectHub.Data.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -43,9 +44,13 @@ namespace ProjectHub.Models.User
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        [Display(Name = "Choose User Type")]
+        [Display(Name = "Choose User Kind")]
         public int UserKindId { get; set; }
 
+        [Display(Name = "Choose Discipline")]
+        public int DisciplineId { get; set; }
+
         public IEnumerable<UserKindRegisterFormModel> UserKinds { get; set; }
+        public IEnumerable<Discipline> Disciplines { get; set; }
     }
 }

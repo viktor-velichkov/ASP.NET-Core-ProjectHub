@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProjectHub.Data;
 using ProjectHub.Data.Models;
 using ProjectHub.Models.Project;
+using ProjectHub.Models.User;
 using ProjectHub.Services.Projects;
 using System;
 using System.Collections.Generic;
@@ -54,9 +55,44 @@ namespace ProjectHub.Controllers
         {
             return View();
         }
-        public IActionResult Details()
+
+        public IActionResult Details(int id)
         {
-            return View();
+            var project = this.projectService.GetProjectById(id);
+
+            var disciplines = this.projectService.GetAllDisciplines();
+
+            var projectViewModel = this.mapper.Map<Project, ProjectDetailsViewModel>(project);
+
+            var loggedUserId = int.Parse(this.userManager.GetUserId(this.User));
+
+            var loggedUser = this.projectService.GetUserById(loggedUserId);
+
+            var loggedUserUserKind = loggedUser.UserKind.Name;
+
+            var loggedUserDiscipline = loggedUserUserKind.Equals("Designer") ? 
+                                       this.projectService.GetDesignerDisciplineName(loggedUserId) : null;
+
+            var projectViewType = projectViewModel.GetType();
+
+            bool isLoggedUserPositionFree = false;
+
+            if (!loggedUserUserKind.Equals("Designer"))
+            {
+                isLoggedUserPositionFree = projectViewType.GetProperty(loggedUserUserKind) != null ?
+                                           String.IsNullOrWhiteSpace(
+                                               projectViewType.GetProperty(loggedUserUserKind).GetValue(projectViewModel) as string) :
+                                           true;                                                                                    
+            }
+            else
+            {
+                isLoggedUserPositionFree = String.IsNullOrWhiteSpace(
+                    projectViewModel.Designers.Select(d => d.Discipline).FirstOrDefault(d => d.Equals(loggedUserDiscipline)));
+            }
+
+            projectViewModel.IsLoggedUserPositionFree = isLoggedUserPositionFree;
+
+            return View(new Tuple<ProjectDetailsViewModel, List<Discipline>>(projectViewModel,disciplines));
         }
 
     }
