@@ -6,13 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using ProjectHub.Data.Models;
 using ProjectHub.Models.Discussion;
-using ProjectHub.Models.Project;
+using ProjectHub.Models.Projects;
 using ProjectHub.Models.Review;
 using ProjectHub.Models.User;
 using ProjectHub.Services.User;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProjectHub.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -28,6 +30,7 @@ namespace ProjectHub.Controllers
             this.userService = userService;
         }
 
+        
         public IActionResult Profile()
         {
             if (!this.User.Identity.IsAuthenticated)
@@ -64,7 +67,7 @@ namespace ProjectHub.Controllers
             return View(tuple);
         }
 
-
+       
         public IActionResult EditUserProfile(int userId, string userKind)
         {
             if (!this.User.Identity.IsAuthenticated)
@@ -84,7 +87,7 @@ namespace ProjectHub.Controllers
             return View(currentUser);
         }
 
-        [HttpPost]
+        [HttpPost]        
         public IActionResult EditUserProfile(UserEditProfileViewModel model)
         {
             var uploadedImage = model.User.ImageUpload;
@@ -112,8 +115,7 @@ namespace ProjectHub.Controllers
 
             return RedirectToAction("Profile", "User", new { id = model.User.Id });
         }
-
-
+                
         public IActionResult Projects(int id, string userKind)
         {
             var projects = this.userService.GetUserProjects(id, userKind).ToList();

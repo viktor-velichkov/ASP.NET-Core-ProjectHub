@@ -5,7 +5,7 @@ using ProjectHub.Data;
 using ProjectHub.Data.Models;
 using ProjectHub.Data.Models.Projects;
 using ProjectHub.Models.Discussion;
-using ProjectHub.Models.Project;
+using ProjectHub.Models.Projects;
 using ProjectHub.Models.Review;
 using ProjectHub.Models.User;
 using System.Collections.Generic;

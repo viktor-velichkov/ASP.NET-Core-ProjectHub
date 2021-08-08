@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ProjectHub.Models.Project
+namespace ProjectHub.Models.Projects
 {
     public class ProjectAddViewModel
     {

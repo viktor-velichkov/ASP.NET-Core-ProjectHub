@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjectHub.Data.Models
@@ -7,20 +8,17 @@ namespace ProjectHub.Data.Models
     {
         public int Id { get; set; }
 
-        [Required]
-        [MaxLength(DataConstants.OfferNameMaxLength)]
-        public string Name { get; set; }
-
-        
         [ForeignKey(nameof(Author))]
         public int AuthorId { get; set; }
         public ApplicationUser Author { get; set; }
 
-        
+
         [ForeignKey(nameof(Project))]
         public int ProjectId { get; set; }
 
         public Project Project { get; set; }
+
+        public DateTime Date { get; set; }
 
         [Required]
         [Range(0, int.MaxValue)]

@@ -104,13 +104,13 @@
         </div>
         @if (Model.Item1.IsLoggedUserPositionFree)
         {
-            <div style="text-align: end;">
-                <input asp-controller="Offers" asp-action="Send" type="submit" formmethod="get" class="btn btn-primary" value="Send Offer" style="margin-top: 10px;margin-right: 5%;">
+            <form class="form-group" style="text-align: end;">
+                <input asp-controller="Offers" asp-action="Add" formmethod="get" type="submit" class="btn btn-primary" value="Send Offer" style="margin-top: 10px;margin-right: 5%;"> 
                 <div class="col-12" style="text-align: end;">
                     <span class="timer">Remaining time for sending offers: </span>
                     <span class="timer" id="timer" style="margin-right: 5%; text-align: end;"></span>
                 </div>                
-            </div>
+            </form>
         }
 
     </div>

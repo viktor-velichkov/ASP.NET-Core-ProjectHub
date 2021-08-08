@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ProjectHub.Data;
-using ProjectHub.Models.Project;
+using ProjectHub.Models.Projects;
 using System;
 using System.Collections.Generic;
 using System.Linq;

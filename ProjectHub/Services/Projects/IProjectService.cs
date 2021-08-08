@@ -1,5 +1,5 @@
 ﻿using ProjectHub.Data.Models;
-using ProjectHub.Models.Project;
+using ProjectHub.Models.Projects;
 using System.Collections.Generic;
 
 namespace ProjectHub.Services.Projects

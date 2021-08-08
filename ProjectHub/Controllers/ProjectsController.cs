@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.Data;
 using ProjectHub.Data.Models;
-using ProjectHub.Models.Project;
+using ProjectHub.Models.Projects;
 using ProjectHub.Models.User;
 using ProjectHub.Services.Projects;
 using System;

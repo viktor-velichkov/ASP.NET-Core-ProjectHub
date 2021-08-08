@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ProjectHub.Models.Project
+namespace ProjectHub.Models.Projects
 {
     public class ProjectDetailsViewModel
     {
