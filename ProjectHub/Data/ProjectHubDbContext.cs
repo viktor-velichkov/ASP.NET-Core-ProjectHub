@@ -76,9 +76,16 @@ namespace ProjectHub.Data
                    .HasForeignKey(r => r.AuthorId);
 
             builder.Entity<Project>()
-                    .HasOne(nameof(Project.Investor))
-                    .WithMany(nameof(Investor.Projects))
+                    .HasOne(p=>p.Investor)
+                    .WithMany(i=>i.Projects)
+                    .HasForeignKey(p=>p.InvestorId)
                     .OnDelete(DeleteBehavior.NoAction);
+
+            //builder.Entity<Project>()
+            //        .HasMany(p => p.Offers)
+            //        .WithOne(offer => offer.Project)
+            //        .HasForeignKey(offer => offer.ProjectId)
+            //        .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Rate>()
                    .HasOne(r => r.Recipient)
@@ -103,13 +110,16 @@ namespace ProjectHub.Data
                    .HasForeignKey(r => r.AuthorId);
 
             builder.Entity<Offer>()
-                   .HasOne(nameof(Offer.Project))
-                   .WithMany(nameof(Project.Offers))
+                   .HasOne(offer => offer.Project)
+                   .WithMany(p => p.Offers)
+                   .HasForeignKey(offer => offer.ProjectId)
                    .OnDelete(DeleteBehavior.NoAction);
 
+
             builder.Entity<ProjectDesigner>()
-                   .HasOne(nameof(ProjectDesigner.Project))
-                   .WithMany(nameof(Project.Designers))
+                   .HasOne(pd=>pd.Project)
+                   .WithMany(p=>p.Designers)
+                   .HasForeignKey(pd=>pd.ProjectId)
                    .OnDelete(DeleteBehavior.NoAction);
                         
             builder.Entity<UserDiscussion>()
@@ -123,6 +133,9 @@ namespace ProjectHub.Data
 
             builder.Entity<Review>()
                    .HasKey(r => new { r.AuthorId, r.RecipientId });
+
+            builder.Entity<Offer>()
+                   .HasKey(offer => new { offer.AuthorId, offer.ProjectId });
 
             builder.Entity<Offer>()
                    .Property(nameof(Offer.Price))

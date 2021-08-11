@@ -38,18 +38,21 @@
 
 <form method="post" enctype="multipart/form-data">
     <div class="row">
+        <input asp-for="@Model.AuthorId" type="hidden" value="@Model.AuthorId">
+        <input asp-for="@Model.ProjectId" type="hidden" value="@Model.Project.Id">
+        <input asp-for="@Model.Position" type="hidden" value="@Model.Position">
         <div class="field-title offset-3 col-6" style="background-color: lightskyblue; border-radius: 5px; padding-bottom:10px">
             <div class="col-12" style="text-align:start; padding-left: 0px;">
-                <span class="small-text-bold" style="text-align:start; padding-left: 0px;">Project: </span><span class="small-text" style="font-weight:normal">Жилищна сграда</span>
+                <span class="small-text-bold" style="text-align:start; padding-left: 0px;">Project: </span><span class="small-text" style="font-weight:normal">@Model.Project.Name</span>
             </div>
             <div class="col-12" style="text-align:start; padding-left: 0px;">
-                <span class="small-text-bold" style="text-align:start; padding-left: 0px;">City: </span><span class="small-text" style="font-weight:normal">Бургас</span>
+                <span class="small-text-bold" style="text-align:start; padding-left: 0px;">City: </span><span class="small-text" style="font-weight:normal">@Model.Project.City</span>
             </div>
             <div class="col-12" style="text-align:start; padding-left: 0px;">
-                <span class="small-text-bold" style="text-align:start; padding-left: 0px;">Address: </span><span class="small-text" style="font-weight:normal">Адрес на обекта</span>
+                <span class="small-text-bold" style="text-align:start; padding-left: 0px;">Address: </span><span class="small-text" style="font-weight:normal">@Model.Project.Address</span>
             </div>
             <div class="col-12" style="text-align:start; padding-left: 0px;">
-                <span class="small-text-bold" style="text-align:start; padding-left: 0px;">Investor: </span><span class="small-text" style="font-weight:normal">Виктор Величков</span>
+                <span class="small-text-bold" style="text-align:start; padding-left: 0px;">Investor: </span><span class="small-text" style="font-weight:normal">@Model.Project.Investor</span>
             </div>
             <div class="form-group" style="margin-bottom: 0; margin-top: 5px; text-align:start">
                 <label class="small-text-bold" asp-for="@Model.Price"></label>
@@ -61,7 +64,7 @@
             </div>
             <div class="form-group" style="margin-bottom: 0; margin-top: 5px; text-align:start">
                 <label class="small-text-bold" asp-for="@Model.Description"></label>
-                <textarea asp-for="@Model.Description" class="form-control" id="desription" rows="4" placeholder="Project is..."></textarea>
+                <textarea asp-for="@Model.Description" class="form-control" id="desription" rows="4" placeholder="Offer includes....."></textarea>
                 <span asp-validation-for="@Model.Description" class="text-danger  small-text-normal"></span>
             </div>
         </div>

@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using ProjectHub.Data;
+using ProjectHub.Data.Models;
 using ProjectHub.Models.Projects;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using ProjectHub.Data.Models.Projects;
-using ProjectHub.Data.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace ProjectHub.Services.Projects
 {
@@ -44,6 +41,11 @@ namespace ProjectHub.Services.Projects
         public Project GetProjectById(int id)
             => this.data
                    .Projects
+                   .FirstOrDefault(p => p.Id.Equals(id));
+
+        public Project GetProjectWithItsParticipantsById(int id)
+            => this.data
+                   .Projects
                    .Include(p => p.Investor)
                    .ThenInclude(i => i.User)
                    .Include(p => p.Manager)
@@ -53,11 +55,12 @@ namespace ProjectHub.Services.Projects
                    .Include(p => p.Designers)
                    .FirstOrDefault(p => p.Id.Equals(id));
 
-        public ApplicationUser GetUserById(int id)
+        public List<Offer> GetProjectOffersWithAuthorByProjectId(int id)
             => this.data
-                   .Users
-                   .Include(u=>u.UserKind)
-                   .FirstOrDefault(u => u.Id.Equals(id));
+                   .Offers
+                   .Include(offer => offer.Author)
+                   .Where(offer => offer.ProjectId.Equals(id))
+                   .ToList();
 
         public string GetDesignerDisciplineName(int id)
             => this.data
@@ -66,5 +69,7 @@ namespace ProjectHub.Services.Projects
                    .FirstOrDefault(d => d.Id.Equals(id))
                    .Discipline
                    .Name;
+
+
     }
 }

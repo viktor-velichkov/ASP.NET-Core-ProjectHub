@@ -1,24 +1,77 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ProjectHub.Data.Models;
 using ProjectHub.Models.Offer;
-using System;
+using ProjectHub.Models.Projects;
+using ProjectHub.Services.Offers;
+using ProjectHub.Services.Projects;
+using ProjectHub.Services.User;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ProjectHub.Controllers
 {
     public class OffersController : Controller
     {
-        [Authorize]
-        public IActionResult Add()
+        private readonly IProjectService projectService;
+        private readonly IUserService userService;
+        private readonly IOfferService offerServce;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly IMapper mapper;
+
+        public OffersController(IProjectService projectService,
+                                IUserService userService,
+                                IOfferService offerService,
+                                UserManager<ApplicationUser> userManager,
+                                IMapper mapper)
         {
-            return View();
+            this.projectService = projectService;
+            this.userService = userService;
+            this.offerServce = offerService;
+            this.userManager = userManager;
+            this.mapper = mapper;
         }
+
+        public IActionResult Add(int id)
+        {
+            var project = this.projectService.GetProjectWithItsParticipantsById(id);
+
+            var projectModel = this.mapper.Map<Project, ProjectOfferAddViewModel>(project);
+
+            var authorId = int.Parse(this.userManager.GetUserId(this.User));
+
+            var position = this.userService.GetPositionThatUserAppliesFor(authorId);
+
+            var offerModel = new OfferAddVIewModel { AuthorId = authorId, Project = projectModel, Position = position };
+
+            return View(offerModel);
+        }
+
         [HttpPost]
         public IActionResult Add(OfferAddVIewModel model)
         {
-            return View();
+            if (this.offerServce.IsLoggedUserAlreadySentAnOfferForThisProject(model.AuthorId, model.ProjectId))
+            {
+                this.ModelState.AddModelError(nameof(Offer), "This user already have sent an offer for this project.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            this.offerServce.AddOffer(model);
+
+            return RedirectToAction("Details", "Projects", new { id = model.ProjectId });
+        }
+
+        public IActionResult Filter(int projectId, string position)
+        {
+            var offers = this.offerServce.GetProjectOffersByPosition(projectId, position);
+
+            var offersModel = this.mapper.Map<List<Offer>, List<OfferListViewModel>>(offers);
+
+            return PartialView("~/Views/Projects/OffersPartial.cshtml", offersModel);
         }
     }
 }

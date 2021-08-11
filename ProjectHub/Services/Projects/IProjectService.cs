@@ -9,9 +9,12 @@ namespace ProjectHub.Services.Projects
         public void AddProject(ProjectAddViewModel model, int investorId);
 
         public Project GetProjectById(int id);
-        public List<Discipline> GetAllDisciplines();
 
-        public ApplicationUser GetUserById(int id);
+        public Project GetProjectWithItsParticipantsById(int id);
+
+        public List<Offer> GetProjectOffersWithAuthorByProjectId(int id);
+
+        public List<Discipline> GetAllDisciplines();
 
         public string GetDesignerDisciplineName(int id);
     }

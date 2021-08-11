@@ -31,7 +31,7 @@ namespace ProjectHub.Services.Reviews
         }
 
         public List<Review> GetRecipientReviews(int recipientId)
-            =>this.data
+            => this.data
                   .Reviews
                   .Include(r => r.Author)
                   .Where(r => r.RecipientId.Equals(recipientId))
@@ -41,7 +41,7 @@ namespace ProjectHub.Services.Reviews
         {
             var review = this.data
                              .Reviews
-                             .FirstOrDefault(r => r.RecipientId.Equals(recipientId) 
+                             .FirstOrDefault(r => r.RecipientId.Equals(recipientId)
                                                   && r.AuthorId.Equals(authorId));
 
             review.Content = content;
@@ -54,7 +54,7 @@ namespace ProjectHub.Services.Reviews
         {
             var review = this.data
                              .Reviews
-                             .FirstOrDefault(r => r.RecipientId.Equals(recipientId) 
+                             .FirstOrDefault(r => r.RecipientId.Equals(recipientId)
                                                   && r.AuthorId.Equals(authorId));
 
             this.data.Reviews.Remove(review);

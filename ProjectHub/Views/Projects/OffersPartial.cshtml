@@ -1,0 +1,66 @@
+﻿@model List<OfferListViewModel>
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+    .timer {
+        font-size: medium
+    }
+
+    .field-title {
+        font-size: larger;
+        font-weight: bold;
+        padding-bottom: 5px;
+        text-align: center;
+    }
+
+    .small-text-normal {
+        text-decoration: none;
+        font-size: medium;
+        font-weight: normal
+    }
+
+    .small-text-bold {
+        text-decoration: none;
+        font-size: medium;
+        font-weight: bold
+    }
+
+    .small-text {
+        font-size: medium;
+    }
+</style>
+
+@{
+    foreach (var offer in Model)
+    {
+
+        <div class="field-title offset-3 col-6" style="background-color: lightskyblue; border-radius: 5px; padding-bottom:10px; margin-bottom:10px;">
+            <div class="col-12" style="text-align:start; padding-left: 0px;">
+                <span class="small-text-bold" style="text-align:start; padding-left: 0px;">Author: </span><a asp-action="Profile" asp-controller="User" asp-route-id="@offer.AuthorId" class="small-text" style="font-weight:normal">@offer.Author</a>
+            </div>
+            <div class="col-12" style="text-align:start; padding-left: 0px;">
+                <span class="small-text-bold" style="text-align:start; padding-left: 0px;">Position: </span><span class="small-text" style="font-weight:normal">@offer.Position</span>
+            </div>
+            <div class="col-12" style="text-align:start; padding-left: 0px;">
+                <span class="small-text-bold" style="text-align:start; padding-left: 0px;">From: </span><span class="small-text" style="font-weight:normal">@offer.Date</span>
+            </div>
+            <div class="col-12" style="text-align:start; padding-left: 0px;">
+                <span class="small-text-bold" style="text-align:start; padding-left: 0px;">Price: </span><span class="small-text" style="font-weight:normal">@offer.Price lv.</span>
+            </div>
+            <div class="col-12" style="text-align: start; padding-left: 0px;">
+                <span class="small-text-bold" style="text-align:start; padding-left: 0px;">Description: </span>
+            </div>
+            <div class="col-12" style="text-align: start; padding-left: 0px; background-color: azure; border-radius: 5px; padding:10px;">
+                <span class="small-text" style="font-weight: normal;">@offer.Description</span>
+            </div>
+            <div class="field-title col-12" style="text-align: end; padding-right:0px">
+                <input type="button" formmethod="get" class="btn js-offer-accept-button" data-action="Accept" value="Accept" style="background-color: azure; margin-top: 10px; margin-right: 0px;">
+                <input type="button" formmethod="post" class="btn js-offer-decilne-button" data-action="Decline" value="Decline" style="background-color: azure; margin-top: 10px; margin-right: 0px; ">
+            </div>
+        </div>
+
+    }
+}

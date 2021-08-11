@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ProjectHub.Data.Models;
 using ProjectHub.Data.Models.Projects;
+using ProjectHub.Models.Offer;
 using ProjectHub.Models.Projects;
 using ProjectHub.Models.Review;
 using ProjectHub.Models.User;
@@ -24,7 +25,7 @@ namespace ProjectHub.AutoMapper
                 .ForMember(
                           u => u.UserKindName,
                           opt => opt.MapFrom(au => au.UserKind.Name));
-
+                        
             CreateMap<object, UserProfileViewModel>();
             CreateMap<object, UserEditProfileViewModel>();
 
@@ -75,6 +76,14 @@ namespace ProjectHub.AutoMapper
                            pvm => pvm.Contractor,
                            opt => opt.MapFrom(p => p.Contractor.User.FullName));
 
+            CreateMap<Project, ProjectOfferAddViewModel>()
+                .ForMember(
+                           pvm => pvm.Investor,
+                           opt => opt.MapFrom(p => p.Investor.User.FullName));
+
+            CreateMap<Project, ProjectOffersListViewModel>();
+                            
+
             //REVIEWS MAPPING
             CreateMap<Review, ReviewListingViewModel>()
                 .ForMember(
@@ -83,6 +92,15 @@ namespace ProjectHub.AutoMapper
                 .ForMember(
                           rl => rl.Date,
                           opt => opt.MapFrom(r => r.Date.ToString("HH:mm dd.MM.yyyy", CultureInfo.InvariantCulture)));
+
+            //OFFERS MAPPING
+            CreateMap<Offer, OfferListViewModel>()
+                .ForMember(
+                           offerViewModel => offerViewModel.Author,
+                           opt => opt.MapFrom(offer => offer.Author.FullName))
+                .ForMember(
+                          offerViewModel => offerViewModel.Date,
+                          opt => opt.MapFrom(offer => offer.Date.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture))); ;
 
 
         }

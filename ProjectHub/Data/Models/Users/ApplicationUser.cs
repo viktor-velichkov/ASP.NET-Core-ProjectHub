@@ -41,7 +41,7 @@ namespace ProjectHub.Data.Models
         [InverseProperty(nameof(Rate.Recipient))]
         public ICollection<Rate> RatesReceived { get; set; }
 
-            [InverseProperty(nameof(Rate.Author))]
+        [InverseProperty(nameof(Rate.Author))]
         public ICollection<Rate> RatesSent { get; set; }
 
         [Url]
@@ -53,7 +53,7 @@ namespace ProjectHub.Data.Models
         [Url]
         public string SkypeProfile { get; set; }
 
-
+        
         public ICollection<Offer> Offers => new HashSet<Offer>();
 
         [InverseProperty(nameof(Review.Recipient))]

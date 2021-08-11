@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectHub.Data;
 
 namespace ProjectHub.Data.Migrations
 {
     [DbContext(typeof(ProjectHubDbContext))]
-    partial class ProjectHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210811073059_RemoveOffers")]
+    partial class RemoveOffers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -407,35 +409,6 @@ namespace ProjectHub.Data.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("ProjectHub.Data.Models.Offer", b =>
-                {
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(10000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Position")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal");
-
-                    b.HasKey("AuthorId", "ProjectId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("Offers");
-                });
-
             modelBuilder.Entity("ProjectHub.Data.Models.Project", b =>
                 {
                     b.Property<int>("Id")
@@ -715,25 +688,6 @@ namespace ProjectHub.Data.Migrations
                     b.Navigation("Author");
                 });
 
-            modelBuilder.Entity("ProjectHub.Data.Models.Offer", b =>
-                {
-                    b.HasOne("ProjectHub.Data.Models.ApplicationUser", "Author")
-                        .WithMany("Offers")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProjectHub.Data.Models.Project", "Project")
-                        .WithMany("Offers")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-
-                    b.Navigation("Project");
-                });
-
             modelBuilder.Entity("ProjectHub.Data.Models.Project", b =>
                 {
                     b.HasOne("ProjectHub.Data.Models.Contractor", "Contractor")
@@ -839,8 +793,6 @@ namespace ProjectHub.Data.Migrations
 
                     b.Navigation("Messages");
 
-                    b.Navigation("Offers");
-
                     b.Navigation("RatesReceived");
 
                     b.Navigation("RatesSent");
@@ -882,8 +834,6 @@ namespace ProjectHub.Data.Migrations
             modelBuilder.Entity("ProjectHub.Data.Models.Project", b =>
                 {
                     b.Navigation("Designers");
-
-                    b.Navigation("Offers");
                 });
 #pragma warning restore 612, 618
         }

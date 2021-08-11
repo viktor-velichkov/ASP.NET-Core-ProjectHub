@@ -31,7 +31,7 @@ namespace ProjectHub.Infrastructure
                 return;
             }
 
-            data.UserKinds.AddRange(new[] 
+            data.UserKinds.AddRange(new[]
             {
                 new UserKind { Name = "Investor"},
                 new UserKind { Name = "Manager"},
@@ -62,5 +62,7 @@ namespace ProjectHub.Infrastructure
 
             data.SaveChanges();
         }
+
+
     }
 }

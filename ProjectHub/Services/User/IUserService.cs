@@ -20,13 +20,17 @@ namespace ProjectHub.Services.User
         public IEnumerable<ReviewListingViewModel> GetUserReviews(int id);
 
         public IEnumerable<DiscussionViewModel> GetUserDiscussions(int id);
+        public Discipline GetDesignerDiscipline(int id);
         public byte[] GetUserImage(int id);
 
         public byte[] ProcessUploadedFile(IFormFile file);
 
         public string GetUserRecommendationsCount(int authorId, int recipientId);
+
         public string GetUserDisapprovalsCount(int authorId, int recipientId);
 
         public bool CheckIfUserIsAlreadyReviewedByTheLoggedUser(int recipientId, int loggedUserId);
+
+        public string GetPositionThatUserAppliesFor(int userId);
     }
 }

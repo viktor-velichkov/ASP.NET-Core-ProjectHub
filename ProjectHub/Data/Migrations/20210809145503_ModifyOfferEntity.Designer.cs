@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectHub.Data;
 
 namespace ProjectHub.Data.Migrations
 {
     [DbContext(typeof(ProjectHubDbContext))]
-    partial class ProjectHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210809145503_ModifyOfferEntity")]
+    partial class ModifyOfferEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -423,9 +425,6 @@ namespace ProjectHub.Data.Migrations
                         .HasMaxLength(10000)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Position")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal");
 
@@ -726,7 +725,7 @@ namespace ProjectHub.Data.Migrations
                     b.HasOne("ProjectHub.Data.Models.Project", "Project")
                         .WithMany("Offers")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Author");

@@ -26,5 +26,7 @@ namespace ProjectHub.Models.Projects
         public string Contractor { get; set; }
 
         public bool IsLoggedUserPositionFree { get; set; }
+
+        public bool IsLoggedUserAlreadySentAnOffer { get; set; }
     }
 }

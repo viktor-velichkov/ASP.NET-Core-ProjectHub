@@ -16,20 +16,7 @@ namespace ProjectHub.Services.Account
         {
             this.data = data;
         }
-        public IEnumerable<UserKindRegisterFormModel> GetUserKinds()
-             => this.data
-                    .UserKinds
-                    .Select(ut => new UserKindRegisterFormModel
-                    {
-                        Id = ut.Id,
-                        Name = ut.Name
-                    })
-                    .ToList();
 
-        public IEnumerable<Discipline> GetDisciplines()
-             => this.data
-                    .Disciplines
-                    .ToList();
         public bool ConfirmThatDisciplineIsValid(int disciplineId)
             => this.data.Disciplines.Any(d => d.Id.Equals(disciplineId));
 

@@ -1,0 +1,146 @@
+﻿@model ProjectOffersListViewModel
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+    .timer {
+        font-size: medium
+    }
+
+    .field-title {
+        font-size: larger;
+        font-weight: bold;
+        padding-bottom: 5px;
+        text-align: center;
+    }
+
+    .small-text-normal {
+        text-decoration: none;
+        font-size: medium;
+        font-weight: normal
+    }
+
+    .small-text-bold {
+        text-decoration: none;
+        font-size: medium;
+        font-weight: bold
+    }
+
+    .small-text {
+        font-size: medium;
+    }
+</style>
+
+<div class="row">
+    <div class="field-title offset-3 col-6" style="background-color: lightskyblue; border-radius: 5px; padding-bottom:10px">
+        <div class="col-12" style="text-align:start; padding-left: 0px;">
+            <span class="small-text-bold" style="text-align:start; padding-left: 0px;">Project: </span><span class="small-text" style="font-weight:normal">@Model.Name</span>
+        </div>
+        <div class="col-12" style="text-align:start; padding-left: 0px;">
+            <span class="small-text-bold" style="text-align:start; padding-left: 0px;">City: </span><span class="small-text" style="font-weight:normal">@Model.City</span>
+        </div>
+        <div class="col-12" style="text-align:start; padding-left: 0px;">
+            <span class="small-text-bold" style="text-align:start; padding-left: 0px;">Address: </span><span class="small-text" style="font-weight:normal">@Model.Address</span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="offset-3 col-6" style="margin-top : 10px; margin-bottom:10px; background-color: lightskyblue; border-radius: 5px;">
+        <p class="field-title" style="margin-bottom:0px;">Sent Offers</p>
+        <form>
+            <div class="col-12">
+                <div class="row" style="padding-bottom:5%;">
+                    <div class="small-text-bold col-sm-3 col-md-3 col-lg-2 col-xl-2" style="padding-top:5px; padding-left:0px;">
+                        <label asp-for="@Model.PositionFilter"></label>
+                    </div>
+                    <div class="col-auto">
+                        <select asp-for="@Model.PositionFilter" class="form-control js-position-filter" id="js-position-filter">
+                            <option value="All" selected>All</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Designer">Designer</option>
+                            <option value="Contractor">Contractor</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row js-discipline-filter" style="padding-bottom: 5%; display: none; ">
+                    <div class="small-text-bold col-sm-3 col-md-3 col-lg-2 col-xl-2" style="padding-left: 0px; padding-top: 5px;">
+                        <label asp-for="@Model.DisciplineFilter"></label>
+                    </div>
+                    <div class="col-auto">
+                        <select asp-for="@Model.DisciplineFilter" class="form-control js-discipline-value">
+                            @{
+                                foreach (var discipline in Model.Disciplines)
+                                {
+                                    <option value="@discipline.Name">@discipline.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<div class="row js-project-offers">
+    <partial name="~/Views/Projects/OffersPartial.cshtml" model="@Model.Offers" />
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.js-position-filter').change(function () {
+
+                var position = $('.js-position-filter').val();
+
+                console.log(position);
+
+                if (position == 'Designer') {
+                    $('.js-discipline-filter').show();
+                    position = 'Designer - ' + $('.js-discipline-value').val();
+                }
+                else {
+                    $('.js-discipline-filter').hide();
+                    position = $('.js-position-filter').val();
+                }
+
+                console.log(position);
+
+                $.get('/Offers/Filter',
+                    {
+                        projectId: @Model.Id,
+                        position: position
+                    },
+                    function (data) {
+                        console.log(data);
+                        $('.js-project-offers').html(data);
+                    });
+            });
+
+            $('.js-discipline-value').change(function () {
+                var position = 'Designer - ' + $('.js-discipline-value').val();
+
+                console.log(position);
+
+                $.get('/Offers/Filter',
+                    {
+                        projectId: @Model.Id,
+                        position: position
+                    },
+                    function (data) {
+                        console.log(data);
+                        $('.js-project-offers').html(data);
+                    });
+            });
+        });
+    </script>
+}
+
+
+
+

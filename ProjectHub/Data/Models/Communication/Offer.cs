@@ -4,19 +4,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjectHub.Data.Models
 {
+
     public class Offer
     {
-        public int Id { get; set; }
-
-        [ForeignKey(nameof(Author))]
         public int AuthorId { get; set; }
         public ApplicationUser Author { get; set; }
-
-
-        [ForeignKey(nameof(Project))]
+        
         public int ProjectId { get; set; }
 
         public Project Project { get; set; }
+
+        public string Position { get; set; }
 
         public DateTime Date { get; set; }
 

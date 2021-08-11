@@ -1,5 +1,7 @@
 ﻿using ProjectHub.Data;
 using ProjectHub.Data.Models;
+using ProjectHub.Models.Projects;
+using ProjectHub.Models.User;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProjectHub.Models.Offer
@@ -8,9 +10,13 @@ namespace ProjectHub.Models.Offer
     {
         public int Id { get; set; }
 
-        public string Author { get; set; }
+        public int AuthorId { get; set; }
 
-        public Project Project { get; set; }
+        public int ProjectId { get; set; }
+
+        public ProjectOfferAddViewModel Project { get; set; }
+
+        public string Position { get; set; }
 
         [Required]
         [Range(0,double.MaxValue)]

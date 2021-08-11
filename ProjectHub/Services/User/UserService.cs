@@ -1,16 +1,16 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using ProjectHub.Data;
 using ProjectHub.Data.Models;
-using ProjectHub.Data.Models.Projects;
 using ProjectHub.Models.Discussion;
 using ProjectHub.Models.Projects;
 using ProjectHub.Models.Review;
 using ProjectHub.Models.User;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+
 
 namespace ProjectHub.Services.User
 {
@@ -185,6 +185,9 @@ namespace ProjectHub.Services.User
             return userDiscussions;
         }
 
+        public Discipline GetDesignerDiscipline(int id)
+           => this.data.Designers.Include(d=>d.Discipline).FirstOrDefault(d => d.Id.Equals(id)).Discipline;
+
         public byte[] GetUserImage(int id)
             => this.data.Users.FirstOrDefault(u => u.Id.Equals(id)).Image;
 
@@ -270,5 +273,24 @@ namespace ProjectHub.Services.User
         public bool CheckIfUserIsAlreadyReviewedByTheLoggedUser(int recipientId, int loggedUserId)
             => this.data.Reviews.Any(r => r.AuthorId.Equals(loggedUserId)
                                           && r.RecipientId.Equals(recipientId));
+
+        public string GetPositionThatUserAppliesFor(int userId)
+        {
+            var position = this.data
+                               .Users
+                               .Include(u => u.UserKind)
+                               .First(u => u.Id.Equals(userId))
+                               .UserKind
+                               .Name;
+
+            if (position.Equals(nameof(Designer)))
+            {
+                var disciplineName = this.GetDesignerDiscipline(userId).Name;
+
+                position += $" - {disciplineName}";
+            }
+
+            return position;
+        }
     }
 }

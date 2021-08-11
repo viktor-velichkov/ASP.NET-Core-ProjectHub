@@ -27,7 +27,7 @@ namespace ProjectHub.Data.Models
         [Required]
         [MaxLength(DataConstants.DescriptionMaxLength)]
         public string Description { get; set; }
-                
+
         [ForeignKey(nameof(Investor))]
         public int InvestorId { get; set; }
         public Investor Investor { get; set; }
@@ -40,7 +40,7 @@ namespace ProjectHub.Data.Models
 
         [ForeignKey(nameof(Contractor))]
         public int? ContractorId { get; set; }
-        public Contractor Contractor { get; set; }        
+        public Contractor Contractor { get; set; }
 
         public ICollection<Offer> Offers => new HashSet<Offer>();
     }

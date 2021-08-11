@@ -13,9 +13,12 @@ using ProjectHub.Data;
 using ProjectHub.Data.Models;
 using ProjectHub.Infrastructure;
 using ProjectHub.Services.Account;
+using ProjectHub.Services.DIscipline;
+using ProjectHub.Services.Offers;
 using ProjectHub.Services.Projects;
 using ProjectHub.Services.Reviews;
 using ProjectHub.Services.User;
+using ProjectHub.Services.UserKinds;
 
 namespace ProjectHub
 {
@@ -68,6 +71,12 @@ namespace ProjectHub
                 .AddTransient<IAccountService, AccountService>();
 
             services
+                .AddTransient<IDisciplineService, DisciplineService>();
+
+            services
+                .AddTransient<IUserKindService, UserKindService>();
+
+            services
                 .AddTransient<IUserService, UserService>();
 
             services
@@ -75,6 +84,9 @@ namespace ProjectHub
 
             services
                 .AddTransient<IReviewService, ReviewService>();
+
+            services
+                .AddTransient<IOfferService, OfferService>();
 
         }
 

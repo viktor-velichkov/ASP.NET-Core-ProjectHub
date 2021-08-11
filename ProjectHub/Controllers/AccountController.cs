@@ -1,35 +1,42 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.Data.Models;
 using ProjectHub.Models.User;
 using ProjectHub.Services.Account;
+using ProjectHub.Services.DIscipline;
+using ProjectHub.Services.UserKinds;
+using System.Threading.Tasks;
 
 namespace ProjectHub.Controllers
 {
     public class AccountController : Controller
     {
-        
+
         private readonly IAccountService accountService;
+        private readonly IDisciplineService disciplineService;
+        private readonly IUserKindService userKindService;
 
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
 
-
-
-        public AccountController(IAccountService accountService,
-                                 UserManager<ApplicationUser> userManager,
-                                 SignInManager<ApplicationUser> signInManager)
+        public AccountController(
+                         IAccountService accountService,
+                         IDisciplineService disciplineService,
+                         IUserKindService userKindService,
+                         UserManager<ApplicationUser> userManager,
+                         SignInManager<ApplicationUser> signInManager)
         {
             this.accountService = accountService;
+            this.disciplineService = disciplineService;
+            this.userKindService = userKindService;
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
 
         public IActionResult Register()
         {
-            var userKinds = this.accountService.GetUserKinds();
-            var designerDisciplines = this.accountService.GetDisciplines();
+            var userKinds = this.userKindService.GetAllUserKinds();
+            var designerDisciplines = this.disciplineService.GetAllDisciplines();
             return View(new UserRegisterFormModel
             {
                 UserKinds = userKinds,
@@ -53,9 +60,9 @@ namespace ProjectHub.Controllers
 
             if (!ModelState.IsValid)
             {
-                user.UserKinds = this.accountService.GetUserKinds();
+                user.UserKinds = this.userKindService.GetAllUserKinds();
 
-                user.Disciplines = this.accountService.GetDisciplines();
+                user.Disciplines = this.disciplineService.GetAllDisciplines();
 
                 return View(user);
             }
@@ -73,7 +80,7 @@ namespace ProjectHub.Controllers
 
             this.accountService.CreateUserKindEntityRecord(user.UserKindId, newUser.Id, user.DisciplineId);
 
-            
+
 
             return RedirectToAction("Login", "Account");
         }
