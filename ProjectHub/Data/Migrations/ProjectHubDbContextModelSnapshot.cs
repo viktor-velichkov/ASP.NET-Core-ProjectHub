@@ -755,7 +755,7 @@ namespace ProjectHub.Data.Migrations
                     b.HasOne("ProjectHub.Data.Models.Designer", "Designer")
                         .WithMany("Projects")
                         .HasForeignKey("DesignerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ProjectHub.Data.Models.Project", "Project")

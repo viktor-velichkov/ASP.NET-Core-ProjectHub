@@ -445,7 +445,7 @@ namespace ProjectHub.Data.Migrations
                         column: x => x.InvestorId,
                         principalTable: "Investors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Projects_Managers_ManagerId",
                         column: x => x.ManagerId,
@@ -478,7 +478,8 @@ namespace ProjectHub.Data.Migrations
                         name: "FK_Offers_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -501,7 +502,8 @@ namespace ProjectHub.Data.Migrations
                         name: "FK_ProjectDesigners_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

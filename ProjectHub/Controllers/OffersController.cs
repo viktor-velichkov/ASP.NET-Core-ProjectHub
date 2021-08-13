@@ -77,6 +77,7 @@ namespace ProjectHub.Controllers
 
         public IActionResult Accept(int projectId, int authorId, string position)
         {
+           
             if (this.projectService.CheckIfProjectAlreadyHasSuchASpecialist(projectId,position))
             {
                 return BadRequest();

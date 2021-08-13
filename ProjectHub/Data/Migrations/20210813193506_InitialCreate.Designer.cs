@@ -10,8 +10,8 @@ using ProjectHub.Data;
 namespace ProjectHub.Data.Migrations
 {
     [DbContext(typeof(ProjectHubDbContext))]
-    [Migration("20210813154227_AddSomeDbContextSettingsAgain2")]
-    partial class AddSomeDbContextSettingsAgain2
+    [Migration("20210813193506_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -721,7 +721,7 @@ namespace ProjectHub.Data.Migrations
                     b.HasOne("ProjectHub.Data.Models.Project", "Project")
                         .WithMany("Offers")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Author");
@@ -738,7 +738,7 @@ namespace ProjectHub.Data.Migrations
                     b.HasOne("ProjectHub.Data.Models.Investor", "Investor")
                         .WithMany("Projects")
                         .HasForeignKey("InvestorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("ProjectHub.Data.Models.Manager", "Manager")
@@ -757,13 +757,13 @@ namespace ProjectHub.Data.Migrations
                     b.HasOne("ProjectHub.Data.Models.Designer", "Designer")
                         .WithMany("Projects")
                         .HasForeignKey("DesignerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ProjectHub.Data.Models.Project", "Project")
                         .WithMany("Designers")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Designer");
