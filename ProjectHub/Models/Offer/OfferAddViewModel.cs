@@ -1,7 +1,5 @@
 ﻿using ProjectHub.Data;
-using ProjectHub.Data.Models;
 using ProjectHub.Models.Projects;
-using ProjectHub.Models.User;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProjectHub.Models.Offer

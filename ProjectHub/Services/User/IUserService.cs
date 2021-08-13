@@ -10,6 +10,7 @@ namespace ProjectHub.Services.User
 {
     public interface IUserService
     {
+        public List<Investor> GetTopThreeInvestors();
         public ApplicationUser GetUserById(int userId);
         object GetUserKindEntityByUserId(string userKind, int userId);
 
@@ -20,6 +21,9 @@ namespace ProjectHub.Services.User
         public IEnumerable<ReviewListingViewModel> GetUserReviews(int id);
 
         public IEnumerable<DiscussionViewModel> GetUserDiscussions(int id);
+
+        public Designer GetDesignerById(int id);
+
         public Discipline GetDesignerDiscipline(int id);
         public byte[] GetUserImage(int id);
 

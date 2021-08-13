@@ -1,9 +1,7 @@
 ﻿using ProjectHub.Controllers;
 using ProjectHub.Data;
 using ProjectHub.Data.Models;
-using ProjectHub.Models.User;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ProjectHub.Services.Account
@@ -28,12 +26,13 @@ namespace ProjectHub.Services.Account
 
         public void CreateUserKindEntityRecord(int userKindId, int userId, int disciplineId)
         {
-            var userKindName = this.data.UserKinds.FirstOrDefault(uk => uk.Id.Equals(userKindId)).Name;
+            var userKind = this.data.UserKinds.FirstOrDefault(uk => uk.Id.Equals(userKindId)).Name;
 
-            switch (userKindName)
+            switch (userKind)
             {
                 case "Investor":
-                    this.data.Investors.Add(new Investor { Id = userId, UserId = userId });
+                    var investor = new Investor { Id = userId, UserId = userId };
+                    this.data.Investors.Add(investor);
                     break;
                 case "Designer":
                     this.data.Designers.Add(new Designer { Id = userId, UserId = userId, DisciplineId = disciplineId });

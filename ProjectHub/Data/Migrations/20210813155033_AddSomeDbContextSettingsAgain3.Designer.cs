@@ -10,8 +10,8 @@ using ProjectHub.Data;
 namespace ProjectHub.Data.Migrations
 {
     [DbContext(typeof(ProjectHubDbContext))]
-    [Migration("20210811072227_ModifyDbContextSettingsAgain")]
-    partial class ModifyDbContextSettingsAgain
+    [Migration("20210813155033_AddSomeDbContextSettingsAgain3")]
+    partial class AddSomeDbContextSettingsAgain3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -155,26 +155,6 @@ namespace ProjectHub.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("ProjectHub.Data.Models.Activity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ContractorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContractorId");
-
-                    b.ToTable("Activities");
-                });
-
             modelBuilder.Entity("ProjectHub.Data.Models.ApplicationUser", b =>
                 {
                     b.Property<int>("Id")
@@ -297,7 +277,7 @@ namespace ProjectHub.Data.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DisciplineId")
+                    b.Property<int>("DisciplineId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
@@ -318,9 +298,7 @@ namespace ProjectHub.Data.Migrations
             modelBuilder.Entity("ProjectHub.Data.Models.Discipline", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -576,6 +554,26 @@ namespace ProjectHub.Data.Migrations
                     b.ToTable("UserKinds");
                 });
 
+            modelBuilder.Entity("ProjectHub.Data.Models.Users.Activity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ContractorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractorId");
+
+                    b.ToTable("Activities");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
@@ -627,13 +625,6 @@ namespace ProjectHub.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProjectHub.Data.Models.Activity", b =>
-                {
-                    b.HasOne("ProjectHub.Data.Models.Contractor", null)
-                        .WithMany("Activities")
-                        .HasForeignKey("ContractorId");
-                });
-
             modelBuilder.Entity("ProjectHub.Data.Models.ApplicationUser", b =>
                 {
                     b.HasOne("ProjectHub.Data.Models.UserKind", "UserKind")
@@ -660,7 +651,9 @@ namespace ProjectHub.Data.Migrations
                 {
                     b.HasOne("ProjectHub.Data.Models.Discipline", "Discipline")
                         .WithMany()
-                        .HasForeignKey("DisciplineId");
+                        .HasForeignKey("DisciplineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProjectHub.Data.Models.ApplicationUser", "User")
                         .WithMany()
@@ -728,7 +721,7 @@ namespace ProjectHub.Data.Migrations
                     b.HasOne("ProjectHub.Data.Models.Project", "Project")
                         .WithMany("Offers")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Author");
@@ -745,7 +738,7 @@ namespace ProjectHub.Data.Migrations
                     b.HasOne("ProjectHub.Data.Models.Investor", "Investor")
                         .WithMany("Projects")
                         .HasForeignKey("InvestorId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ProjectHub.Data.Models.Manager", "Manager")
@@ -764,13 +757,13 @@ namespace ProjectHub.Data.Migrations
                     b.HasOne("ProjectHub.Data.Models.Designer", "Designer")
                         .WithMany("Projects")
                         .HasForeignKey("DesignerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ProjectHub.Data.Models.Project", "Project")
                         .WithMany("Designers")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Designer");
@@ -833,6 +826,13 @@ namespace ProjectHub.Data.Migrations
                     b.Navigation("Discussion");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ProjectHub.Data.Models.Users.Activity", b =>
+                {
+                    b.HasOne("ProjectHub.Data.Models.Contractor", null)
+                        .WithMany("Activities")
+                        .HasForeignKey("ContractorId");
                 });
 
             modelBuilder.Entity("ProjectHub.Data.Models.ApplicationUser", b =>

@@ -14,7 +14,7 @@ namespace ProjectHub.Services.DIscipline
             this.data = data;
         }
 
-        public ICollection<Discipline> GetAllDisciplines()
-            => this.data.Disciplines.ToList();
+        public List<Discipline> GetAllDisciplines()
+            => this.data.Disciplines.OrderBy(d=>d.Id).ToList();
     }
 }

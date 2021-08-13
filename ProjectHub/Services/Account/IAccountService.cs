@@ -1,8 +1,4 @@
-﻿using ProjectHub.Data.Models;
-using ProjectHub.Models.User;
-using System.Collections.Generic;
-
-namespace ProjectHub.Services.Account
+﻿namespace ProjectHub.Services.Account
 {
     public interface IAccountService
     {        

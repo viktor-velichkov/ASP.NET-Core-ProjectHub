@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using ProjectHub.Data;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Web;
 
 namespace ProjectHub.Models.User
 {

@@ -11,6 +11,6 @@ namespace ProjectHub.Data.Models
         [ForeignKey(nameof(User))]
         public int UserId { get; set; }
         public ApplicationUser User { get; set; }
-        public ICollection<Project> Projects { get; set; }
+        public ICollection<Project> Projects => new HashSet<Project>();
     }
 }

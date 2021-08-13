@@ -26,6 +26,16 @@ namespace ProjectHub.Services.User
             this.mapper = mapper;
         }
 
+        public List<Investor> GetTopThreeInvestors()
+            => this.data
+                   .Investors
+                   .Include(i => i.User)
+                   .ThenInclude(u => u.RatesReceived)
+                   .Include(i=>i.Projects)
+                   .OrderByDescending(i => (double)i.User.RatesReceived.Count(rr => rr.IsPositive) 
+                                            - i.User.RatesReceived.Count(rr => !rr.IsPositive))
+                   .Take(3)
+                   .ToList();
         public object GetUserKindEntityByUserId(string userKind, int userId)
         {
             object result = null;
@@ -51,7 +61,7 @@ namespace ProjectHub.Services.User
                                  .Designers
                                  .Include(d => d.User)
                                  .Include(d => d.User.UserKind)
-                                 .Include(d=>d.Discipline)
+                                 .Include(d => d.Discipline)
                                  .FirstOrDefault(i => i.UserId.Equals(userId));
                     break;
                 case "Contractor":
@@ -153,8 +163,7 @@ namespace ProjectHub.Services.User
                     break;
                 case "Contractor":
                     var contractor = this.data.Contractors.FirstOrDefault(i => i.UserId.Equals(model.User.Id));
-                    contractor.User = user;
-                    contractor.Activities = model.Activities;
+                    contractor.User = user;                    
                     break;
                 default:
                     break;
@@ -165,9 +174,9 @@ namespace ProjectHub.Services.User
         {
             var userReviews = this.data
                                   .Reviews
-                                  .Include(r=>r.Author)
+                                  .Include(r => r.Author)
                                   .Where(r => r.RecipientId.Equals(id))
-                                  .OrderByDescending(r=>r.Date)
+                                  .OrderByDescending(r => r.Date)
                                   .Select(r => this.mapper.Map<Review, ReviewListingViewModel>(r))
                                   .ToList();
 
@@ -185,8 +194,11 @@ namespace ProjectHub.Services.User
             return userDiscussions;
         }
 
+        public Designer GetDesignerById(int id)
+            => this.data.Designers.FirstOrDefault(d => d.Id.Equals(id));
+
         public Discipline GetDesignerDiscipline(int id)
-           => this.data.Designers.Include(d=>d.Discipline).FirstOrDefault(d => d.Id.Equals(id)).Discipline;
+            => this.data.Designers.Include(d => d.Discipline).FirstOrDefault(d => d.Id.Equals(id)).Discipline;
 
         public byte[] GetUserImage(int id)
             => this.data.Users.FirstOrDefault(u => u.Id.Equals(id)).Image;
@@ -292,5 +304,6 @@ namespace ProjectHub.Services.User
 
             return position;
         }
+        
     }
 }

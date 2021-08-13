@@ -1,19 +1,17 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.Data;
 using ProjectHub.Data.Models;
 using ProjectHub.Models.Offer;
 using ProjectHub.Models.Projects;
-using ProjectHub.Models.User;
 using ProjectHub.Services.DIscipline;
 using ProjectHub.Services.Offers;
 using ProjectHub.Services.Projects;
 using ProjectHub.Services.User;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ProjectHub.Controllers
 {
@@ -32,15 +30,15 @@ namespace ProjectHub.Controllers
                                   IProjectService projectService,
                                   IOfferService offerService,
                                   IUserService userService,
-                                  IDisciplineService disciplineService,                                  
+                                  IDisciplineService disciplineService,
                                   UserManager<ApplicationUser> userManager)
         {
             this.data = data;
             this.mapper = mapper;
             this.projectService = projectService;
             this.offerService = offerService;
-            this.userService = userService;            
-            this.disciplineService = disciplineService;            
+            this.userService = userService;
+            this.disciplineService = disciplineService;
             this.userManager = userManager;
         }
 
@@ -73,7 +71,7 @@ namespace ProjectHub.Controllers
         {
             var project = this.projectService.GetProjectWithItsParticipantsById(id);
 
-            var disciplines = this.projectService.GetAllDisciplines();
+            var disciplines = this.disciplineService.GetAllDisciplines();
 
             var projectViewModel = this.mapper.Map<Project, ProjectDetailsViewModel>(project);
 
@@ -107,8 +105,6 @@ namespace ProjectHub.Controllers
 
             projectViewModel.IsLoggedUserAlreadySentAnOffer = this.offerService.IsLoggedUserAlreadySentAnOfferForThisProject(loggedUserId, id);
 
-
-
             return View(new Tuple<ProjectDetailsViewModel, List<Discipline>>(projectViewModel, disciplines));
         }
 
@@ -129,7 +125,7 @@ namespace ProjectHub.Controllers
 
             var offers = this.projectService.GetProjectOffersWithAuthorByProjectId(id);
 
-            var projectModel = this.mapper.Map<Project, ProjectOffersListViewModel>(project);            
+            var projectModel = this.mapper.Map<Project, ProjectOffersListViewModel>(project);
 
             projectModel.Offers = this.mapper.Map<List<Offer>, List<OfferListViewModel>>(offers);
 

@@ -16,8 +16,7 @@ namespace ProjectHub.Data.Models
         [ForeignKey(nameof(UserKind))]
         public int UserKindId { get; set; }
         public UserKind UserKind { get; set; }
-        
-        //[Column(TypeName = "Binary")]
+
         public byte[] Image { get; set; }
 
         [Required]
@@ -34,7 +33,7 @@ namespace ProjectHub.Data.Models
         [MaxLength(DataConstants.DescriptionMaxLength)]
         public string Description { get; set; }
 
-        
+
         [MaxLength(DataConstants.WebSiteAddresMaxLength)]
         public string WebSite { get; set; }
 
@@ -46,14 +45,14 @@ namespace ProjectHub.Data.Models
 
         [Url]
         public string FacebookPage { get; set; }
-        
+
         [Url]
         public string LinkedinPage { get; set; }
-        
+
         [Url]
         public string SkypeProfile { get; set; }
 
-        
+
         public ICollection<Offer> Offers => new HashSet<Offer>();
 
         [InverseProperty(nameof(Review.Recipient))]

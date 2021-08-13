@@ -2,11 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ProjectHub.Data;
 using ProjectHub.Data.Models;
 using ProjectHub.Models.Review;
 using ProjectHub.Services.Reviews;
-using ProjectHub.Services.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;

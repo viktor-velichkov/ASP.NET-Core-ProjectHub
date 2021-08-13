@@ -7,6 +7,8 @@
 
         public string City { get; set; }
 
+        public int InvestorId { get; set; }
+
         public string Investor { get; set; }
 
         public string Deadline { get; set; }

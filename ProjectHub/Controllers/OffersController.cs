@@ -8,6 +8,7 @@ using ProjectHub.Services.Offers;
 using ProjectHub.Services.Projects;
 using ProjectHub.Services.User;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ProjectHub.Controllers
 {
@@ -72,6 +73,27 @@ namespace ProjectHub.Controllers
             var offersModel = this.mapper.Map<List<Offer>, List<OfferListViewModel>>(offers);
 
             return PartialView("~/Views/Projects/OffersPartial.cshtml", offersModel);
+        }
+
+        public IActionResult Accept(int projectId, int authorId, string position)
+        {
+            if (this.projectService.CheckIfProjectAlreadyHasSuchASpecialist(projectId,position))
+            {
+                return BadRequest();
+            }
+
+            if (position.StartsWith(nameof(Designer)))
+            {
+                this.projectService.AddDesignerToProject(projectId,authorId);
+            }
+            else
+            {
+                var projectPosition = position.Split(" - ").ToArray().First();
+
+                this.projectService.AddUserToProjectPosition(projectId, authorId, projectPosition);
+            }
+
+            return RedirectToAction("Details", "Project", new { id = projectId });
         }
     }
 }

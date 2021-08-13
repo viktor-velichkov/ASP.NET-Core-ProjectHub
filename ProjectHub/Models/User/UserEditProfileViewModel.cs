@@ -1,4 +1,5 @@
 ﻿using ProjectHub.Data.Models;
+using ProjectHub.Data.Models.Users;
 using System.Collections.Generic;
 
 namespace ProjectHub.Models.User

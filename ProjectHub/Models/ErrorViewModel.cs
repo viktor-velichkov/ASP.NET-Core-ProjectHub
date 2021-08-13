@@ -1,5 +1,3 @@
-using System;
-
 namespace ProjectHub.Models
 {
     public class ErrorViewModel

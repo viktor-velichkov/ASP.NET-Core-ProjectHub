@@ -80,8 +80,6 @@ namespace ProjectHub.Controllers
 
             this.accountService.CreateUserKindEntityRecord(user.UserKindId, newUser.Id, user.DisciplineId);
 
-
-
             return RedirectToAction("Login", "Account");
         }
 
@@ -96,13 +94,15 @@ namespace ProjectHub.Controllers
             {
                 this.ModelState.AddModelError(nameof(user), ValidationErrorMessages.UserInvalidEmailGivenMessage);
             }
-
-            var passwordMatch = ((int)this.userManager.PasswordHasher.VerifyHashedPassword(userDb, userDb.PasswordHash, user.Password));// != 0;
-
-            if (passwordMatch == 0)
+            else
             {
-                this.ModelState.AddModelError(nameof(user), ValidationErrorMessages.UserInvalidPasswordGivenMessage);
-            }
+                var passwordMatch = ((int)this.userManager.PasswordHasher.VerifyHashedPassword(userDb, userDb.PasswordHash, user.Password));// != 0;
+
+                if (passwordMatch == 0)
+                {
+                    this.ModelState.AddModelError(nameof(user), ValidationErrorMessages.UserInvalidPasswordGivenMessage);
+                }
+            }            
 
             if (!ModelState.IsValid)
             {

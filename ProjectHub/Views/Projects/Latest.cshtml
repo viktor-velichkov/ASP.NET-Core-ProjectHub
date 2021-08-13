@@ -1,0 +1,51 @@
+﻿@model List<ProjectListingViewModel>
+
+
+<div class="col-12" style="text-decoration:underline; text-align:start;">
+    <div class="row">
+        <div class="col-6" style="text-align:start">
+            Latest Projects
+        </div>
+        <div class="col-6" style="text-align:end">
+            <a asp-controller="Projects" asp-action="All">View all</a>
+        </div>
+    </div>
+</div>
+@{
+    foreach (var project in Model)
+    {
+        <div class="col-12" style="background-color: lightskyblue;
+                                      margin-right: 0;
+                                      margin-left: 0px;
+                                      margin-top: 2.5%;
+                                      border-radius: 5px;
+                                      padding: 2.5%;">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="row small-text-bold">Name :</div>
+                        <div class="row small-text-normal" style="margin-left: 0px; margin-right: 0px;">@project.Name</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row small-text-bold" style="font-weight: bold">Investor :</div>
+                        <a asp-controller="User" asp-action="Profile" asp-route-id="@project.InvestorId" class="row small-text-normal" style="margin-left: 0px; margin-right: 0px;">@project.Investor</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="row small-text-bold" style="font-weight: bold">City :</div>
+                        <div class="row small-text-normal" style="margin-left: 0px; margin-right: 0px;">@project.City</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row small-text-bold" style="font-weight: bold">Deadline :</div>
+                        <div class="row small-text-normal" style="margin-left: 0px; margin-right: 0px;">@project.Deadline</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+
+
+

@@ -28,7 +28,6 @@ namespace ProjectHub.Data.Models
         [MaxLength(DataConstants.DescriptionMaxLength)]
         public string Description { get; set; }
 
-        [ForeignKey(nameof(Investor))]
         public int InvestorId { get; set; }
         public Investor Investor { get; set; }
 

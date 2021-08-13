@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using ProjectHub.Data.Models;
-using ProjectHub.Data.Models.Projects;
+using ProjectHub.Models.Investor;
 using ProjectHub.Models.Offer;
 using ProjectHub.Models.Projects;
 using ProjectHub.Models.Review;
 using ProjectHub.Models.User;
-using System;
 using System.Globalization;
 using System.Linq;
 
@@ -32,6 +31,22 @@ namespace ProjectHub.AutoMapper
             //INVESTORS
             CreateMap<Investor, UserProfileViewModel>();
             CreateMap<Investor, UserEditProfileViewModel>();
+            CreateMap<Investor, InvestorListViewModel>()
+                .ForMember(
+                          ivm => ivm.Name,
+                          opt => opt.MapFrom(i => i.User.FullName))
+                .ForMember(
+                          ivm => ivm.Image,
+                          opt => opt.MapFrom(i => i.User.Image))
+                .ForMember(
+                          ivm => ivm.ProjectsCount,
+                          opt => opt.MapFrom(i => i.Projects.Count()))
+                .ForMember(
+                           ivm => ivm.Recommendations,
+                           opt => opt.MapFrom(i => i.User.RatesReceived.Count(rr => rr.IsPositive)))
+                .ForMember(
+                           ivm => ivm.Disapprovals,
+                           opt => opt.MapFrom(i => i.User.RatesReceived.Count(rr => !rr.IsPositive)));
 
             //MANAGERS
             CreateMap<Manager, UserProfileViewModel>();

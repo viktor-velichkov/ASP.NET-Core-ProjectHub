@@ -2,7 +2,7 @@
 
 namespace ProjectHub.Data.Migrations
 {
-    public partial class AddOfferEntityAgain : Migration
+    public partial class AddSomeDbContextSettingsAgain : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -10,8 +10,8 @@ using ProjectHub.Data;
 namespace ProjectHub.Data.Migrations
 {
     [DbContext(typeof(ProjectHubDbContext))]
-    [Migration("20210803144445_ModifyDbSettings")]
-    partial class ModifyDbSettings
+    [Migration("20210813135448_RemoveSomeDbContextSettings")]
+    partial class RemoveSomeDbContextSettings
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -155,26 +155,6 @@ namespace ProjectHub.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("ProjectHub.Data.Models.Activity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ContractorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContractorId");
-
-                    b.ToTable("Activities");
-                });
-
             modelBuilder.Entity("ProjectHub.Data.Models.ApplicationUser", b =>
                 {
                     b.Property<int>("Id")
@@ -297,7 +277,7 @@ namespace ProjectHub.Data.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DisciplineId")
+                    b.Property<int>("DisciplineId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
@@ -318,9 +298,7 @@ namespace ProjectHub.Data.Migrations
             modelBuilder.Entity("ProjectHub.Data.Models.Discipline", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -411,33 +389,27 @@ namespace ProjectHub.Data.Migrations
 
             modelBuilder.Entity("ProjectHub.Data.Models.Offer", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(10000)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                    b.Property<string>("Position")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
+                    b.HasKey("AuthorId", "ProjectId");
 
                     b.HasIndex("ProjectId");
 
@@ -529,12 +501,10 @@ namespace ProjectHub.Data.Migrations
 
             modelBuilder.Entity("ProjectHub.Data.Models.Review", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecipientId")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -545,12 +515,7 @@ namespace ProjectHub.Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("RecipientId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
+                    b.HasKey("AuthorId", "RecipientId");
 
                     b.HasIndex("RecipientId");
 
@@ -587,6 +552,26 @@ namespace ProjectHub.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserKinds");
+                });
+
+            modelBuilder.Entity("ProjectHub.Data.Models.Users.Activity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ContractorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractorId");
+
+                    b.ToTable("Activities");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -640,13 +625,6 @@ namespace ProjectHub.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProjectHub.Data.Models.Activity", b =>
-                {
-                    b.HasOne("ProjectHub.Data.Models.Contractor", null)
-                        .WithMany("Activities")
-                        .HasForeignKey("ContractorId");
-                });
-
             modelBuilder.Entity("ProjectHub.Data.Models.ApplicationUser", b =>
                 {
                     b.HasOne("ProjectHub.Data.Models.UserKind", "UserKind")
@@ -673,7 +651,9 @@ namespace ProjectHub.Data.Migrations
                 {
                     b.HasOne("ProjectHub.Data.Models.Discipline", "Discipline")
                         .WithMany()
-                        .HasForeignKey("DisciplineId");
+                        .HasForeignKey("DisciplineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProjectHub.Data.Models.ApplicationUser", "User")
                         .WithMany()
@@ -758,7 +738,7 @@ namespace ProjectHub.Data.Migrations
                     b.HasOne("ProjectHub.Data.Models.Investor", "Investor")
                         .WithMany("Projects")
                         .HasForeignKey("InvestorId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ProjectHub.Data.Models.Manager", "Manager")
@@ -796,13 +776,13 @@ namespace ProjectHub.Data.Migrations
                     b.HasOne("ProjectHub.Data.Models.ApplicationUser", "Author")
                         .WithMany("RatesSent")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ProjectHub.Data.Models.ApplicationUser", "Recipient")
                         .WithMany("RatesReceived")
                         .HasForeignKey("RecipientId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Author");
@@ -815,13 +795,13 @@ namespace ProjectHub.Data.Migrations
                     b.HasOne("ProjectHub.Data.Models.ApplicationUser", "Author")
                         .WithMany("ReviewsSent")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ProjectHub.Data.Models.ApplicationUser", "Recipient")
                         .WithMany("ReviewsReceived")
                         .HasForeignKey("RecipientId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Author");
@@ -846,6 +826,13 @@ namespace ProjectHub.Data.Migrations
                     b.Navigation("Discussion");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ProjectHub.Data.Models.Users.Activity", b =>
+                {
+                    b.HasOne("ProjectHub.Data.Models.Contractor", null)
+                        .WithMany("Activities")
+                        .HasForeignKey("ContractorId");
                 });
 
             modelBuilder.Entity("ProjectHub.Data.Models.ApplicationUser", b =>

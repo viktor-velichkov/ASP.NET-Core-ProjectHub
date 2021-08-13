@@ -2,7 +2,7 @@
 
 namespace ProjectHub.Data.Migrations
 {
-    public partial class ModidyDbContextSettings : Migration
+    public partial class EditSomeDbContextSettings : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

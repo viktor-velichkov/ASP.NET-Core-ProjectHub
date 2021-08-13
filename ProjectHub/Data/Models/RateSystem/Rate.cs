@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ProjectHub.Data.Models
+﻿namespace ProjectHub.Data.Models
 {
     public class Rate
     {        

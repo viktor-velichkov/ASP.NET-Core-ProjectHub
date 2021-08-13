@@ -1,4 +1,4 @@
-﻿namespace ProjectHub.Data.Models
+﻿namespace ProjectHub.Data.Models.Users
 {
     public class Activity
     {

@@ -5,6 +5,6 @@ namespace ProjectHub.Services.DIscipline
 {
     public interface IDisciplineService
     {
-        public ICollection<Discipline> GetAllDisciplines();
+        public List<Discipline> GetAllDisciplines();
     }
 }

@@ -51,13 +51,13 @@ namespace ProjectHub.Infrastructure
 
             data.Disciplines.AddRange(new[]
             {
-                new Discipline { Name = "Architecture"},
-                new Discipline { Name = "Structure"},
-                new Discipline { Name = "Electro"},
-                new Discipline { Name = "WS&S"},
-                new Discipline { Name = "HVAC"},
-                new Discipline { Name = "Geodesy"},
-                new Discipline { Name = "Landscaping"},
+                new Discipline { Id = 1, Name = "Architecture"},
+                new Discipline { Id = 2, Name = "Structure"},
+                new Discipline { Id = 3, Name = "Electro"},
+                new Discipline { Id = 4, Name = "WS&S"},
+                new Discipline { Id = 5, Name = "HVAC"},
+                new Discipline { Id = 6, Name = "Geodesy"},
+                new Discipline { Id = 7, Name = "Landscaping"},
             });
 
             data.SaveChanges();

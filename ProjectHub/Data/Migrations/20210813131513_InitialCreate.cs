@@ -26,8 +26,7 @@ namespace ProjectHub.Data.Migrations
                 name: "Disciplines",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false)
                 },
                 constraints: table =>
@@ -219,7 +218,7 @@ namespace ProjectHub.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    DisciplineId = table.Column<int>(type: "int", nullable: true),
+                    DisciplineId = table.Column<int>(type: "int", nullable: false),
                     WorkExperience = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -236,7 +235,7 @@ namespace ProjectHub.Data.Migrations
                         column: x => x.DisciplineId,
                         principalTable: "Disciplines",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -298,15 +297,13 @@ namespace ProjectHub.Data.Migrations
                 name: "Rates",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     AuthorId = table.Column<int>(type: "int", nullable: false),
                     RecipientId = table.Column<int>(type: "int", nullable: false),
                     IsPositive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Rates", x => x.Id);
+                    table.PrimaryKey("PK_Rates", x => new { x.AuthorId, x.RecipientId });
                     table.ForeignKey(
                         name: "FK_Rates_AspNetUsers_AuthorId",
                         column: x => x.AuthorId,
@@ -317,15 +314,14 @@ namespace ProjectHub.Data.Migrations
                         name: "FK_Rates_AspNetUsers_RecipientId",
                         column: x => x.RecipientId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Reviews",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     AuthorId = table.Column<int>(type: "int", nullable: false),
                     RecipientId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -333,7 +329,7 @@ namespace ProjectHub.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reviews", x => x.Id);
+                    table.PrimaryKey("PK_Reviews", x => new { x.AuthorId, x.RecipientId });
                     table.ForeignKey(
                         name: "FK_Reviews_AspNetUsers_AuthorId",
                         column: x => x.AuthorId,
@@ -344,7 +340,8 @@ namespace ProjectHub.Data.Migrations
                         name: "FK_Reviews_AspNetUsers_RecipientId",
                         column: x => x.RecipientId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -447,7 +444,8 @@ namespace ProjectHub.Data.Migrations
                         name: "FK_Projects_Investors_InvestorId",
                         column: x => x.InvestorId,
                         principalTable: "Investors",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Projects_Managers_ManagerId",
                         column: x => x.ManagerId,
@@ -460,17 +458,16 @@ namespace ProjectHub.Data.Migrations
                 name: "Offers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     AuthorId = table.Column<int>(type: "int", nullable: false),
                     ProjectId = table.Column<int>(type: "int", nullable: false),
+                    Position = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Price = table.Column<decimal>(type: "decimal", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", maxLength: 10000, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Offers", x => x.Id);
+                    table.PrimaryKey("PK_Offers", x => new { x.AuthorId, x.ProjectId });
                     table.ForeignKey(
                         name: "FK_Offers_AspNetUsers_AuthorId",
                         column: x => x.AuthorId,
@@ -597,11 +594,6 @@ namespace ProjectHub.Data.Migrations
                 column: "DiscussionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Offers_AuthorId",
-                table: "Offers",
-                column: "AuthorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Offers_ProjectId",
                 table: "Offers",
                 column: "ProjectId");
@@ -627,19 +619,9 @@ namespace ProjectHub.Data.Migrations
                 column: "ManagerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Rates_AuthorId",
-                table: "Rates",
-                column: "AuthorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Rates_RecipientId",
                 table: "Rates",
                 column: "RecipientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reviews_AuthorId",
-                table: "Reviews",
-                column: "AuthorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_RecipientId",
