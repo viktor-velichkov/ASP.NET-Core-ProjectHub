@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.Data.Models;
 using ProjectHub.Models.User;
 using ProjectHub.Services.Account;
 using ProjectHub.Services.DIscipline;
 using ProjectHub.Services.UserKinds;
-using System.Threading.Tasks;
 
 namespace ProjectHub.Controllers
 {
@@ -115,7 +115,7 @@ namespace ProjectHub.Controllers
             }
 
             await signInManager.SignInAsync(userDb, user.RememberMe);
-
+            
             return RedirectToAction("Profile", "User");
         }
     }

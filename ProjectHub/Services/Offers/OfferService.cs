@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using ProjectHub.Data;
+using ProjectHub.Data.ExceptionMessages;
 using ProjectHub.Data.Models;
 using ProjectHub.Models.Offer;
 
@@ -33,6 +34,17 @@ namespace ProjectHub.Services.Offers
 
             this.data.SaveChanges();
         }
+        public void RemoveOffersForThisPosition(int projectId, string position)
+        {
+            var offers = this.data.Offers.Where(offer => offer.ProjectId.Equals(projectId)
+                                                        && offer.Position.Equals(position))
+                                         .ToList();            
+
+            this.data.Offers.RemoveRange(offers);
+
+            this.data.SaveChanges();
+        }
+
 
         public List<Offer> GetProjectOffersByPosition(int projectId, string position)
         {
@@ -53,6 +65,9 @@ namespace ProjectHub.Services.Offers
         public bool IsLoggedUserAlreadySentAnOfferForThisProject(int userId, int projectId)
             => this.data.Offers.Any(offer => offer.AuthorId.Equals(userId) && offer.ProjectId.Equals(projectId));
 
-
+        public bool IsLoggedUserAlreadyWasHiredForThisProject(int userId, int projectId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

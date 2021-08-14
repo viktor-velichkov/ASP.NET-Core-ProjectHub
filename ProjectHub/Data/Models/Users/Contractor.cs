@@ -6,6 +6,11 @@ namespace ProjectHub.Data.Models
 {
     public class Contractor
     {
+        public Contractor()
+        {
+            this.Activities = new HashSet<Activity>();
+            this.Projects = new HashSet<Project>();
+        }
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
@@ -14,8 +19,8 @@ namespace ProjectHub.Data.Models
 
         public ApplicationUser User { get; set; }
 
-        public ICollection<Activity> Activities => new HashSet<Activity>();
+        public ICollection<Activity> Activities { get; set; }
 
-        public ICollection<Project> Projects => new HashSet<Project>();
+        public ICollection<Project> Projects { get; set; }
     }
 }

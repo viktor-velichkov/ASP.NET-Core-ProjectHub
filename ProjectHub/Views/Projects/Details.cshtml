@@ -42,10 +42,11 @@
             <div class="col-5" style="background-color: lightskyblue; border-radius: 5px; padding: 2.5%; left:5%">
                 <div>Team</div>
                 <div class="row small-text-bold" style="margin-left: 0px; text-decoration: none">Investor:</div>
-                <div class="row small-text-normal" style="margin-left: 20%; margin-right: 0px;">@Model.Item1.Investor</div>
+                <a asp-controller="User" asp-action="Profile" asp-route-id="@Model.Item1.InvestorId" class="row small-text-normal" style="margin-left: 20%; margin-right: 0px;">@Model.Item1.Investor</a>
                 @{
                     <div class="row small-text-bold" style="margin-left: 0px; text-decoration: none">Manager:</div>
                     var manager = Model.Item1.Manager;
+                    var managerId = Model.Item1.ManagerId;
                     <div class="row small-text-normal" style="margin-left: 20%; margin-right: 0px;">
                         @if (String.IsNullOrWhiteSpace(manager))
                         {
@@ -53,7 +54,7 @@
                         }
                         else
                         {
-                            <p style="margin:0px;">@manager</p>
+                            <a asp-controller="User" asp-action="Profile" asp-route-id="@managerId" style="margin:0px;">@manager</a>
                         }
                     </div>
                     <div class="row small-text-bold" style="margin-left: 0px; text-decoration: none">Designers :</div>
@@ -61,6 +62,7 @@
                     foreach (var discipline in Model.Item2)
                     {
                         var designer = Model.Item1.Designers.FirstOrDefault(d => d.Discipline.Equals(discipline.Name));
+                        
                         <div class="row small-text-normal" style="margin-left: 5%; text-decoration: none">• @discipline.Name:</div>
                         <div class="row small-text-normal" style="margin-left: 20%; margin-right: 0px;">
 
@@ -70,12 +72,14 @@
                             }
                             else
                             {
-                                <p style="margin:0px;">@designer.Name;</p>
+                                var designerId = designer.DesignerId;
+                                <a asp-controller="User" asp-action="Profile" asp-route-id="@designerId" style="margin:0px;">@designer.Name;</a>
                             }
                         </div>
                     }
 
                     var contractor = Model.Item1.Contractor;
+                    var contractorId = Model.Item1.ContractorId;
                     <div class="row small-text-bold" style="margin-left: 0px; text-decoration: none">Main contractor:</div>
                     <div class="row small-text-normal" style="margin-left: 20%; margin-right: 0px;">
                         @if (String.IsNullOrWhiteSpace(contractor))
@@ -84,7 +88,7 @@
                         }
                         else
                         {
-                            <p style="margin:0px;">@contractor</p>
+                            <a asp-controller="User" asp-action="Profile" asp-route-id="@contractorId" style="margin:0px;">@contractor</a>
                         }
                     </div>
                 }
@@ -114,7 +118,13 @@
         }
         @if (Model.Item1.IsLoggedUserAlreadySentAnOffer)
         {
-            <div class="col-12" style="text-align: start;padding-right:5%">
+            <div class="col-12" style="text-align: end;padding-right:5%">
+                <span class="timer">You've already sent an offer for this project.</span>
+            </div>
+        }
+        @if (Model.Item1.IsLoggedUserAlreadySentAnOffer)
+        {
+            <div class="col-12" style="text-align: end;padding-right:5%">
                 <span class="timer">You've already sent an offer for this project.</span>
             </div>
         }

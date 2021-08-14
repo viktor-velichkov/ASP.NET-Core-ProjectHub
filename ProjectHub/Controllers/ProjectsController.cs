@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.Data;
 using ProjectHub.Data.Models;
+using ProjectHub.Data.Models.Projects;
 using ProjectHub.Models.Offer;
 using ProjectHub.Models.Projects;
+using ProjectHub.Models.User;
 using ProjectHub.Services.DIscipline;
 using ProjectHub.Services.Offers;
 using ProjectHub.Services.Projects;
@@ -75,6 +77,11 @@ namespace ProjectHub.Controllers
 
             var projectViewModel = this.mapper.Map<Project, ProjectDetailsViewModel>(project);
 
+            var projectDesigners = this.projectService.GetProjectDesignersByProjectId(id);
+
+            projectViewModel.Designers = this.mapper
+                .Map<List<ProjectDesigner>, List<DesignerProjectDetailsViewModel>>(projectDesigners);
+
             var loggedUserId = int.Parse(this.userManager.GetUserId(this.User));
 
             var loggedUser = this.userService.GetUserById(loggedUserId);
@@ -88,22 +95,29 @@ namespace ProjectHub.Controllers
 
             bool isLoggedUserPositionFree = false;
 
+            bool isLoggedUserHiredForThisProject = false;
+
             if (!loggedUserUserKind.Equals("Designer"))
             {
                 isLoggedUserPositionFree = projectViewType.GetProperty(loggedUserUserKind) != null ?
                                            String.IsNullOrWhiteSpace(
                                                projectViewType.GetProperty(loggedUserUserKind).GetValue(projectViewModel) as string) :
                                            true;
+
+                isLoggedUserHiredForThisProject = Convert.ToInt32(typeof(Project).GetProperty(loggedUserUserKind + "Id").GetValue(project)).Equals(loggedUserId);
             }
             else
             {
                 isLoggedUserPositionFree = String.IsNullOrWhiteSpace(
                     projectViewModel.Designers.Select(d => d.Discipline).FirstOrDefault(d => d.Equals(loggedUserDiscipline)));
+
+                isLoggedUserHiredForThisProject = projectDesigners.Any(pd => pd.Designer.User.Id.Equals(loggedUserId));
             }
 
             projectViewModel.IsLoggedUserPositionFree = isLoggedUserPositionFree;
 
-            projectViewModel.IsLoggedUserAlreadySentAnOffer = this.offerService.IsLoggedUserAlreadySentAnOfferForThisProject(loggedUserId, id);
+            projectViewModel.IsLoggedUserAlreadySentAnOffer = this.offerService
+                                                                  .IsLoggedUserAlreadySentAnOfferForThisProject(loggedUserId, id);
 
             return View(new Tuple<ProjectDetailsViewModel, List<Discipline>>(projectViewModel, disciplines));
         }
@@ -132,6 +146,23 @@ namespace ProjectHub.Controllers
             projectModel.Disciplines = this.disciplineService.GetAllDisciplines();
 
             return View(projectModel);
+        }
+
+        public IActionResult Remove(int id)
+        {
+            int loggedUserId = int.Parse(this.userManager.GetUserId(this.User));
+
+            var loggedUser = this.userService.GetUserById(loggedUserId);
+
+            if (loggedUser.UserKind.Name != nameof(Investor)
+                || !this.projectService.ConfirmThatInvestorIsOwnerOfTheProject(loggedUserId, id))
+            {
+                return Unauthorized();
+            }
+
+            this.projectService.RemoveProject(id);
+
+            return RedirectToAction("Profile", "User", new { Id = loggedUserId });
         }
 
     }

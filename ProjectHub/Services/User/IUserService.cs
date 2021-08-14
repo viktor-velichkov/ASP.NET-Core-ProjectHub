@@ -11,6 +11,10 @@ namespace ProjectHub.Services.User
     public interface IUserService
     {
         public List<Investor> GetTopThreeInvestors();
+        public List<Manager> GetTopThreeManagers();
+        public List<Designer> GetTopThreeDesigners();
+        public List<Contractor> GetTopThreeContractors();
+        
         public ApplicationUser GetUserById(int userId);
         object GetUserKindEntityByUserId(string userKind, int userId);
 

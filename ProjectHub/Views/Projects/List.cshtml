@@ -50,7 +50,7 @@
                             @if (Model.Item2.IsLoggedUser && Model.Item2.UserKind.Equals("Investor"))
                             {
                                 <input asp-controller="Projects" asp-action="Offers" asp-route-id="@item.Id" type="submit" formmethod="get" class="btn js-review-edit-button" data-action="Offers" value="Offers" style="background-color: azure; margin-top: 10px; margin-right: 0px;">
-                                <input asp-controller="Projects" asp-action="Remove" asp-route-id="@item.Id" type="submit" formmethod="post" class="btn js-review-edit-button" data-action="Remove" value="Remove" style="background-color: azure; margin-top: 10px; margin-right: 0px;">
+                                <input asp-controller="Projects" asp-action="Remove" asp-route-id="@item.Id" type="submit" formmethod="get" class="btn js-review-edit-button" data-action="Remove" value="Remove" style="background-color: azure; margin-top: 10px; margin-right: 0px;">
                             }
                             <input asp-controller="Projects" asp-action="Details" asp-route-id="@item.Id" type="submit" formmethod="get" class="btn js-review-edit-button" data-action="Edit" value="Details" style="background-color: azure; margin-top: 10px; margin-right: 0px;">
                         </div>

@@ -1,0 +1,69 @@
+﻿@model IndexPageViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+    .field-title {
+        font-size: large;
+        font-weight: bold;
+        padding-bottom: 5px;
+        text-align: center;
+    }
+
+    .small-text-normal {
+        text-decoration: none;
+        font-size: large;
+        font-weight: normal
+    }
+
+    .small-text-bold {
+        text-decoration: none;
+        font-size: large;
+        font-weight: bold
+    }
+
+    .small-text {
+        font-size: large;
+    }
+</style>
+
+<div class="text-center">
+    <div class="field-title offset-lg-2 offset-md-1 offset-sm-1 offset-0 col-lg-8 col-md-10 col-sm-10 col-12">
+        <partial name="~/Views/Projects/Latest.cshtml" model="@Model.Projects" />
+    </div>
+    <hr />
+    <div class="field-title col-12" style="padding:0px;">
+        <div class="row">
+            <div class="field-title offset-sm-1 offset-md-1 offset-lg-0 col-sm-10 col-lg-6 col-12" style="border-left: 1px solid lightgrey; border-right: 1px solid lightgrey;">
+                <partial name="~/Views/User/TopInvestors.cshtml" model="@Model.Investors" />
+            </div>
+            
+            <div class="field-title offset-sm-1 offset-md-1 offset-lg-0 col-sm-10 col-lg-6 col-12" style="border-left: 1px solid lightgrey; border-right: 1px solid lightgrey;">
+                <partial name="~/Views/User/TopManagers.cshtml" model="@Model.Managers" />
+            </div>
+            
+        </div>
+        <hr />
+        <div class="row">
+            <div class="field-title offset-sm-1 offset-md-1 offset-lg-0 col-sm-10 col-lg-6 col-12" style="border-left: 1px solid lightgrey; border-right: 1px solid lightgrey;">
+                <partial name="~/Views/User/TopDesigners.cshtml" model="@Model.Designers" />
+            </div>
+            
+            <div class="field-title offset-sm-1 offset-md-1 offset-lg-0 col-sm-10 col-lg-6 col-12" style="border-left: 1px solid lightgrey; border-right: 1px solid lightgrey;">
+                <partial name="~/Views/User/TopContractors.cshtml" model="@Model.Contractors" />
+            </div>
+            
+        </div>
+        <hr />
+    </div>
+
+    <hr />
+</div>
+
+

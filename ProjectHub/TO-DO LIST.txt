@@ -1,22 +1,18 @@
-﻿2. Discussions
-	- list in user profile
-	- option to start a discussion
-	- discussion window
-	-
+﻿
 
-3. Projects
-	- Details view check and set
-		+ timer - done!
-		+ option to remove already hired people
+	- general projects window	
 
-	- general projects window
 	- filter by search term
+
 	- sorting
+
 	- paging
-	- option to send offers (anybody but investor)
-	- option to view sent offers (investor)
-	- option to hire people (investor)
-	- option to edit project info (by project investor only)
+	
+	- option to edit project info (by project investor only)	
+
+	- info in project list for the logged user
+
+
 	
 
 	

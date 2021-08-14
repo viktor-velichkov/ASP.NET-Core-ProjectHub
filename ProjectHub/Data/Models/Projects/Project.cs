@@ -8,6 +8,11 @@ namespace ProjectHub.Data.Models
 {
     public class Project
     {
+        public Project()
+        {
+            this.Designers = new HashSet<ProjectDesigner>();
+            this.Offers = new HashSet<Offer>();
+        }
         public int Id { get; set; }
 
         [Required]
@@ -35,12 +40,12 @@ namespace ProjectHub.Data.Models
         public int? ManagerId { get; set; }
         public Manager Manager { get; set; }
 
-        public ICollection<ProjectDesigner> Designers => new HashSet<ProjectDesigner>();
+        public ICollection<ProjectDesigner> Designers { get; set; }
 
         [ForeignKey(nameof(Contractor))]
         public int? ContractorId { get; set; }
         public Contractor Contractor { get; set; }
 
-        public ICollection<Offer> Offers => new HashSet<Offer>();
+        public ICollection<Offer> Offers { get; set; }
     }
 }

@@ -3,59 +3,13 @@
     ViewData["Title"] = "Home Page";
 }
 
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<style>
-    .field-title {
-        font-size: larger;
-        font-weight: bold;
-        padding-bottom: 5px;
-        text-align: center;
-    }
-
-    .small-text-normal {
-        text-decoration: none;
-        font-size: large;
-        font-weight: normal
-    }
-
-    .small-text-bold {
-        text-decoration: none;
-        font-size: large;
-        font-weight: bold
-    }
-
-    .small-text {
-        font-size: large;
-    }
-</style>
-
 <div class="text-center">
-    @{
-        if (!this.User.Identity.IsAuthenticated)
-        {
-            <h1 class="display-4">Welcome to ProjectHub!</h1><br />
-            <h5>You are an INVESTOR and you are looking for the best team of managers, designers and contractors for your project?</h5><br />
-            <h5>You are a MANAGER and you want to manage really cool projects?</h5><br />
-            <h5>You are a DESIGNER and you want to develop and be able to show your skills in a real project?</h5><br />
-            <h5>You are a CONTRACTOR and you want to challenge yourself with an interesting buildings and installations?</h5><br />
-            <h5><a asp-controller="Account" asp-action="Register">Register</a> and become part of ProjectHub. If you are already a member, please <a asp-controller="Account" asp-action="Login">Login</a>.</h5>
-        }
-        else
-        {
-            <div class="field-title offset-lg-2 offset-md-1 offset-sm-1 offset-0 col-lg-8 col-md-10 col-sm-10 col-12">
-                <partial name="~/Views/Projects/Latest.cshtml" model="@Model.Projects" />
-            </div>
-            <hr />
-            <div class="field-title offset-lg-2 offset-md-1 offset-sm-1 offset-0 col-lg-8 col-md-10 col-sm-10 col-12">
-                <partial name="~/Views/User/TopInvestors.cshtml" model="@Model.Investors" />
-            </div>
-            <hr />
-
-        }
-    }
+    <h1 class="display-4">Welcome to ProjectHub!</h1><br />
+    <h5>You are an INVESTOR and you are looking for the best team of managers, designers and contractors for your project?</h5><br />
+    <h5>You are a MANAGER and you want to manage really cool projects?</h5><br />
+    <h5>You are a DESIGNER and you want to develop and be able to show your skills in a real project?</h5><br />
+    <h5>You are a CONTRACTOR and you want to challenge yourself with an interesting buildings and installations?</h5><br />
+    <h5><a asp-controller="Account" asp-action="Register">Register</a> and become part of ProjectHub. If you are already a member, please <a asp-controller="Account" asp-action="Login">Login</a>.</h5>
 </div>
 
 

@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ProjectHub.Data;
+using ProjectHub.Data.ExceptionMessages;
 using ProjectHub.Data.Models;
 using ProjectHub.Data.Models.Projects;
 using ProjectHub.Models.Projects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,9 +27,9 @@ namespace ProjectHub.Services.Projects
         public List<Project> GetAllProjectsWithInvestor()
             => this.data
                    .Projects
-                   .Include(p=>p.Investor)
-                   .ThenInclude(i=>i.User)
-                   .OrderByDescending(p=>p.Id)                   
+                   .Include(p => p.Investor)
+                   .ThenInclude(i => i.User)
+                   .OrderByDescending(p => p.Id)
                    .ToList();
 
         public List<Project> GetLatestThreeProjects()
@@ -52,7 +54,25 @@ namespace ProjectHub.Services.Projects
             });
 
             this.data.SaveChanges();
-        }        
+        }
+
+        public void RemoveProject(int projectId)
+        {
+            var project = this.data
+                              .Projects
+                              .FirstOrDefault(p => p.Id.Equals(projectId));
+
+            var projectOffers = this.data
+                                    .Offers
+                                    .Where(offer => offer.ProjectId.Equals(projectId))
+                                    .ToList();
+
+            this.data.Offers.RemoveRange(projectOffers);
+
+            this.data.Projects.Remove(project);
+
+            this.data.SaveChanges();
+        }
 
         public Project GetProjectById(int id)
             => this.data
@@ -68,8 +88,17 @@ namespace ProjectHub.Services.Projects
                    .ThenInclude(i => i.User)
                    .Include(p => p.Contractor)
                    .ThenInclude(i => i.User)
-                   .Include(p => p.Designers)
                    .FirstOrDefault(p => p.Id.Equals(id));
+
+        public List<ProjectDesigner> GetProjectDesignersByProjectId(int projectId)
+            => this.data
+                   .ProjectDesigners
+                   .Include(pd => pd.Designer)
+                   .ThenInclude(d => d.Discipline)
+                   .Include(pd => pd.Designer)
+                   .ThenInclude(d => d.User)
+                   .Where(pd => pd.ProjectId.Equals(projectId))
+                   .ToList();
 
         public List<Offer> GetProjectOffersWithAuthorByProjectId(int id)
             => this.data
@@ -88,15 +117,19 @@ namespace ProjectHub.Services.Projects
 
         public void AddDesignerToProject(int projectId, int designerId)
         {
-            var projectDesigner = new ProjectDesigner { ProjectId = projectId, DesignerId = designerId };
 
-            var designer = this.data.Designers.FirstOrDefault(d => d.Id.Equals(designerId));
-            
+            var project = this.data.Projects.FirstOrDefault(p => p.Id.Equals(projectId));
 
+            var designer = this.data.Designers.FirstOrDefault(p => p.Id.Equals(designerId));
 
-            var asd = this.data.ProjectDesigners;
+            if (project == null || designer == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.InvalidData);
+            }
 
-            asd.Add(projectDesigner);
+            var projectDesigner = new ProjectDesigner { Project = project, Designer = designer };
+
+            this.data.ProjectDesigners.Add(projectDesigner);
 
             this.data.SaveChanges();
         }
@@ -104,8 +137,6 @@ namespace ProjectHub.Services.Projects
         public void AddUserToProjectPosition(int projectId, int userId, string projectPosition)
         {
             var project = this.GetProjectWithItsParticipantsById(projectId);
-
-            this.data.Projects.Add(project);
 
             typeof(Project).GetProperty(projectPosition + "Id").SetValue(project, userId);
 
@@ -135,6 +166,11 @@ namespace ProjectHub.Services.Projects
             }
         }
 
-        
+        public bool ConfirmThatInvestorIsOwnerOfTheProject(int investorId, int projectId)
+            => this.data
+                   .Projects
+                   .FirstOrDefault(p => p.Id.Equals(projectId))
+                   .InvestorId
+                   .Equals(investorId);
     }
 }

@@ -6,6 +6,10 @@ namespace ProjectHub.Data.Models
 {
     public class Designer
     {
+        public Designer()
+        {
+            this.Projects = new HashSet<ProjectDesigner>();
+        }
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
@@ -21,6 +25,6 @@ namespace ProjectHub.Data.Models
 
         public int? WorkExperience { get; set; }
 
-        public ICollection<ProjectDesigner> Projects => new HashSet<ProjectDesigner>();
+        public ICollection<ProjectDesigner> Projects { get; set; }
     }
 }

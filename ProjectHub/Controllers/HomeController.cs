@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProjectHub.Data.Models;
 using ProjectHub.Models;
+using ProjectHub.Models.Contractor;
+using ProjectHub.Models.Designer;
 using ProjectHub.Models.Home;
 using ProjectHub.Models.Investor;
+using ProjectHub.Models.Manager;
 using ProjectHub.Models.Projects;
 using ProjectHub.Services.Projects;
 using ProjectHub.Services.User;
@@ -34,6 +37,11 @@ namespace ProjectHub.Controllers
 
         public IActionResult Index()
         {
+            if (!this.User.Identity.IsAuthenticated)
+            {
+                return View();
+            }
+
             var latestThreeProjects = this.projectService
                               .GetLatestThreeProjects();
 
@@ -43,9 +51,25 @@ namespace ProjectHub.Controllers
 
             var modeInvestors = this.mapper.Map<List<Investor>, List<InvestorListViewModel>>(topThreeInvestors);
 
-            var model = new IndexPageViewModel { Projects = modelProjects, Investors = modeInvestors };
+            var topThreeManagers = this.userService.GetTopThreeManagers();
 
-            return View(model);
+            var modelManagers = this.mapper.Map<List<Manager>, List<ManagerListViewModel>>(topThreeManagers);
+
+            var topThreeDesigners = this.userService.GetTopThreeDesigners();
+
+            var modelDesigners = this.mapper.Map<List<Designer>, List<DesignerListViewModel>>(topThreeDesigners);
+
+            var topThreeContractor = this.userService.GetTopThreeContractors();
+
+            var modelContractors = this.mapper.Map<List<Contractor>, List<ContractorListViewModel>>(topThreeContractor);
+
+            var model = new IndexPageViewModel { Projects = modelProjects,
+                                                 Investors = modeInvestors,
+                                                 Managers=modelManagers,
+                                                 Designers = modelDesigners,
+                                                 Contractors = modelContractors};
+
+            return View("~/Views/Home/AuthorizedIndex.cshtml", model);
         }
 
         public IActionResult Privacy()

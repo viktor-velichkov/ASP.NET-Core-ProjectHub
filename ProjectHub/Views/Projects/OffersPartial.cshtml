@@ -57,7 +57,7 @@
                 <span class="small-text" style="font-weight: normal;">@offer.Description</span>
             </div>
             <form class="field-title col-12" style="text-align: end; padding-right:0px">
-                <button asp-controller="Offers" asp-action="Accept" asp-route-projectId="@offer.ProjectId" asp-route-authorId="@offer.AuthorId" asp-route-position="@offer.Position" class="btn" type="submit" formmethod="post" style="background-color: azure; margin-top: 10px; margin-right: 0px;">Accept</button>
+                @Html.AntiForgeryToken()<button asp-controller="Offers" asp-action="Accept" asp-route-projectId="@offer.ProjectId" asp-route-authorId="@offer.AuthorId" asp-route-position="@offer.Position" class="btn" type="submit" formmethod="post" style="background-color: azure; margin-top: 10px; margin-right: 0px;">Accept</button>
             </form>
         </div>
 

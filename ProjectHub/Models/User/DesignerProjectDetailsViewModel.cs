@@ -2,7 +2,7 @@
 {
     public class DesignerProjectDetailsViewModel
     {
-        public int Id { get; set; }
+        public int DesignerId { get; set; }
 
         public string Name { get; set; }
 

@@ -76,13 +76,13 @@ namespace ProjectHub.Data
             builder.Entity<ApplicationUser>()
                    .HasMany(u => u.ReviewsSent)
                    .WithOne(r => r.Author)
-                   .HasForeignKey(r => r.AuthorId);
+                   .HasForeignKey(r => r.AuthorId);                       
 
             builder.Entity<Project>()
                    .HasOne(p => p.Investor)
                    .WithMany(i => i.Projects)
                    .HasForeignKey(p => p.InvestorId)
-                   .OnDelete(DeleteBehavior.ClientCascade);
+                   .OnDelete(DeleteBehavior.ClientNoAction);
 
             builder.Entity<Project>()
                    .HasOne(p => p.Manager)

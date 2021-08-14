@@ -36,6 +36,40 @@ namespace ProjectHub.Services.User
                                             - i.User.RatesReceived.Count(rr => !rr.IsPositive))
                    .Take(3)
                    .ToList();
+
+        public List<Manager> GetTopThreeManagers()
+            => this.data
+                   .Managers
+                   .Include(i => i.User)
+                   .ThenInclude(u => u.RatesReceived)
+                   .Include(i => i.Projects)
+                   .OrderByDescending(i => (double)i.User.RatesReceived.Count(rr => rr.IsPositive)
+                                            - i.User.RatesReceived.Count(rr => !rr.IsPositive))
+                   .Take(3)
+                   .ToList();
+
+        public List<Designer> GetTopThreeDesigners()
+            => this.data
+                   .Designers
+                   .Include(i => i.User)
+                   .ThenInclude(u => u.RatesReceived)
+                   .Include(i => i.Projects)
+                   .OrderByDescending(i => (double)i.User.RatesReceived.Count(rr => rr.IsPositive)
+                                            - i.User.RatesReceived.Count(rr => !rr.IsPositive))
+                   .Take(3)
+                   .ToList();
+
+        public List<Contractor> GetTopThreeContractors()
+            => this.data
+                   .Contractors
+                   .Include(i => i.User)
+                   .ThenInclude(u => u.RatesReceived)
+                   .Include(i => i.Projects)
+                   .OrderByDescending(i => (double)i.User.RatesReceived.Count(rr => rr.IsPositive)
+                                            - i.User.RatesReceived.Count(rr => !rr.IsPositive))
+                   .Take(3)
+                   .ToList();
+
         public object GetUserKindEntityByUserId(string userKind, int userId)
         {
             object result = null;
@@ -304,6 +338,7 @@ namespace ProjectHub.Services.User
 
             return position;
         }
+
         
     }
 }

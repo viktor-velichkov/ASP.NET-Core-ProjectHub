@@ -1,12 +1,16 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using System.Globalization;
+using AutoMapper;
 using ProjectHub.Data.Models;
+using ProjectHub.Data.Models.Projects;
+using ProjectHub.Models.Contractor;
+using ProjectHub.Models.Designer;
 using ProjectHub.Models.Investor;
+using ProjectHub.Models.Manager;
 using ProjectHub.Models.Offer;
 using ProjectHub.Models.Projects;
 using ProjectHub.Models.Review;
 using ProjectHub.Models.User;
-using System.Globalization;
-using System.Linq;
 
 namespace ProjectHub.AutoMapper
 {
@@ -51,22 +55,65 @@ namespace ProjectHub.AutoMapper
             //MANAGERS
             CreateMap<Manager, UserProfileViewModel>();
             CreateMap<Manager, UserEditProfileViewModel>();
+            CreateMap<Manager, ManagerListViewModel>()
+                .ForMember(
+                          mvm => mvm.Name,
+                          opt => opt.MapFrom(m => m.User.FullName))
+                .ForMember(
+                          mvm => mvm.Image,
+                          opt => opt.MapFrom(m => m.User.Image))
+                .ForMember(
+                          mvm => mvm.ProjectsCount,
+                          opt => opt.MapFrom(m => m.Projects.Count()))
+                .ForMember(
+                           mvm => mvm.Recommendations,
+                           opt => opt.MapFrom(m => m.User.RatesReceived.Count(rr => rr.IsPositive)))
+                .ForMember(
+                           mvm => mvm.Disapprovals,
+                           opt => opt.MapFrom(m => m.User.RatesReceived.Count(rr => !rr.IsPositive)));
 
 
             //DESIGNERS
             CreateMap<Designer, UserProfileViewModel>();
             CreateMap<Designer, UserEditProfileViewModel>();
-            CreateMap<Designer, DesignerProjectDetailsViewModel>()
+            CreateMap<Designer, DesignerListViewModel>()
                 .ForMember(
-                           m => m.Name,
-                           opt => opt.MapFrom(d => d.User.FullName))
+                          mvm => mvm.Name,
+                          opt => opt.MapFrom(m => m.User.FullName))
                 .ForMember(
-                           m => m.Discipline,
-                           opt => opt.MapFrom(d => d.Discipline.Name));
+                          mvm => mvm.Image,
+                          opt => opt.MapFrom(m => m.User.Image))
+                .ForMember(
+                          mvm => mvm.ProjectsCount,
+                          opt => opt.MapFrom(m => m.Projects.Count()))
+                .ForMember(
+                           mvm => mvm.Recommendations,
+                           opt => opt.MapFrom(m => m.User.RatesReceived.Count(rr => rr.IsPositive)))
+                .ForMember(
+                           mvm => mvm.Disapprovals,
+                           opt => opt.MapFrom(m => m.User.RatesReceived.Count(rr => !rr.IsPositive)));
+
 
             //CONTRACTORS
             CreateMap<Contractor, UserProfileViewModel>();
             CreateMap<Contractor, UserEditProfileViewModel>();
+            CreateMap<Contractor, ContractorListViewModel>()
+                .ForMember(
+                          mvm => mvm.Name,
+                          opt => opt.MapFrom(m => m.User.FullName))
+                .ForMember(
+                          mvm => mvm.Image,
+                          opt => opt.MapFrom(m => m.User.Image))
+                .ForMember(
+                          mvm => mvm.ProjectsCount,
+                          opt => opt.MapFrom(m => m.Projects.Count()))
+                .ForMember(
+                           mvm => mvm.Recommendations,
+                           opt => opt.MapFrom(m => m.User.RatesReceived.Count(rr => rr.IsPositive)))
+                .ForMember(
+                           mvm => mvm.Disapprovals,
+                           opt => opt.MapFrom(m => m.User.RatesReceived.Count(rr => !rr.IsPositive)));
+
 
             //PROJECTS MAPPING
             CreateMap<Project, ProjectListingViewModel>()
@@ -97,7 +144,16 @@ namespace ProjectHub.AutoMapper
                            opt => opt.MapFrom(p => p.Investor.User.FullName));
 
             CreateMap<Project, ProjectOffersListViewModel>();
-                            
+
+            //PROJECTDESIGNERS MAPPING
+            CreateMap<ProjectDesigner, DesignerProjectDetailsViewModel>()
+                .ForMember(
+                           m => m.Name,
+                           opt => opt.MapFrom(d => d.Designer.User.FullName))
+                .ForMember(
+                           m => m.Discipline,
+                           opt => opt.MapFrom(d => d.Designer.Discipline.Name));
+
 
             //REVIEWS MAPPING
             CreateMap<Review, ReviewListingViewModel>()

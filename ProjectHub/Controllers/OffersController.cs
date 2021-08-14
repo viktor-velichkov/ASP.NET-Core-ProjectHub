@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.Data.Models;
+using ProjectHub.Data.Models.Projects;
 using ProjectHub.Models.Offer;
 using ProjectHub.Models.Projects;
 using ProjectHub.Services.Offers;
 using ProjectHub.Services.Projects;
 using ProjectHub.Services.User;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,7 +18,7 @@ namespace ProjectHub.Controllers
     {
         private readonly IProjectService projectService;
         private readonly IUserService userService;
-        private readonly IOfferService offerServce;
+        private readonly IOfferService offerService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IMapper mapper;
 
@@ -28,7 +30,7 @@ namespace ProjectHub.Controllers
         {
             this.projectService = projectService;
             this.userService = userService;
-            this.offerServce = offerService;
+            this.offerService = offerService;
             this.userManager = userManager;
             this.mapper = mapper;
         }
@@ -51,7 +53,7 @@ namespace ProjectHub.Controllers
         [HttpPost]
         public IActionResult Add(OfferAddVIewModel model)
         {
-            if (this.offerServce.IsLoggedUserAlreadySentAnOfferForThisProject(model.AuthorId, model.ProjectId))
+            if (this.offerService.IsLoggedUserAlreadySentAnOfferForThisProject(model.AuthorId, model.ProjectId))
             {
                 this.ModelState.AddModelError(nameof(Offer), "This user already have sent an offer for this project.");
             }
@@ -61,14 +63,14 @@ namespace ProjectHub.Controllers
                 return View(model);
             }
 
-            this.offerServce.AddOffer(model);
+            this.offerService.AddOffer(model);
 
             return RedirectToAction("Details", "Projects", new { id = model.ProjectId });
         }
 
         public IActionResult Filter(int projectId, string position)
         {
-            var offers = this.offerServce.GetProjectOffersByPosition(projectId, position);
+            var offers = this.offerService.GetProjectOffersByPosition(projectId, position);
 
             var offersModel = this.mapper.Map<List<Offer>, List<OfferListViewModel>>(offers);
 
@@ -77,15 +79,15 @@ namespace ProjectHub.Controllers
 
         public IActionResult Accept(int projectId, int authorId, string position)
         {
-           
-            if (this.projectService.CheckIfProjectAlreadyHasSuchASpecialist(projectId,position))
+
+            if (this.projectService.CheckIfProjectAlreadyHasSuchASpecialist(projectId, position))
             {
                 return BadRequest();
             }
 
             if (position.StartsWith(nameof(Designer)))
             {
-                this.projectService.AddDesignerToProject(projectId,authorId);
+                this.projectService.AddDesignerToProject(projectId, authorId);
             }
             else
             {
@@ -94,7 +96,9 @@ namespace ProjectHub.Controllers
                 this.projectService.AddUserToProjectPosition(projectId, authorId, projectPosition);
             }
 
-            return RedirectToAction("Details", "Project", new { id = projectId });
+            this.offerService.RemoveOffersForThisPosition(projectId, position);
+
+            return RedirectToAction("Details", "Projects", new { id = projectId });
         }
     }
 }
