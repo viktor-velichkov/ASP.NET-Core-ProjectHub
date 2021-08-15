@@ -48,6 +48,11 @@
                         <div class="small-text-bold" style="font-weight: bold">Disapprovals : </div>
                         <div class="small-text-normal" style="padding-left: 2.5%;">@investor.Disapprovals</div>
                     </div>
+                    <div class="row" style="text-align:end">
+                        <form class="col-12" style="text-align:end">                            
+                            <input asp-controller="User" asp-action="Profile" asp-route-id="@investor.Id" type="submit" formmethod="get" class="btn" data-action="Edit" value="View Profile" style="background-color: azure; margin-top: 10px; margin-right: 0px;">
+                        </form>
+                    </div>
                 </div>                
             </div>
         </div>
