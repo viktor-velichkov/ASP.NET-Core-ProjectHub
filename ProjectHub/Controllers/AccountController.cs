@@ -92,7 +92,7 @@ namespace ProjectHub.Controllers
 
             if (userDb == null)
             {
-                this.ModelState.AddModelError(nameof(user), ValidationErrorMessages.UserInvalidEmailGivenMessage);
+                this.ModelState.AddModelError(nameof(user), ValidationErrorMessages.UserInvalidCredentialsGivenMessage);
             }
             else
             {
@@ -100,7 +100,7 @@ namespace ProjectHub.Controllers
 
                 if (passwordMatch == 0)
                 {
-                    this.ModelState.AddModelError(nameof(user), ValidationErrorMessages.UserInvalidPasswordGivenMessage);
+                    this.ModelState.AddModelError(nameof(user), ValidationErrorMessages.UserInvalidCredentialsGivenMessage);
                 }
             }            
 

@@ -15,6 +15,8 @@ namespace ProjectHub.Data.Models
         }
         public int Id { get; set; }
 
+        public byte[] Image { get; set; }
+
         [Required]
         [MaxLength(DataConstants.ProjectNameMaxLength)]
         public string Name { get; set; }

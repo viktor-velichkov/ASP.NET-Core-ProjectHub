@@ -10,7 +10,7 @@ namespace ProjectHub.Services.Projects
         public void AddProject(ProjectAddViewModel model, int investorId);
         public void RemoveProject(int projectId);
 
-        public List<Project> GetAllProjectsWithInvestor();
+        public byte[] GetProjectImage(int id);        
 
         public List<Project> GetLatestThreeProjects();
 

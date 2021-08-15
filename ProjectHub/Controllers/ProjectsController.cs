@@ -11,6 +11,7 @@ using ProjectHub.Models.Offer;
 using ProjectHub.Models.Projects;
 using ProjectHub.Models.User;
 using ProjectHub.Services.DIscipline;
+using ProjectHub.Services.Files;
 using ProjectHub.Services.Offers;
 using ProjectHub.Services.Projects;
 using ProjectHub.Services.User;
@@ -24,6 +25,7 @@ namespace ProjectHub.Controllers
         private readonly IProjectService projectService;
         private readonly IOfferService offerService;
         private readonly IUserService userService;
+        private readonly IFilesService filesService;
         private readonly IDisciplineService disciplineService;
         private readonly UserManager<ApplicationUser> userManager;
 
@@ -32,6 +34,7 @@ namespace ProjectHub.Controllers
                                   IProjectService projectService,
                                   IOfferService offerService,
                                   IUserService userService,
+                                  IFilesService filesService,
                                   IDisciplineService disciplineService,
                                   UserManager<ApplicationUser> userManager)
         {
@@ -40,6 +43,7 @@ namespace ProjectHub.Controllers
             this.projectService = projectService;
             this.offerService = offerService;
             this.userService = userService;
+            this.filesService = filesService;
             this.disciplineService = disciplineService;
             this.userManager = userManager;
         }
@@ -52,6 +56,26 @@ namespace ProjectHub.Controllers
         [HttpPost]
         public IActionResult Add(ProjectAddViewModel model)
         {
+            var uploadedImage = model.ImageUpload;
+
+            if (uploadedImage != null && uploadedImage.Length > 2097152)
+            {
+                ModelState.AddModelError(nameof(uploadedImage), "The file is too large");
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (uploadedImage != null)
+            {
+                model.Image = this.filesService.ProcessUploadedFile(uploadedImage);
+            }
+            else
+            {
+                model.Image = this.projectService.GetProjectImage(model.Id);
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(model);

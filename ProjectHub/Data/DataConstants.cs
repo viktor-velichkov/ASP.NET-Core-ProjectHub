@@ -36,5 +36,6 @@
 
         public const int OfferNameMinLength = 10;
         public const int OfferNameMaxLength = 150;
+
     }
 }

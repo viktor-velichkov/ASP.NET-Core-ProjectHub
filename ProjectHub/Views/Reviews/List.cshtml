@@ -93,8 +93,15 @@
 
             var content = $('.js-review-edit-content').val();
 
+            var token = $('input[name="__RequestVerificationToken"]').val();
+
             $.post('/Reviews/' + action,
-                { recipientId: recipientId, authorId:authorId, content:content },
+                {
+                    recipientId: recipientId,
+                    authorId: authorId,
+                    content: content,
+                    __RequestVerificationToken: token
+                },
                 function (response) {
                     console.log(response)
                     $('.js-tab-content').html(response);
@@ -108,10 +115,16 @@
 
             var recipientId = @Model.Item1.First().RecipientId;
 
-            var authorId = @Model.Item2;            
+            var authorId = @Model.Item2;
+
+            var token = $('input[name="__RequestVerificationToken"]').val();
 
             $.post('/Reviews/' + action,
-                { recipientId: recipientId, authorId:authorId },
+                {
+                    recipientId: recipientId,
+                    authorId: authorId,
+                    __RequestVerificationToken: token
+                },
                 function (response) {
                     console.log(response)
                     $('.js-tab-content').html(response);

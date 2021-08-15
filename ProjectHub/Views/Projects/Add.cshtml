@@ -32,26 +32,27 @@
         font-size: medium;
     }
 </style>
-<div class="row">
-    <p class="field-title offset-3 col-6" style="background-color: lightskyblue; border-radius: 5px;">Project Info</p>
+<div class="field-title offset-lg-3 col-lg-6 offset-xl-3 col-xl-6 offset-sm-0 col-sm-12 offset-md-0 col-md-12">
+    <p style="background-color: lightskyblue; border-radius: 5px;">Project Info</p>
 </div>
 
+
 <form method="post" enctype="multipart/form-data">
-    <div class="row">
-        <div class="field-title offset-3 col-6" style="background-color: lightskyblue; border-radius: 5px; padding-bottom:10px">
+    <div class="field-title offset-lg-3 col-lg-6 offset-xl-3 col-xl-6 offset-sm-0 col-sm-12 offset-md-0 col-md-12">
+        <div class="col-12" style="background-color: lightskyblue; border-radius: 5px; padding-bottom: 10px;">
             <div class="form-group" style="margin-bottom: 0; margin-top: 5px; text-align:start">
                 <label class="small-text-bold" asp-for="@Model.Name"></label>
-                <input asp-for="@Model.Name" class="form-control" placeholder="Жилищна сграда, Търговски център..." />
+                <input asp-for="@Model.Name" class="form-control" placeholder="Residential buiding, Industrial building..." />
                 <span asp-validation-for="@Model.Name" class="text-danger small-text-normal"></span>
             </div>
             <div class="form-group" style="margin-bottom: 0; margin-top: 5px; text-align:start">
                 <label class="small-text-bold" asp-for="@Model.City"></label>
-                <input asp-for="@Model.City" class="form-control" placeholder="София,Пловдив,Бургас.." />
+                <input asp-for="@Model.City" class="form-control" placeholder="Sofia, Plovdiv, Varna..." />
                 <span asp-validation-for="@Model.City" class="text-danger  small-text-normal"></span>
             </div>
             <div class="form-group" style="margin-bottom: 0; margin-top: 5px; text-align:start">
                 <label class="small-text-bold" asp-for="@Model.Address"></label>
-                <input asp-for="@Model.Address" class="form-control" placeholder="кв...ул..." />
+                <input asp-for="@Model.Address" class="form-control"  />
                 <span asp-validation-for="@Model.Address" class="text-danger  small-text-normal"></span>
             </div>
             <div class="form-group" style="margin-bottom: 0; margin-top: 5px; text-align:start">
@@ -66,8 +67,10 @@
             </div>
         </div>
     </div>
-    <div class="field-title offset-3 col-6" style="text-align: end; padding-right: 0px; padding-left: 0px;">
-        <input type="submit" class="btn btn-primary" value="Add" style="margin-top: 10px;margin-right: 0px;">
+    <div class="field-title offset-lg-3 col-lg-6 offset-xl-3 col-xl-6 offset-sm-0 col-sm-12 offset-md-0 col-md-12" style="text-align: end;">
+        <input type="file" asp-for="@Model.ImageUpload" id="file" accept="image/*" style="visibility: hidden; height: 10%; width: 10%" />
+        <button class="btn btn-primary" id="files" onclick="document.getElementById('file').click(); return false;" style="margin-bottom: 15px; margin-top: 15px;">Add Project Photo</button>
+        <input type="submit" class="btn btn-primary" value="Add" style="margin-bottom: 15px; margin-top: 15px;">
     </div>
 </form>
 

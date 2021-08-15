@@ -36,7 +36,7 @@
     <div class="field-title col-12" style="text-align: end;">
         <input type="button" formmethod="get" class="btn js-review-add-cancel-button" data-action="Reviews" value="Cancel" style="background-color: lightgrey;
                                                                                                                 margin-top: 10px;
-                                                                                                                margin-right: 0px;">
+          @Html.AntiForgeryToken()                                                                                                      margin-right: 0px;">
         <input type="button" class="btn js-review-add-button" data-action="Add" value="Add" style="background-color: lightgrey;
                                                                                                    margin-top: 10px;
                                                                                                    margin-right: 0px;">
@@ -59,7 +59,14 @@
 
         var content = $('.js-review-content').val();
 
-        $.post('/Reviews/' + action, { authorId: authorId, recipientId: recipientId, content: content },
+        var token = $('input[name="__RequestVerificationToken"]').val();
+
+        $.post('/Reviews/' + action, {
+            authorId: authorId,
+            recipientId: recipientId,
+            content: content,
+            __RequestVerificationToken: token
+        },
             function (data) {
                 console.log(data);
                 $('.js-reviews-container').html(data);

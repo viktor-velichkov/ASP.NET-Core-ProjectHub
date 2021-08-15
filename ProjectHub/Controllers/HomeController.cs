@@ -43,25 +43,34 @@ namespace ProjectHub.Controllers
             }
 
             var latestThreeProjects = this.projectService
-                              .GetLatestThreeProjects();
+                .GetLatestThreeProjects();
 
-            var modelProjects = this.mapper.Map<List<Project>, List<ProjectListingViewModel>>(latestThreeProjects);
+            var modelProjects = this.mapper
+                .Map<List<Project>, List<ProjectListingViewModel>>(latestThreeProjects);
 
-            var topThreeInvestors = this.userService.GetTopThreeInvestors();
+            var topThreeInvestors = this.userService
+                .GetTopThreeInvestors();
 
-            var modeInvestors = this.mapper.Map<List<Investor>, List<InvestorListViewModel>>(topThreeInvestors);
+            var modeInvestors = this.mapper
+                .Map<List<Investor>, List<InvestorListViewModel>>(topThreeInvestors);
 
-            var topThreeManagers = this.userService.GetTopThreeManagers();
+            var topThreeManagers = this.userService
+                .GetTopThreeManagers();
 
-            var modelManagers = this.mapper.Map<List<Manager>, List<ManagerListViewModel>>(topThreeManagers);
+            var modelManagers = this.mapper
+                .Map<List<Manager>, List<ManagerListViewModel>>(topThreeManagers);
 
-            var topThreeDesigners = this.userService.GetTopThreeDesigners();
+            var topThreeDesigners = this.userService
+                .GetTopThreeDesigners();
 
-            var modelDesigners = this.mapper.Map<List<Designer>, List<DesignerListViewModel>>(topThreeDesigners);
+            var modelDesigners = this.mapper
+                .Map<List<Designer>, List<DesignerListViewModel>>(topThreeDesigners);
 
-            var topThreeContractor = this.userService.GetTopThreeContractors();
+            var topThreeContractor = this.userService
+                .GetTopThreeContractors();
 
-            var modelContractors = this.mapper.Map<List<Contractor>, List<ContractorListViewModel>>(topThreeContractor);
+            var modelContractors = this.mapper
+                .Map<List<Contractor>, List<ContractorListViewModel>>(topThreeContractor);
 
             var model = new IndexPageViewModel { Projects = modelProjects,
                                                  Investors = modeInvestors,

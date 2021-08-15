@@ -11,6 +11,7 @@ using ProjectHub.Models.Review;
 using ProjectHub.Models.User;
 using ProjectHub.Services.User;
 using Microsoft.AspNetCore.Authorization;
+using ProjectHub.Services.Files;
 
 namespace ProjectHub.Controllers
 {
@@ -20,14 +21,17 @@ namespace ProjectHub.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IMapper mapper;
         private readonly IUserService userService;
+        private readonly IFilesService filesService;
 
         public UserController(UserManager<ApplicationUser> userManager,
                               IMapper mapper,
-                              IUserService userService)
+                              IUserService userService,
+                              IFilesService filesService)
         {
             this.userManager = userManager;
             this.mapper = mapper;
             this.userService = userService;
+            this.filesService = filesService;
         }
 
         
@@ -104,7 +108,7 @@ namespace ProjectHub.Controllers
 
             if (uploadedImage != null)
             {
-                model.User.Image = this.userService.ProcessUploadedFile(uploadedImage);
+                model.User.Image = this.filesService.ProcessUploadedFile(uploadedImage);
             }
             else
             {

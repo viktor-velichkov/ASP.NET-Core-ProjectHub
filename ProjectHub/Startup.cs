@@ -13,6 +13,7 @@ using ProjectHub.Data.Models;
 using ProjectHub.Infrastructure;
 using ProjectHub.Services.Account;
 using ProjectHub.Services.DIscipline;
+using ProjectHub.Services.Files;
 using ProjectHub.Services.Offers;
 using ProjectHub.Services.Projects;
 using ProjectHub.Services.Reviews;
@@ -89,6 +90,9 @@ namespace ProjectHub
 
             services
                 .AddTransient<IOfferService, OfferService>();
+
+            services
+                .AddTransient<IFilesService, FilesService>();
 
         }
 

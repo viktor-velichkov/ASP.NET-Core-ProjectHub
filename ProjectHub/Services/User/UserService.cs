@@ -236,27 +236,7 @@ namespace ProjectHub.Services.User
 
         public byte[] GetUserImage(int id)
             => this.data.Users.FirstOrDefault(u => u.Id.Equals(id)).Image;
-
-        public byte[] ProcessUploadedFile(IFormFile file)
-        {
-            byte[] result = null;
-
-            using (var memoryStream = new MemoryStream())
-            {
-                file.CopyTo(memoryStream);
-
-
-
-                // Upload the file if less than 2 MB
-                if (memoryStream.Length < 2097152)
-                {
-                    result = memoryStream.ToArray();
-                }
-            }
-
-            return result;
-        }
-
+        
         public ApplicationUser GetUserById(int userId)
              => this.data
                     .Users

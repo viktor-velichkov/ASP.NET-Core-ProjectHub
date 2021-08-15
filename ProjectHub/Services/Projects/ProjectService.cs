@@ -24,27 +24,11 @@ namespace ProjectHub.Services.Projects
         }
 
 
-        public List<Project> GetAllProjectsWithInvestor()
-            => this.data
-                   .Projects
-                   .Include(p => p.Investor)
-                   .ThenInclude(i => i.User)
-                   .OrderByDescending(p => p.Id)
-                   .ToList();
-
-        public List<Project> GetLatestThreeProjects()
-            => this.data
-                   .Projects
-                   .Include(p => p.Investor)
-                   .ThenInclude(i => i.User)
-                   .OrderByDescending(p => p.Id)
-                   .Take(3)
-                   .ToList();
-
         public void AddProject(ProjectAddViewModel model, int investorId)
         {
             this.data.Projects.Add(new Project
             {
+                Image = model.Image,
                 InvestorId = investorId,
                 Name = model.Name,
                 City = model.City,
@@ -73,6 +57,18 @@ namespace ProjectHub.Services.Projects
 
             this.data.SaveChanges();
         }
+
+        public byte[] GetProjectImage(int id)
+            => this.data.Projects.FirstOrDefault(u => u.Id.Equals(id)).Image;
+
+        public List<Project> GetLatestThreeProjects()
+            => this.data
+                   .Projects
+                   .Include(p => p.Investor)
+                   .ThenInclude(i => i.User)
+                   .OrderByDescending(p => p.Id)
+                   .Take(3)
+                   .ToList();
 
         public Project GetProjectById(int id)
             => this.data
@@ -172,5 +168,8 @@ namespace ProjectHub.Services.Projects
                    .FirstOrDefault(p => p.Id.Equals(projectId))
                    .InvestorId
                    .Equals(investorId);
+
+
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using ProjectHub.Data;
+﻿using Microsoft.AspNetCore.Http;
+using ProjectHub.Data;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -6,6 +7,11 @@ namespace ProjectHub.Models.Projects
 {
     public class ProjectAddViewModel
     {
+        public int Id { get; set; }
+        public byte[] Image { get; set; }
+
+        public IFormFile ImageUpload { get; set; }
+
         public int InvestorId { get; set; }
 
         [Required]

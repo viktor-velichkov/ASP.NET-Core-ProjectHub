@@ -11,6 +11,8 @@ namespace ProjectHub.Models.Projects
         }
         public int Id { get; set; }
 
+        public byte[] Image { get; set; }
+
         public string Name { get; set; }
 
         public string City { get; set; }

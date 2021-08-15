@@ -29,9 +29,7 @@ namespace ProjectHub.Services.User
         public Designer GetDesignerById(int id);
 
         public Discipline GetDesignerDiscipline(int id);
-        public byte[] GetUserImage(int id);
-
-        public byte[] ProcessUploadedFile(IFormFile file);
+        public byte[] GetUserImage(int id);        
 
         public string GetUserRecommendationsCount(int authorId, int recipientId);
 
