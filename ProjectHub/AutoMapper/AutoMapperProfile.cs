@@ -124,6 +124,11 @@ namespace ProjectHub.AutoMapper
                           p => p.Deadline,
                           opt => opt.MapFrom(p => p.Deadline.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture)));
 
+            CreateMap<Project, ProjectCardViewModel>()
+                .ForMember(
+                          pl => pl.Investor,
+                          opt => opt.MapFrom(p => p.Investor.User.FullName));
+
             CreateMap<Project, ProjectDetailsViewModel>()
                 .ForMember(
                            pvm => pvm.Deadline,

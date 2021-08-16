@@ -47,7 +47,18 @@ namespace ProjectHub.Controllers
             this.disciplineService = disciplineService;
             this.userManager = userManager;
         }
+        public IActionResult All(string city)
+        {
+            var projects = this.projectService.GetAllProjectsOrderedByDateDescending(city);
 
+            var modelProjects = this.mapper.Map<List<Project>, List<ProjectCardViewModel>>(projects);
+
+            var modelCities = this.projectService.GetAllProjectCities();
+            
+            var model = new AllProjectsViewModel { Projects = modelProjects, Cities=modelCities };
+
+            return View(model);
+        }
         public IActionResult Add()
         {
             return View();

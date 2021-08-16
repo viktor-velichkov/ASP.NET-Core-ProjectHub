@@ -7,6 +7,9 @@ namespace ProjectHub.Services.Projects
 {
     public interface IProjectService
     {
+        public List<Project> GetAllProjectsOrderedByDateDescending(string city);
+
+        public List<string> GetAllProjectCities();
         public void AddProject(ProjectAddViewModel model, int investorId);
         public void RemoveProject(int projectId);
 
