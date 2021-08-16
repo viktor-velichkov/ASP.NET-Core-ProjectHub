@@ -38,8 +38,7 @@ namespace ProjectHub.Data.Migrations
                 name: "UserKinds",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
@@ -74,7 +73,7 @@ namespace ProjectHub.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserKindId = table.Column<int>(type: "int", nullable: false),
+                    UserKindId = table.Column<int>(type: "int", nullable: true),
                     Image = table.Column<byte[]>(type: "varbinary(MAX)", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
@@ -106,7 +105,7 @@ namespace ProjectHub.Data.Migrations
                         column: x => x.UserKindId,
                         principalTable: "UserKinds",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -422,6 +421,7 @@ namespace ProjectHub.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Image = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
@@ -444,8 +444,7 @@ namespace ProjectHub.Data.Migrations
                         name: "FK_Projects_Investors_InvestorId",
                         column: x => x.InvestorId,
                         principalTable: "Investors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Projects_Managers_ManagerId",
                         column: x => x.ManagerId,

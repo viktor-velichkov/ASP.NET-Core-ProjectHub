@@ -1,4 +1,5 @@
-﻿using ProjectHub.Controllers;
+﻿using ProjectHub.Areas.Admin;
+using ProjectHub.Controllers;
 using ProjectHub.Data;
 using ProjectHub.Data.Models;
 using System;
@@ -19,7 +20,10 @@ namespace ProjectHub.Services.Account
             => this.data.Disciplines.Any(d => d.Id.Equals(disciplineId));
 
         public bool ConfirmThatUserKindIsValid(int userKindId)
-            => this.data.UserKinds.Any(d => d.Id.Equals(userKindId));
+            => this.data
+                   .UserKinds
+                   .Any(d => d.Id.Equals(userKindId));
+
 
         public int GetUserKindId(string userKindName)
             => this.data.UserKinds.FirstOrDefault(uk => uk.Name.Equals(userKindName)).Id;

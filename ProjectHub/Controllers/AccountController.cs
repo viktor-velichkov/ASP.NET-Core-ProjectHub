@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ProjectHub.Areas.Admin;
 using ProjectHub.Data.Models;
 using ProjectHub.Models.User;
 using ProjectHub.Services.Account;
@@ -16,20 +17,23 @@ namespace ProjectHub.Controllers
         private readonly IDisciplineService disciplineService;
         private readonly IUserKindService userKindService;
 
-        private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<IdentityRole<int>> roleManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
         public AccountController(
                          IAccountService accountService,
                          IDisciplineService disciplineService,
                          IUserKindService userKindService,
                          UserManager<ApplicationUser> userManager,
+                         RoleManager<IdentityRole<int>> roleManager,
                          SignInManager<ApplicationUser> signInManager)
         {
             this.accountService = accountService;
             this.disciplineService = disciplineService;
             this.userKindService = userKindService;
             this.userManager = userManager;
+            this.roleManager = roleManager;
             this.signInManager = signInManager;
         }
 
@@ -67,6 +71,13 @@ namespace ProjectHub.Controllers
                 return View(user);
             }
 
+            if (!await roleManager.RoleExistsAsync(ControllerConstants.UserIdentityRole))
+            {
+                var role = new IdentityRole<int> { Name = ControllerConstants.UserIdentityRole };
+
+                await this.roleManager.CreateAsync(role);
+            }
+
             var newUser = new ApplicationUser
             {
                 FirstName = user.FirstName,
@@ -77,6 +88,8 @@ namespace ProjectHub.Controllers
             };
 
             await userManager.CreateAsync(newUser, user.Password);
+
+            await userManager.AddToRoleAsync(newUser, ControllerConstants.UserIdentityRole);
 
             this.accountService.CreateUserKindEntityRecord(user.UserKindId, newUser.Id, user.DisciplineId);
 
@@ -102,7 +115,7 @@ namespace ProjectHub.Controllers
                 {
                     this.ModelState.AddModelError(nameof(user), ValidationErrorMessages.UserInvalidCredentialsGivenMessage);
                 }
-            }            
+            }
 
             if (!ModelState.IsValid)
             {
@@ -115,8 +128,13 @@ namespace ProjectHub.Controllers
             }
 
             await signInManager.SignInAsync(userDb, user.RememberMe);
-            
-            return RedirectToAction("Profile", "User");
+
+            if (await this.userManager.IsInRoleAsync(userDb, AdminConstants.AdministratorRole))
+            {
+                return RedirectToRoute("/Admin/Home/Index");
+            }
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

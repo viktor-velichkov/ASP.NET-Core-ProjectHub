@@ -39,8 +39,7 @@ namespace ProjectHub
 
             services
                 .AddDatabaseDeveloperPageExceptionFilter();
-
-
+                        
             services
                 .AddDefaultIdentity<ApplicationUser>(options =>
                 {
@@ -49,7 +48,11 @@ namespace ProjectHub
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                 })
+                .AddRoles<IdentityRole<int>>()
                 .AddEntityFrameworkStores<ProjectHubDbContext>();
+
+            services
+                .AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, UserClaimsPrincipalFactory<ApplicationUser, IdentityRole<int>>>();
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -64,6 +67,10 @@ namespace ProjectHub
 
             services
                 .AddScoped(typeof(UserManager<ApplicationUser>));
+
+            services
+               .AddScoped(typeof(RoleManager<IdentityRole<int>>));
+
             services
                 .AddScoped(typeof(SignInManager<ApplicationUser>));
 
@@ -119,6 +126,10 @@ namespace ProjectHub
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                  {
+                     endpoints.MapControllerRoute(
+                         name: "AdminArea",
+                         pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
                      endpoints.MapDefaultControllerRoute();
                      endpoints.MapRazorPages();
                  });

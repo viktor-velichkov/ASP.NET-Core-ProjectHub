@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Builder;
-using ProjectHub.Data;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
+﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using ProjectHub.Areas.Admin;
+using ProjectHub.Data;
 using ProjectHub.Data.Models;
+
 
 namespace ProjectHub.Infrastructure
 {
@@ -21,6 +26,8 @@ namespace ProjectHub.Infrastructure
 
             SeedDisciplines(data);
 
+            SeedAdministrator(scopedServices.ServiceProvider);
+
             return app;
         }
 
@@ -33,10 +40,10 @@ namespace ProjectHub.Infrastructure
 
             data.UserKinds.AddRange(new[]
             {
-                new UserKind { Name = "Investor"},
-                new UserKind { Name = "Manager"},
-                new UserKind { Name = "Designer"},
-                new UserKind { Name = "Contractor"},
+                new UserKind { Id = 1, Name = nameof(Investor)},
+                new UserKind { Id = 2, Name = nameof(Manager)},
+                new UserKind { Id = 3, Name = nameof(Designer)},
+                new UserKind { Id = 4, Name = nameof(Contractor)}                
             });
 
             data.SaveChanges();
@@ -61,6 +68,42 @@ namespace ProjectHub.Infrastructure
             });
 
             data.SaveChanges();
+        }
+
+        private static void SeedAdministrator(IServiceProvider services)
+        {
+            var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole<int>>>();
+
+            Task
+                .Run(async () =>
+                {
+                    if (await roleManager.RoleExistsAsync(AdminConstants.AdministratorRole))
+                    {
+                        return;
+                    }
+
+                    var role = new IdentityRole<int> { Name = AdminConstants.AdministratorRole };
+
+                    await roleManager.CreateAsync(role);
+
+                    const string adminEmail = "admin@projecthub.com";
+                    const string adminPassword = "admin123";
+
+                    var user = new ApplicationUser
+                    {
+                        Email = adminEmail,
+                        UserName = adminEmail,
+                        FirstName = "Admin",
+                        LastName = "Admin"
+                    };
+
+                    await userManager.CreateAsync(user, adminPassword);
+
+                    await userManager.AddToRoleAsync(user, AdminConstants.AdministratorRole);
+                })
+                .GetAwaiter()
+                .GetResult();
         }
 
 

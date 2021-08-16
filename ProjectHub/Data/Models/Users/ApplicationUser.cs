@@ -22,12 +22,8 @@ namespace ProjectHub.Data.Models
         }
 
 
-
-
-
-
         [ForeignKey(nameof(UserKind))]
-        public int UserKindId { get; set; }
+        public int? UserKindId { get; set; }
         public UserKind UserKind { get; set; }
 
         public byte[] Image { get; set; }
@@ -64,7 +60,6 @@ namespace ProjectHub.Data.Models
 
         [Url]
         public string SkypeProfile { get; set; }
-
 
         public ICollection<Offer> Offers { get; set; }
 

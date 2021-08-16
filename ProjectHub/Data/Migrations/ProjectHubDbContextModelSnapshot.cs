@@ -229,7 +229,7 @@ namespace ProjectHub.Data.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<int>("UserKindId")
+                    b.Property<int?>("UserKindId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
@@ -541,9 +541,7 @@ namespace ProjectHub.Data.Migrations
             modelBuilder.Entity("ProjectHub.Data.Models.UserKind", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -630,9 +628,7 @@ namespace ProjectHub.Data.Migrations
                 {
                     b.HasOne("ProjectHub.Data.Models.UserKind", "UserKind")
                         .WithMany()
-                        .HasForeignKey("UserKindId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserKindId");
 
                     b.Navigation("UserKind");
                 });
