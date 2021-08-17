@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.Data;
@@ -18,6 +19,7 @@ using ProjectHub.Services.User;
 
 namespace ProjectHub.Controllers
 {
+    [Authorize]
     public class ProjectsController : Controller
     {
         private readonly ProjectHubDbContext data;

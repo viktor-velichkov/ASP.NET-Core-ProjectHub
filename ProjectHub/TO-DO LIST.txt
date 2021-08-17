@@ -1,14 +1,9 @@
 ﻿
+	- paging in projects all view
 
-	- general projects window	
-
-	- filter by search term
-
-	- sorting
-
-	- paging
+	- modify jquery in projects all view
 	
-	- option to edit project info (by project investor only)	
+	- option to edit project info (by project investor and admin only)	
 
 	- info in project list for the logged user
 

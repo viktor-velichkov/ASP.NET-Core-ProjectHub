@@ -2,7 +2,7 @@
 {
     public class ProjectFormViewModel
     {
-        public int Id { get; set; }
+        public int ProjectId { get; set; }
 
         public string Investor { get; set; }
     }

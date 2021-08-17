@@ -12,6 +12,7 @@ using ProjectHub.Models.User;
 using ProjectHub.Services.User;
 using Microsoft.AspNetCore.Authorization;
 using ProjectHub.Services.Files;
+using ProjectHub.Areas.Admin;
 
 namespace ProjectHub.Controllers
 {
@@ -19,49 +20,37 @@ namespace ProjectHub.Controllers
     public class UserController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IMapper mapper;
         private readonly IUserService userService;
         private readonly IFilesService filesService;
 
         public UserController(UserManager<ApplicationUser> userManager,
-                              IMapper mapper,
                               IUserService userService,
                               IFilesService filesService)
         {
             this.userManager = userManager;
-            this.mapper = mapper;
             this.userService = userService;
             this.filesService = filesService;
         }
 
-        
-        public IActionResult Profile()
+
+        public IActionResult Profile(int id)
         {
-            if (!this.User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "Account");
-            }
+            var userDb = this.userService.GetUserById(id);
 
-            var userId = this.Request.RouteValues.ContainsKey("id") ?
-                         int.Parse(this.Request.RouteValues["id"].ToString()) :
-                         int.Parse(this.userManager.GetUserId(this.User));
-
-            var userDb = this.userService.GetUserById(userId);
-                        
-            if (userDb == null)
+            if (userDb == null || this.userService.IsInRole(id, AdminConstants.AdministratorRole))
             {
                 return NotFound();
             }
 
-            var userTypeName = userDb.UserKind.Name;
+            var userKindName = userDb.UserKind.Name;
 
-            var userTypeEntity = this.userService.GetUserKindEntityByUserId(userTypeName, userId);            
+            var userViewModel = this.userService.GetUserProfileViewModel(id, userKindName);
 
-            var userViewModel = this.mapper.Map<object, UserProfileViewModel>(userTypeEntity);            
+            var asd = this.userManager.GetUserId(this.User);
 
-            var loggedUserId = int.Parse(this.userManager.GetUserId(this.User));
+            var loggedUserId = int.Parse(asd);
 
-            if (loggedUserId == userId)
+            if (loggedUserId == id)
             {
                 userViewModel.IsLoggedUser = true;
             }
@@ -71,27 +60,21 @@ namespace ProjectHub.Controllers
             return View(tuple);
         }
 
-       
+        [Authorize]
         public IActionResult EditUserProfile(int userId, string userKind)
         {
-            if (!this.User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var userDb = this.userService.GetUserKindEntityByUserId(userKind, userId);
-
-            var currentUser = this.mapper.Map<object, UserEditProfileViewModel>(userDb);
+            var userModel = this.userService.GetUserEditProfileViewModel(userId, userKind);
 
             if (int.Parse(this.userManager.GetUserId(this.User)) == userId)
             {
-                currentUser.IsLoggedUser = true;
+                userModel.IsLoggedUser = true;
             }
 
-            return View(currentUser);
+            return View(userModel);
         }
 
-        [HttpPost]        
+        [Authorize]
+        [HttpPost]
         public IActionResult EditUserProfile(UserEditProfileViewModel model)
         {
             var uploadedImage = model.User.ImageUpload;
@@ -119,7 +102,7 @@ namespace ProjectHub.Controllers
 
             return RedirectToAction("Profile", "User", new { id = model.User.Id });
         }
-                
+
         public IActionResult Projects(int id, string userKind)
         {
             var projects = this.userService.GetUserProjects(id, userKind).ToList();
@@ -143,7 +126,8 @@ namespace ProjectHub.Controllers
 
             var loggedUserId = int.Parse(this.userManager.GetUserId(this.User));
 
-            UserReviewsListViewModel user = new UserReviewsListViewModel {
+            UserReviewsListViewModel user = new UserReviewsListViewModel
+            {
 
                 LoggedUserId = loggedUserId,
                 Id = id,

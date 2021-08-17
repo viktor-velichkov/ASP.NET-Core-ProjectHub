@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.Data.Models;
@@ -14,6 +15,7 @@ using System.Linq;
 
 namespace ProjectHub.Controllers
 {
+   [Authorize]
     public class OffersController : Controller
     {
         private readonly IProjectService projectService;

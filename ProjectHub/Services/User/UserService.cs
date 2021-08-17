@@ -31,8 +31,8 @@ namespace ProjectHub.Services.User
                    .Investors
                    .Include(i => i.User)
                    .ThenInclude(u => u.RatesReceived)
-                   .Include(i=>i.Projects)
-                   .OrderByDescending(i => (double)i.User.RatesReceived.Count(rr => rr.IsPositive) 
+                   .Include(i => i.Projects)
+                   .OrderByDescending(i => (double)i.User.RatesReceived.Count(rr => rr.IsPositive)
                                             - i.User.RatesReceived.Count(rr => !rr.IsPositive))
                    .Take(3)
                    .ToList();
@@ -69,6 +69,27 @@ namespace ProjectHub.Services.User
                                             - i.User.RatesReceived.Count(rr => !rr.IsPositive))
                    .Take(3)
                    .ToList();
+
+        public ApplicationUser GetUserById(int userId)
+             => this.data
+                    .Users
+                    .Include(u => u.UserKind)
+                    .Include(u => u.RatesReceived)
+                    .FirstOrDefault(u => u.Id.Equals(userId));
+
+        public UserProfileViewModel GetUserProfileViewModel(int userId, string userKind)
+        {
+            var userKindEntity = this.GetUserKindEntityByUserId(userKind, userId);
+
+            return this.mapper.Map<object, UserProfileViewModel>(userKindEntity);
+        }
+
+        public UserEditProfileViewModel GetUserEditProfileViewModel(int userId, string userKind)
+        {
+            var userKindEntity = this.GetUserKindEntityByUserId(userKind, userId);
+
+            return this.mapper.Map<object, UserEditProfileViewModel>(userKindEntity);
+        }
 
         public object GetUserKindEntityByUserId(string userKind, int userId)
         {
@@ -175,34 +196,7 @@ namespace ProjectHub.Services.User
             }
 
             return this.mapper.Map<List<Project>, List<ProjectListingViewModel>>(projects);
-        }
-
-        private void UpdateUserKindEntityModel(UserEditProfileViewModel model, ApplicationUser user)
-        {
-            switch (model.User.UserKindName)
-            {
-                case "Investor":
-                    var investor = this.data.Investors.FirstOrDefault(i => i.UserId.Equals(model.User.Id));
-                    investor.User = user;
-                    break;
-                case "Manager":
-                    var manager = this.data.Managers.FirstOrDefault(i => i.UserId.Equals(model.User.Id));
-                    manager.User = user;
-                    break;
-                case "Designer":
-                    var designer = this.data.Designers.FirstOrDefault(i => i.UserId.Equals(model.User.Id));
-                    designer.User = user;
-                    designer.Discipline = model.Discipline;
-                    designer.WorkExperience = model.WorkExperience;
-                    break;
-                case "Contractor":
-                    var contractor = this.data.Contractors.FirstOrDefault(i => i.UserId.Equals(model.User.Id));
-                    contractor.User = user;                    
-                    break;
-                default:
-                    break;
-            }
-        }
+        }        
 
         public IEnumerable<ReviewListingViewModel> GetUserReviews(int id)
         {
@@ -229,20 +223,13 @@ namespace ProjectHub.Services.User
         }
 
         public Designer GetDesignerById(int id)
-            => this.data.Designers.FirstOrDefault(d => d.Id.Equals(id));
+          => this.data.Designers.FirstOrDefault(d => d.Id.Equals(id));
 
         public Discipline GetDesignerDiscipline(int id)
             => this.data.Designers.Include(d => d.Discipline).FirstOrDefault(d => d.Id.Equals(id)).Discipline;
 
         public byte[] GetUserImage(int id)
             => this.data.Users.FirstOrDefault(u => u.Id.Equals(id)).Image;
-        
-        public ApplicationUser GetUserById(int userId)
-             => this.data
-                    .Users
-                    .Include(u => u.UserKind)
-                    .Include(u => u.RatesReceived)
-                    .FirstOrDefault(u => u.Id.Equals(userId));
 
         public string GetUserRecommendationsCount(int authorId, int recipientId)
         {
@@ -319,6 +306,51 @@ namespace ProjectHub.Services.User
             return position;
         }
 
-        
+        public bool IsInRole(int userId, string roleName)
+        {
+            var role = this.data
+                           .Roles
+                           .FirstOrDefault(role => role.Name.Equals(roleName));
+
+            return this.data
+                       .UserRoles
+                       .Any(ur => ur.RoleId.Equals(role.Id) && ur.UserId.Equals(userId));
+        }
+
+        public void RemoveUser(string userName)
+        {
+            var user = this.data.Users.FirstOrDefault(u => u.UserName.Equals(userName));
+
+            this.data.Users.Remove(user);
+        }
+
+        private void UpdateUserKindEntityModel(UserEditProfileViewModel model, ApplicationUser user)
+        {
+            switch (model.User.UserKindName)
+            {
+                case "Investor":
+                    var investor = this.data.Investors.FirstOrDefault(i => i.UserId.Equals(model.User.Id));
+                    investor.User = user;
+                    break;
+                case "Manager":
+                    var manager = this.data.Managers.FirstOrDefault(i => i.UserId.Equals(model.User.Id));
+                    manager.User = user;
+                    break;
+                case "Designer":
+                    var designer = this.data.Designers.FirstOrDefault(i => i.UserId.Equals(model.User.Id));
+                    designer.User = user;
+                    designer.Discipline = model.Discipline;
+                    designer.WorkExperience = model.WorkExperience;
+                    break;
+                case "Contractor":
+                    var contractor = this.data.Contractors.FirstOrDefault(i => i.UserId.Equals(model.User.Id));
+                    contractor.User = user;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
     }
 }

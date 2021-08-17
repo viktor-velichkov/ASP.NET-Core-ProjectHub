@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ProjectHub.Areas.Admin;
 using ProjectHub.AutoMapper;
 using ProjectHub.Data;
 using ProjectHub.Data.Models;
@@ -118,6 +119,7 @@ namespace ProjectHub
                 app.UseExceptionHandler("/Home/Error")
                    .UseHsts();
             }
+            
             app
                 .UseHttpsRedirection()
                 .UseStaticFiles()
@@ -126,9 +128,10 @@ namespace ProjectHub
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                  {
+                     
                      endpoints.MapControllerRoute(
                          name: "AdminArea",
-                         pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                         pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");                     
 
                      endpoints.MapDefaultControllerRoute();
                      endpoints.MapRazorPages();

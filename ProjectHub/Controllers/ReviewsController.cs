@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using System.Linq;
 
 namespace ProjectHub.Controllers
 {
+    [Authorize]
     public class ReviewsController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;

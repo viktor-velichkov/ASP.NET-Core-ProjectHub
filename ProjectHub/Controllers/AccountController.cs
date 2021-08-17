@@ -6,6 +6,7 @@ using ProjectHub.Data.Models;
 using ProjectHub.Models.User;
 using ProjectHub.Services.Account;
 using ProjectHub.Services.DIscipline;
+using ProjectHub.Services.User;
 using ProjectHub.Services.UserKinds;
 
 namespace ProjectHub.Controllers
@@ -16,6 +17,7 @@ namespace ProjectHub.Controllers
         private readonly IAccountService accountService;
         private readonly IDisciplineService disciplineService;
         private readonly IUserKindService userKindService;
+        private readonly IUserService userService;
 
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole<int>> roleManager;
@@ -25,6 +27,7 @@ namespace ProjectHub.Controllers
                          IAccountService accountService,
                          IDisciplineService disciplineService,
                          IUserKindService userKindService,
+                         IUserService userService,
                          UserManager<ApplicationUser> userManager,
                          RoleManager<IdentityRole<int>> roleManager,
                          SignInManager<ApplicationUser> signInManager)
@@ -32,6 +35,7 @@ namespace ProjectHub.Controllers
             this.accountService = accountService;
             this.disciplineService = disciplineService;
             this.userKindService = userKindService;
+            this.userService = userService;
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.signInManager = signInManager;
@@ -51,17 +55,31 @@ namespace ProjectHub.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterFormModel user)
         {
-            if (!this.accountService.ConfirmThatUserKindIsValid(user.UserKindId))
+            var isUserNameExists = await this.userManager.FindByNameAsync(user.Email) != null;
+            if (isUserNameExists)
             {
-                this.ModelState.AddModelError(nameof(user.UserKindId), ValidationErrorMessages.InvalidUserKindMessage);
+                this.ModelState
+                    .AddModelError(nameof(user.Email), ValidationErrorMessages.UserAlreadyExists);
+            }
+            var isUserKindValid = this.accountService.ConfirmThatUserKindIsValid(user.UserKindId);
+
+            if (!isUserKindValid)
+            {
+                this.ModelState
+                    .AddModelError(nameof(user.UserKindId), ValidationErrorMessages.InvalidUserKindMessage);
             }
 
-            if (this.accountService.GetUserKindId(nameof(Designer)).Equals(user.UserKindId)
-                && !this.accountService.ConfirmThatDisciplineIsValid(user.DisciplineId))
-            {
-                this.ModelState.AddModelError(nameof(user.DisciplineId), ValidationErrorMessages.InvalidDisciplineMessage);
-            }
+            var userKindId = this.accountService.GetUserKindId(nameof(Designer));
 
+            var isDisciplineValid = this.accountService
+                                        .ConfirmThatDisciplineIsValid(user.DisciplineId);
+
+            if (userKindId.Equals(user.UserKindId) && !isDisciplineValid)
+            {
+                this.ModelState
+                    .AddModelError(nameof(user.DisciplineId), ValidationErrorMessages.InvalidDisciplineMessage);
+            }
+            
             if (!ModelState.IsValid)
             {
                 user.UserKinds = this.userKindService.GetAllUserKinds();
@@ -129,9 +147,10 @@ namespace ProjectHub.Controllers
 
             await signInManager.SignInAsync(userDb, user.RememberMe);
 
-            if (await this.userManager.IsInRoleAsync(userDb, AdminConstants.AdministratorRole))
+
+            if (this.userService.IsInRole(userDb.Id, AdminConstants.AdministratorRole))
             {
-                return RedirectToRoute("/Admin/Home/Index");
+                return Redirect("/Admin/Home/Index");
             }
 
             return RedirectToAction("Index", "Home");

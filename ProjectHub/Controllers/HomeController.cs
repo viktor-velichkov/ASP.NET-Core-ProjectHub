@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ProjectHub.Areas.Admin;
 using ProjectHub.Data.Models;
 using ProjectHub.Models;
 using ProjectHub.Models.Contractor;
@@ -19,17 +21,20 @@ namespace ProjectHub.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly IProjectService projectService;
         private readonly IUserService userService;
         private readonly IMapper mapper;
 
         public HomeController(
                               ILogger<HomeController> logger,
+                              UserManager<ApplicationUser> userManager,
                               IProjectService projectService,
                               IUserService userService,
                               IMapper mapper)
         {
             _logger = logger;
+            this.userManager = userManager;
             this.projectService = projectService;
             this.userService = userService;
             this.mapper = mapper;
@@ -41,6 +46,14 @@ namespace ProjectHub.Controllers
             {
                 return View();
             }
+
+            var loggedUserId = int.Parse(this.userManager.GetUserId(this.User));
+
+            if (this.userService.IsInRole(loggedUserId,AdminConstants.AdministratorRole))
+            {
+                return Redirect("/Admin/Home/Index");
+            }
+
 
             var latestThreeProjects = this.projectService
                 .GetLatestThreeProjects();
@@ -72,19 +85,17 @@ namespace ProjectHub.Controllers
             var modelContractors = this.mapper
                 .Map<List<Contractor>, List<ContractorListViewModel>>(topThreeContractor);
 
-            var model = new IndexPageViewModel { Projects = modelProjects,
-                                                 Investors = modeInvestors,
-                                                 Managers=modelManagers,
-                                                 Designers = modelDesigners,
-                                                 Contractors = modelContractors};
+            var model = new IndexPageViewModel
+            {
+                Projects = modelProjects,
+                Investors = modeInvestors,
+                Managers = modelManagers,
+                Designers = modelDesigners,
+                Contractors = modelContractors
+            };
 
             return View("~/Views/Home/AuthorizedIndex.cshtml", model);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        }        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

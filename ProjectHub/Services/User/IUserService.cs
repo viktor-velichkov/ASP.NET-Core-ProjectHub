@@ -16,7 +16,11 @@ namespace ProjectHub.Services.User
         public List<Contractor> GetTopThreeContractors();
         
         public ApplicationUser GetUserById(int userId);
-        object GetUserKindEntityByUserId(string userKind, int userId);
+
+        public UserProfileViewModel GetUserProfileViewModel(int userId, string userKind);
+        public UserEditProfileViewModel GetUserEditProfileViewModel(int userId, string userKind);
+
+        public object GetUserKindEntityByUserId(string userKind, int userId);
 
         public void EditUser(UserEditProfileViewModel model);
 
@@ -29,6 +33,7 @@ namespace ProjectHub.Services.User
         public Designer GetDesignerById(int id);
 
         public Discipline GetDesignerDiscipline(int id);
+
         public byte[] GetUserImage(int id);        
 
         public string GetUserRecommendationsCount(int authorId, int recipientId);
@@ -38,5 +43,9 @@ namespace ProjectHub.Services.User
         public bool CheckIfUserIsAlreadyReviewedByTheLoggedUser(int recipientId, int loggedUserId);
 
         public string GetPositionThatUserAppliesFor(int userId);
+
+        public bool IsInRole(int userId, string roleName);
+
+        public void RemoveUser(string userName);
     }
 }
