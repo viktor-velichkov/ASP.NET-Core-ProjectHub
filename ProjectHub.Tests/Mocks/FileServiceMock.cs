@@ -10,7 +10,7 @@ namespace ProjectHub.Tests.Mocks
         {
             get
             {
-                var filesService = new Mock<FilesService>();
+                var filesService = new Mock<IFilesService>();
 
                 filesService
                     .Setup(fs => fs.ProcessUploadedFile(Mock.Of<FormFile>()))

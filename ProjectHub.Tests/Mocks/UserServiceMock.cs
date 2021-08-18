@@ -25,6 +25,14 @@ namespace ProjectHub.Tests.Mocks
                     .Returns(new ApplicationUser { Id = 1, UserKind = new UserKind { Name = "UserKind" } });
 
                 userService
+                    .Setup(us => us.GetUserById(3))
+                    .Returns(new ApplicationUser { Id = 3, UserKind = new UserKind { Name = "Designer" } });
+
+                userService
+                    .Setup(us => us.GetUserById(4))
+                    .Returns(new ApplicationUser { Id = 4, UserKind = new UserKind { Name = "Investor" } });
+
+                userService
                     .Setup(us => us.GetUserById(2))
                     .Returns(new ApplicationUser { Id = 2, UserKind = new UserKind { Name = "Administrator" } });
 

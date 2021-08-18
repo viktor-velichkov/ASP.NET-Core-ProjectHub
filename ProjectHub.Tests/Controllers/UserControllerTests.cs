@@ -171,6 +171,7 @@ namespace ProjectHub.Tests.Controllers
             Assert.NotNull(result);
             var resultType = Assert.IsType<ViewResult>(result);
             Assert.IsType<UserEditProfileViewModel>(resultType.Model);
+            Assert.False(resultType.ViewData.ModelState.IsValid);
         }
 
         [Fact]

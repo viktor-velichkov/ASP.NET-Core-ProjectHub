@@ -7,6 +7,7 @@ namespace ProjectHub.Services.Projects
 {
     public interface IProjectService
     {
+        public bool ProjectExists(int id);
         public List<ProjectCardViewModel> GetAllProjectsOrderedByDateDescending();
 
         public List<ProjectCardViewModel> FilterByCity(string city);

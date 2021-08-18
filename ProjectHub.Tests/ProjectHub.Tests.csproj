@@ -25,8 +25,4 @@
     <ProjectReference Include="..\ProjectHub\ProjectHub.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Mocks\NewFolder\" />
-  </ItemGroup>
-
 </Project>

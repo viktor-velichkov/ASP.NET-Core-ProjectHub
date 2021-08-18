@@ -17,22 +17,19 @@ namespace ProjectHub.Controllers
 {
     [Authorize]
     public class ProjectsController : Controller
-    {
-        private readonly ProjectHubDbContext data;
+    {        
         private readonly IProjectService projectService;
         private readonly IOfferService offerService;
         private readonly IUserService userService;
         private readonly IFilesService filesService;
         private readonly IDisciplineService disciplineService;
 
-        public ProjectsController(ProjectHubDbContext data,
-                                  IProjectService projectService,
+        public ProjectsController(IProjectService projectService,
                                   IOfferService offerService,
                                   IUserService userService,
                                   IFilesService filesService,
                                   IDisciplineService disciplineService)
         {
-            this.data = data;
             this.projectService = projectService;
             this.offerService = offerService;
             this.userService = userService;
@@ -58,7 +55,6 @@ namespace ProjectHub.Controllers
 
             return PartialView("~/Views/Projects/AllByCityPartial.cshtml", projectsModel);
         }
-
 
         public IActionResult Add()
         {
@@ -86,12 +82,7 @@ namespace ProjectHub.Controllers
             else
             {
                 model.Image = this.projectService.GetProjectImage(model.Id);
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+            }            
 
             var investorId = int.Parse(this.User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
@@ -107,6 +98,11 @@ namespace ProjectHub.Controllers
 
         public IActionResult Details(int id)
         {
+            if (!this.projectService.ProjectExists(id))
+            {
+                return NotFound();
+            }
+
             var projectViewModel = this.projectService.GetProjectDetailsViewModel(id);
 
             var disciplines = this.disciplineService.GetAllDisciplines();
@@ -158,11 +154,18 @@ namespace ProjectHub.Controllers
             projectViewModel.IsLoggedUserAlreadySentAnOffer = this.offerService
                                                                   .IsOfferAlreadyExists(loggedUserId, id);
 
-            return View(new Tuple<ProjectDetailsViewModel, List<Discipline>>(projectViewModel, disciplines));
+            var viewModel = new Tuple<ProjectDetailsViewModel, List<Discipline>>(projectViewModel, disciplines);
+
+            return View(viewModel);
         }
 
         public IActionResult Offers(int id)
         {
+            if (!this.projectService.ProjectExists(id))
+            {
+                return NotFound();
+            }
+
             var projectModel = this.projectService.GetProjectWithOffersById(id);
 
             var loggedUserId = int.Parse(this.User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -174,7 +177,7 @@ namespace ProjectHub.Controllers
 
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Profile", "User");
+                return RedirectToAction("Profile", "User", new { id = loggedUserId });
             }
 
             projectModel.Disciplines = this.disciplineService.GetAllDisciplines();
@@ -184,7 +187,12 @@ namespace ProjectHub.Controllers
 
         public IActionResult Remove(int id)
         {
-            int loggedUserId = int.Parse(this.User.FindFirst(ClaimTypes.Name).Value);
+            if (!this.projectService.ProjectExists(id))
+            {
+                return NotFound();
+            }
+
+            int loggedUserId = int.Parse(this.User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             var loggedUser = this.userService.GetUserById(loggedUserId);
 

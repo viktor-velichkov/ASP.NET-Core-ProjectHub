@@ -24,6 +24,8 @@ namespace ProjectHub.Services.Projects
             this.mapper = mapper;
         }
 
+        public bool ProjectExists(int id)
+            => this.data.Projects.Any(p => p.Id.Equals(id));
         public List<ProjectCardViewModel> GetAllProjectsOrderedByDateDescending()
         {
             var projects = this.data
