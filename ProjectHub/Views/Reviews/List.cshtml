@@ -73,10 +73,13 @@
 
             var action = $(this).attr('data-action');
 
-            var userId = @Model.Item1.First().RecipientId;
+            var userId = @Model.Item1.First().RecipientId;           
 
             $.get('/User/' + action,
-                { id:userId },
+                {
+                    id: userId,                    
+                    userKind: userId,                    
+                },
                 function (response) {
                     console.log(response)
                     $('.js-tab-content').html(response);

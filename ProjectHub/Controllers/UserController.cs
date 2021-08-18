@@ -139,8 +139,7 @@ namespace ProjectHub.Controllers
         [HttpGet]
         public IActionResult Reviews(int id, string userKind)
         {
-            if (!this.userService.IsUserExists(id)
-                || !this.userKindService.IsValid(userKind))
+            if (!this.userService.IsUserExists(id))
             {
                 return BadRequest();
             }

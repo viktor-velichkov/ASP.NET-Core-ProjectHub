@@ -16,6 +16,12 @@ namespace ProjectHub.Services.Reviews
             this.data = data;
         }
 
+        public bool ReviewExists(int authorId, int recipientId)
+            => this.data
+                   .Reviews
+                   .Any(r => r.AuthorId.Equals(authorId)
+                          && r.RecipientId.Equals(recipientId));
+
         public void AddReview(int authorId, int recipientId, string content)
         {
             this.data.Reviews.Add(new Review
@@ -31,10 +37,10 @@ namespace ProjectHub.Services.Reviews
 
         public List<Review> GetRecipientReviews(int recipientId)
             => this.data
-                  .Reviews
-                  .Include(r => r.Author)
-                  .Where(r => r.RecipientId.Equals(recipientId))
-                  .ToList();
+                   .Reviews
+                   .Include(r => r.Author)
+                   .Where(r => r.RecipientId.Equals(recipientId))
+                   .ToList();
 
         public void EditReview(int authorId, int recipientId, string content)
         {
@@ -60,5 +66,7 @@ namespace ProjectHub.Services.Reviews
 
             this.data.SaveChanges();
         }
+
+        
     }
 }

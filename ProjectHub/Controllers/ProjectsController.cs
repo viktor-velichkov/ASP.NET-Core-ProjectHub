@@ -134,9 +134,9 @@ namespace ProjectHub.Controllers
                                                  String.IsNullOrWhiteSpace(projectViewType.GetProperty(loggedUserUserKind)
                                                                                           .GetValue(projectViewModel) as string) : true;
 
-                isHiredForThisProject = Convert.ToInt32(typeof(Project)
+                isHiredForThisProject = typeof(Project)
                                                .GetProperty(loggedUserUserKind + "Id")
-                                               .GetValue(projectViewModel))
+                                               .GetValue(projectViewModel)
                                                .Equals(loggedUserId);
             }
             else

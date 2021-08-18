@@ -5,6 +5,8 @@ namespace ProjectHub.Services.Reviews
 {
     public interface IReviewService
     {
+        public bool ReviewExists(int authorId, int recipientId);
+
         public void AddReview(int authorId, int recipientId, string content);
 
         public List<Review> GetRecipientReviews(int recipientId);
