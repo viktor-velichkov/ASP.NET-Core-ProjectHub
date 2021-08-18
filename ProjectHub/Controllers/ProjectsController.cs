@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.Data;
 using ProjectHub.Data.Models;
-using ProjectHub.Data.Models.Projects;
-using ProjectHub.Models.Offer;
 using ProjectHub.Models.Projects;
-using ProjectHub.Models.User;
-using ProjectHub.Services.DIscipline;
+using ProjectHub.Services.Disciplines;
 using ProjectHub.Services.Files;
 using ProjectHub.Services.Offers;
 using ProjectHub.Services.Projects;
 using ProjectHub.Services.User;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 
 namespace ProjectHub.Controllers
 {
@@ -23,37 +19,29 @@ namespace ProjectHub.Controllers
     public class ProjectsController : Controller
     {
         private readonly ProjectHubDbContext data;
-        private readonly IMapper mapper;
         private readonly IProjectService projectService;
         private readonly IOfferService offerService;
         private readonly IUserService userService;
         private readonly IFilesService filesService;
         private readonly IDisciplineService disciplineService;
-        private readonly UserManager<ApplicationUser> userManager;
 
         public ProjectsController(ProjectHubDbContext data,
-                                  IMapper mapper,
                                   IProjectService projectService,
                                   IOfferService offerService,
                                   IUserService userService,
                                   IFilesService filesService,
-                                  IDisciplineService disciplineService,
-                                  UserManager<ApplicationUser> userManager)
+                                  IDisciplineService disciplineService)
         {
             this.data = data;
-            this.mapper = mapper;
             this.projectService = projectService;
             this.offerService = offerService;
             this.userService = userService;
             this.filesService = filesService;
             this.disciplineService = disciplineService;
-            this.userManager = userManager;
         }
         public IActionResult All()
         {
-            var projects = this.projectService.GetAllProjectsOrderedByDateDescending();
-
-            var modelProjects = this.mapper.Map<List<Project>, List<ProjectCardViewModel>>(projects);
+            var modelProjects = this.projectService.GetAllProjectsOrderedByDateDescending();
 
             var modelCities = new List<string>() { "All" };
 
@@ -105,7 +93,7 @@ namespace ProjectHub.Controllers
                 return View(model);
             }
 
-            var investorId = int.Parse(this.userManager.GetUserId(this.User));
+            var investorId = int.Parse(this.User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             this.projectService.AddProject(model, investorId);
 
@@ -119,18 +107,16 @@ namespace ProjectHub.Controllers
 
         public IActionResult Details(int id)
         {
-            var project = this.projectService.GetProjectWithItsParticipantsById(id);
+            var projectViewModel = this.projectService.GetProjectDetailsViewModel(id);
 
             var disciplines = this.disciplineService.GetAllDisciplines();
 
-            var projectViewModel = this.mapper.Map<Project, ProjectDetailsViewModel>(project);
+            projectViewModel.Designers = this.projectService
+                                             .GetProjectDesignersByProjectId(id);
 
-            var projectDesigners = this.projectService.GetProjectDesignersByProjectId(id);
-
-            projectViewModel.Designers = this.mapper
-                .Map<List<ProjectDesigner>, List<DesignerProjectDetailsViewModel>>(projectDesigners);
-
-            var loggedUserId = int.Parse(this.userManager.GetUserId(this.User));
+            var loggedUserId = int.Parse(this.User
+                                             .FindFirst(ClaimTypes.NameIdentifier)
+                                             .Value);
 
             var loggedUser = this.userService.GetUserById(loggedUserId);
 
@@ -141,55 +127,55 @@ namespace ProjectHub.Controllers
 
             var projectViewType = projectViewModel.GetType();
 
-            bool isLoggedUserPositionFree = false;
+            bool isPositionFree = false;
 
-            bool isLoggedUserHiredForThisProject = false;
+            bool isHiredForThisProject = false;
 
             if (!loggedUserUserKind.Equals("Designer"))
             {
-                isLoggedUserPositionFree = projectViewType.GetProperty(loggedUserUserKind) != null ?
-                                           String.IsNullOrWhiteSpace(
-                                               projectViewType.GetProperty(loggedUserUserKind).GetValue(projectViewModel) as string) :
-                                           true;
+                isPositionFree = projectViewModel.GetType()
+                                                 .GetProperty(loggedUserUserKind) != null ?
+                                                 String.IsNullOrWhiteSpace(projectViewType.GetProperty(loggedUserUserKind)
+                                                                                          .GetValue(projectViewModel) as string) : true;
 
-                isLoggedUserHiredForThisProject = Convert.ToInt32(typeof(Project).GetProperty(loggedUserUserKind + "Id").GetValue(project)).Equals(loggedUserId);
+                isHiredForThisProject = Convert.ToInt32(typeof(Project)
+                                               .GetProperty(loggedUserUserKind + "Id")
+                                               .GetValue(projectViewModel))
+                                               .Equals(loggedUserId);
             }
             else
             {
-                isLoggedUserPositionFree = String.IsNullOrWhiteSpace(
-                    projectViewModel.Designers.Select(d => d.Discipline).FirstOrDefault(d => d.Equals(loggedUserDiscipline)));
+                isPositionFree = String.IsNullOrWhiteSpace(projectViewModel.Designers
+                                                                           .Select(d => d.Discipline)
+                                                                           .FirstOrDefault(d => d.Equals(loggedUserDiscipline)));
 
-                isLoggedUserHiredForThisProject = projectDesigners.Any(pd => pd.Designer.User.Id.Equals(loggedUserId));
+                isHiredForThisProject = projectViewModel.Designers
+                                                        .Any(pd => pd.DesignerId.Equals(loggedUserId));
             }
 
-            projectViewModel.IsLoggedUserPositionFree = isLoggedUserPositionFree;
+            projectViewModel.IsLoggedUserPositionFree = isPositionFree;
 
             projectViewModel.IsLoggedUserAlreadySentAnOffer = this.offerService
-                                                                  .IsLoggedUserAlreadySentAnOfferForThisProject(loggedUserId, id);
+                                                                  .IsOfferAlreadyExists(loggedUserId, id);
 
             return View(new Tuple<ProjectDetailsViewModel, List<Discipline>>(projectViewModel, disciplines));
         }
 
         public IActionResult Offers(int id)
         {
-            var project = this.projectService.GetProjectById(id);
+            var projectModel = this.projectService.GetProjectWithOffersById(id);
 
-            var loggedUserId = int.Parse(this.userManager.GetUserId(this.User));
-            if (!project.InvestorId.Equals(loggedUserId))
+            var loggedUserId = int.Parse(this.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            if (!projectModel.InvestorId.Equals(loggedUserId))
             {
-                this.ModelState.AddModelError(nameof(project.Investor), ValidationErrorMessages.ProjectInvestorNotLoggedMessage);
+                this.ModelState.AddModelError(nameof(Investor), ValidationErrorMessages.ProjectInvestorNotLoggedMessage);
             }
 
             if (!ModelState.IsValid)
             {
                 return RedirectToAction("Profile", "User");
             }
-
-            var offers = this.projectService.GetProjectOffersWithAuthorByProjectId(id);
-
-            var projectModel = this.mapper.Map<Project, ProjectOffersListViewModel>(project);
-
-            projectModel.Offers = this.mapper.Map<List<Offer>, List<OfferListViewModel>>(offers);
 
             projectModel.Disciplines = this.disciplineService.GetAllDisciplines();
 
@@ -198,12 +184,12 @@ namespace ProjectHub.Controllers
 
         public IActionResult Remove(int id)
         {
-            int loggedUserId = int.Parse(this.userManager.GetUserId(this.User));
+            int loggedUserId = int.Parse(this.User.FindFirst(ClaimTypes.Name).Value);
 
             var loggedUser = this.userService.GetUserById(loggedUserId);
 
             if (loggedUser.UserKind.Name != nameof(Investor)
-                || !this.projectService.ConfirmThatInvestorIsOwnerOfTheProject(loggedUserId, id))
+                || !this.projectService.IsOwnerOfTheProject(loggedUserId, id))
             {
                 return Unauthorized();
             }

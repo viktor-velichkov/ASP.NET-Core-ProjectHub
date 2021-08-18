@@ -12,7 +12,7 @@ using ProjectHub.Data;
 using ProjectHub.Data.Models;
 using ProjectHub.Infrastructure;
 using ProjectHub.Services.Account;
-using ProjectHub.Services.DIscipline;
+using ProjectHub.Services.Disciplines;
 using ProjectHub.Services.Files;
 using ProjectHub.Services.Offers;
 using ProjectHub.Services.Projects;

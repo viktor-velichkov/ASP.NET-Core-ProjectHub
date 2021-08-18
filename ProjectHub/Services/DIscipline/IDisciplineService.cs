@@ -1,7 +1,7 @@
 ﻿using ProjectHub.Data.Models;
 using System.Collections.Generic;
 
-namespace ProjectHub.Services.DIscipline
+namespace ProjectHub.Services.Disciplines
 {
     public interface IDisciplineService
     {

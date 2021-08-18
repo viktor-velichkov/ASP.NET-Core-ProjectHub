@@ -1,0 +1,5 @@
+﻿<ModulePaths>
+  <Include>
+    <ModulePath>.*projecthub.dll</ModulePath>    
+  </Include>
+</ModulePaths>

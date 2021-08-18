@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.Areas.Admin;
 using ProjectHub.Data.Models;
+using ProjectHub.Models.Discussion;
 using ProjectHub.Models.Projects;
 using ProjectHub.Models.Review;
 using ProjectHub.Models.User;
@@ -169,5 +170,9 @@ namespace ProjectHub.Controllers
 
         public string Disapprovals(int authorId, int recipientId)
             => this.userService.GetUserDisapprovalsCount(authorId, recipientId);
+
+        public IActionResult Discussions(int id, string userKind)
+            => PartialView("~/Views/User/UserDiscussionsPartial.cshtml", 
+                new Tuple<List<DiscussionViewModel>,string>(this.userService.GetUserDiscussions(id).ToList(),userKind));
     }
 }

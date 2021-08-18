@@ -7,7 +7,7 @@ namespace ProjectHub.Models.Projects
     {
         public ProjectDetailsViewModel()
         {
-            this.Designers = new HashSet<DesignerProjectDetailsViewModel>();
+            this.Designers = new List<DesignerProjectDetailsViewModel>();
         }
         public int Id { get; set; }
 
@@ -29,7 +29,7 @@ namespace ProjectHub.Models.Projects
         public int ManagerId { get; set; }
         public string Manager { get; set; }
 
-        public ICollection<DesignerProjectDetailsViewModel> Designers;
+        public List<DesignerProjectDetailsViewModel> Designers;
 
         public int ContractorId { get; set; }
         public string Contractor { get; set; }

@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="Models\Activity\**" />
+    <Compile Remove="Services\Models\**" />
     <Content Remove="Models\Activity\**" />
+    <Content Remove="Services\Models\**" />
     <EmbeddedResource Remove="Models\Activity\**" />
+    <EmbeddedResource Remove="Services\Models\**" />
     <None Remove="Models\Activity\**" />
+    <None Remove="Services\Models\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,7 +38,6 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
-    <Folder Include="Services\Models\" />
   </ItemGroup>
 
 </Project>

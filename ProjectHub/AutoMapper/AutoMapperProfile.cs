@@ -16,6 +16,7 @@ namespace ProjectHub.AutoMapper
 {
     public class AutoMapperProfile : Profile
     {
+        
         public AutoMapperProfile()
         {
             //USERS MAPPING

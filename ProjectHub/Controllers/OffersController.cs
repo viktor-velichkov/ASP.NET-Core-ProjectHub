@@ -37,7 +37,7 @@ namespace ProjectHub.Controllers
 
         public IActionResult Add(int id)
         {
-            var project = this.projectService.GetProjectWithItsParticipantsById(id);
+            var project = this.projectService.GetProject(id);
 
             var projectModel = this.mapper.Map<Project, ProjectOfferAddViewModel>(project);
 
@@ -53,7 +53,7 @@ namespace ProjectHub.Controllers
         [HttpPost]
         public IActionResult Add(OfferAddVIewModel model)
         {
-            if (this.offerService.IsLoggedUserAlreadySentAnOfferForThisProject(model.AuthorId, model.ProjectId))
+            if (this.offerService.IsOfferAlreadyExists(model.AuthorId, model.ProjectId))
             {
                 this.ModelState.AddModelError(nameof(Offer), "This user already have sent an offer for this project.");
             }
@@ -80,7 +80,7 @@ namespace ProjectHub.Controllers
         public IActionResult Accept(int projectId, int authorId, string position)
         {
 
-            if (this.projectService.CheckIfProjectAlreadyHasSuchASpecialist(projectId, position))
+            if (this.projectService.AlreadyHasSuchASpecialist(projectId, position))
             {
                 return BadRequest();
             }
@@ -93,7 +93,7 @@ namespace ProjectHub.Controllers
             {
                 var projectPosition = position.Split(" - ").ToArray().First();
 
-                this.projectService.AddUserToProjectPosition(projectId, authorId, projectPosition);
+                this.projectService.AddUserToProject(projectId, authorId, projectPosition);
             }
 
             this.offerService.RemoveOffersForThisPosition(projectId, position);

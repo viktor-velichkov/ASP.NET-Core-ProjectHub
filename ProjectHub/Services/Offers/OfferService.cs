@@ -61,7 +61,7 @@ namespace ProjectHub.Services.Offers
         }
                 
 
-        public bool IsLoggedUserAlreadySentAnOfferForThisProject(int userId, int projectId)
+        public bool IsOfferAlreadyExists(int userId, int projectId)
             => this.data.Offers.Any(offer => offer.AuthorId.Equals(userId) && offer.ProjectId.Equals(projectId));
 
         public bool IsLoggedUserAlreadyWasHiredForThisProject(int userId, int projectId)

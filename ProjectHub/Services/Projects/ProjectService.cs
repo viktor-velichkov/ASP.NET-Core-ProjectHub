@@ -5,6 +5,7 @@ using ProjectHub.Data.ExceptionMessages;
 using ProjectHub.Data.Models;
 using ProjectHub.Data.Models.Projects;
 using ProjectHub.Models.Projects;
+using ProjectHub.Models.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,12 +24,18 @@ namespace ProjectHub.Services.Projects
             this.mapper = mapper;
         }
 
-        public List<Project> GetAllProjectsOrderedByDateDescending()
-             => this.data
-                    .Projects
-                    .Include(p => p.Investor)
-                    .OrderByDescending(p => p.Id)
-                    .ToList();
+        public List<ProjectCardViewModel> GetAllProjectsOrderedByDateDescending()
+        {
+            var projects = this.data
+                               .Projects
+                               .Include(p => p.Investor)
+                               .OrderByDescending(p => p.Id)
+                               .ToList();
+
+            return this.mapper.Map<List<Project>, List<ProjectCardViewModel>>(projects);
+
+        }
+
 
         public List<ProjectCardViewModel> FilterByCity(string city)
         {
@@ -106,38 +113,33 @@ namespace ProjectHub.Services.Projects
                    .Take(3)
                    .ToList();
 
-        public Project GetProjectById(int id)
-            => this.data
-                   .Projects
-                   .FirstOrDefault(p => p.Id.Equals(id));
+        public ProjectOffersListViewModel GetProjectWithOffersById(int id)
+        {
+            var project = this.data
+                              .Projects
+                              .Include(p => p.Offers)
+                              .ThenInclude(offer => offer.Author)
+                              .FirstOrDefault(p => p.Id.Equals(id));
 
-        public Project GetProjectWithItsParticipantsById(int id)
-            => this.data
-                   .Projects
-                   .Include(p => p.Investor)
-                   .ThenInclude(i => i.User)
-                   .Include(p => p.Manager)
-                   .ThenInclude(i => i.User)
-                   .Include(p => p.Contractor)
-                   .ThenInclude(i => i.User)
-                   .FirstOrDefault(p => p.Id.Equals(id));
+            return this.mapper.Map<Project, ProjectOffersListViewModel>(project);
+        }
 
-        public List<ProjectDesigner> GetProjectDesignersByProjectId(int projectId)
-            => this.data
-                   .ProjectDesigners
-                   .Include(pd => pd.Designer)
-                   .ThenInclude(d => d.Discipline)
-                   .Include(pd => pd.Designer)
-                   .ThenInclude(d => d.User)
-                   .Where(pd => pd.ProjectId.Equals(projectId))
-                   .ToList();
+        public ProjectDetailsViewModel GetProjectDetailsViewModel(int id)
+            => this.mapper.Map<Project, ProjectDetailsViewModel>(this.GetProject(id));
 
-        public List<Offer> GetProjectOffersWithAuthorByProjectId(int id)
-            => this.data
-                   .Offers
-                   .Include(offer => offer.Author)
-                   .Where(offer => offer.ProjectId.Equals(id))
-                   .ToList();
+        public List<DesignerProjectDetailsViewModel> GetProjectDesignersByProjectId(int projectId)
+        {
+            var projectDesigners = this.data
+                                       .ProjectDesigners
+                                       .Include(pd => pd.Designer)
+                                       .ThenInclude(d => d.Discipline)
+                                       .Include(pd => pd.Designer)
+                                       .ThenInclude(d => d.User)
+                                       .Where(pd => pd.ProjectId.Equals(projectId))
+                                       .ToList();
+
+            return this.mapper.Map<List<ProjectDesigner>, List<DesignerProjectDetailsViewModel>>(projectDesigners);
+        }
 
         public string GetDesignerDisciplineName(int id)
             => this.data
@@ -166,18 +168,18 @@ namespace ProjectHub.Services.Projects
             this.data.SaveChanges();
         }
 
-        public void AddUserToProjectPosition(int projectId, int userId, string projectPosition)
+        public void AddUserToProject(int projectId, int userId, string projectPosition)
         {
-            var project = this.GetProjectWithItsParticipantsById(projectId);
+            var project = this.GetProject(projectId);
 
             typeof(Project).GetProperty(projectPosition + "Id").SetValue(project, userId);
 
             this.data.SaveChanges();
         }
 
-        public bool CheckIfProjectAlreadyHasSuchASpecialist(int projectId, string position)
+        public bool AlreadyHasSuchASpecialist(int projectId, string position)
         {
-            var project = this.GetProjectWithItsParticipantsById(projectId);
+            var project = this.GetProject(projectId);
 
             var positionParts = position.Split(" - ").ToArray();
 
@@ -198,12 +200,24 @@ namespace ProjectHub.Services.Projects
             }
         }
 
-        public bool ConfirmThatInvestorIsOwnerOfTheProject(int investorId, int projectId)
+        public bool IsOwnerOfTheProject(int investorId, int projectId)
             => this.data
                    .Projects
                    .FirstOrDefault(p => p.Id.Equals(projectId))
                    .InvestorId
                    .Equals(investorId);
+
+        public Project GetProject(int projectId)
+            => this.data
+                   .Projects
+                   .Include(p => p.Investor)
+                   .ThenInclude(i => i.User)
+                   .Include(p => p.Manager)
+                   .ThenInclude(i => i.User)
+                   .Include(p => p.Contractor)
+                   .ThenInclude(i => i.User)
+                   .FirstOrDefault(p => p.Id.Equals(projectId));
+
 
 
     }

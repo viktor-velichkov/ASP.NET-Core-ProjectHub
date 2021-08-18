@@ -5,7 +5,7 @@ using ProjectHub.Areas.Admin;
 using ProjectHub.Data.Models;
 using ProjectHub.Models.User;
 using ProjectHub.Services.Account;
-using ProjectHub.Services.DIscipline;
+using ProjectHub.Services.Disciplines;
 using ProjectHub.Services.User;
 using ProjectHub.Services.UserKinds;
 

@@ -3,7 +3,7 @@ using ProjectHub.Data.Models;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ProjectHub.Services.DIscipline
+namespace ProjectHub.Services.Disciplines
 {
     public class DisciplineService : IDisciplineService
     {
