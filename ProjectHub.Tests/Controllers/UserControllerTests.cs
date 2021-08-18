@@ -255,21 +255,7 @@ namespace ProjectHub.Tests.Controllers
             //Assert
             Assert.NotNull(result);
             var resultType = Assert.IsType<BadRequestResult>(result);
-        }
-
-        [Fact]
-        public void ReviewsMethodShouldReturnBadRequestResultIfUserKindIsInvalid()
-        {
-            //Assert
-            var userController = this.Create();
-
-            //Act            
-            var result = userController.Reviews(1, "UserKind");
-
-            //Assert
-            Assert.NotNull(result);
-            var resultType = Assert.IsType<BadRequestResult>(result);
-        }
+        }        
 
         [Fact]
         public void ReviewsMethodShouldReturnPartialViewResultWithTupleViewModel()
