@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using ProjectHub.Data.Models;
+﻿using ProjectHub.Data.Models;
 using ProjectHub.Models.Discussion;
 using ProjectHub.Models.Projects;
 using ProjectHub.Models.Review;
@@ -10,6 +9,7 @@ namespace ProjectHub.Services.User
 {
     public interface IUserService
     {
+        public bool IsUserExists(int userId);
         public List<Investor> GetTopThreeInvestors();
         public List<Manager> GetTopThreeManagers();
         public List<Designer> GetTopThreeDesigners();
@@ -40,7 +40,7 @@ namespace ProjectHub.Services.User
 
         public string GetUserDisapprovalsCount(int authorId, int recipientId);
 
-        public bool CheckIfUserIsAlreadyReviewedByTheLoggedUser(int recipientId, int loggedUserId);
+        public bool ReviewAlreadyExists(int recipientId, int loggedUserId);
 
         public string GetPositionThatUserAppliesFor(int userId);
 

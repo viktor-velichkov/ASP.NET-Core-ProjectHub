@@ -14,6 +14,9 @@ namespace ProjectHub.Services.UserKinds
             this.data = data;
         }
 
+        public bool IsValid(string userKind)
+            => this.data.UserKinds.Any(uk => uk.Name.Equals(userKind));
+
         public IEnumerable<UserKindRegisterFormModel> GetAllUserKinds()
             => this.data
                    .UserKinds
@@ -23,5 +26,7 @@ namespace ProjectHub.Services.UserKinds
                        Name = ut.Name
                    })
                    .ToList();
+
+
     }
 }

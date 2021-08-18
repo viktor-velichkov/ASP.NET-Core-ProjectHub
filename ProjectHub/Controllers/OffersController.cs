@@ -3,19 +3,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.Data.Models;
-using ProjectHub.Data.Models.Projects;
 using ProjectHub.Models.Offer;
 using ProjectHub.Models.Projects;
 using ProjectHub.Services.Offers;
 using ProjectHub.Services.Projects;
 using ProjectHub.Services.User;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ProjectHub.Controllers
 {
-   [Authorize]
+    [Authorize]
     public class OffersController : Controller
     {
         private readonly IProjectService projectService;

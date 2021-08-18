@@ -1,18 +1,18 @@
-﻿using AutoMapper;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using ProjectHub.Areas.Admin;
 using ProjectHub.Data.Models;
-using ProjectHub.Models.Discussion;
 using ProjectHub.Models.Projects;
 using ProjectHub.Models.Review;
 using ProjectHub.Models.User;
-using ProjectHub.Services.User;
-using Microsoft.AspNetCore.Authorization;
 using ProjectHub.Services.Files;
-using ProjectHub.Areas.Admin;
+using ProjectHub.Services.User;
+using ProjectHub.Services.UserKinds;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 
 namespace ProjectHub.Controllers
 {
@@ -21,14 +21,17 @@ namespace ProjectHub.Controllers
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IUserService userService;
+        private readonly IUserKindService userKindService;
         private readonly IFilesService filesService;
 
         public UserController(UserManager<ApplicationUser> userManager,
                               IUserService userService,
+                              IUserKindService userKindService,
                               IFilesService filesService)
         {
             this.userManager = userManager;
             this.userService = userService;
+            this.userKindService = userKindService;
             this.filesService = filesService;
         }
 
@@ -44,11 +47,9 @@ namespace ProjectHub.Controllers
 
             var userKindName = userDb.UserKind.Name;
 
-            var userViewModel = this.userService.GetUserProfileViewModel(id, userKindName);
+            var userViewModel = this.userService.GetUserProfileViewModel(id, userKindName);            
 
-            var asd = this.userManager.GetUserId(this.User);
-
-            var loggedUserId = int.Parse(asd);
+            var loggedUserId = int.Parse(this.User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             if (loggedUserId == id)
             {
@@ -63,9 +64,17 @@ namespace ProjectHub.Controllers
         [Authorize]
         public IActionResult EditUserProfile(int userId, string userKind)
         {
+            if (!this.userService.IsUserExists(userId) 
+                || !this.userKindService.IsValid(userKind))
+            {
+                return BadRequest();
+            }
+
             var userModel = this.userService.GetUserEditProfileViewModel(userId, userKind);
 
-            if (int.Parse(this.userManager.GetUserId(this.User)) == userId)
+            var loggedUserId = int.Parse(this.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            if (loggedUserId == userId)
             {
                 userModel.IsLoggedUser = true;
             }
@@ -82,7 +91,6 @@ namespace ProjectHub.Controllers
             if (uploadedImage != null && uploadedImage.Length > 2097152)
             {
                 ModelState.AddModelError(nameof(uploadedImage), "The file is too large");
-
             }
             if (!ModelState.IsValid)
             {
@@ -105,13 +113,21 @@ namespace ProjectHub.Controllers
 
         public IActionResult Projects(int id, string userKind)
         {
+            if (!this.userService.IsUserExists(id)
+                || !this.userKindService.IsValid(userKind))
+            {
+                return BadRequest();
+            }
+
             var projects = this.userService.GetUserProjects(id, userKind).ToList();
+
+            var loggedUserId = int.Parse(this.User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             var userModel = new UserProjectsListingViewModel
             {
                 Id = id,
                 UserKind = userKind,
-                IsLoggedUser = int.Parse(this.userManager.GetUserId(this.User)).Equals(id)
+                IsLoggedUser = loggedUserId.Equals(id)
             };
 
             var tuple = new Tuple<List<ProjectListingViewModel>, UserProjectsListingViewModel>(projects, userModel);
@@ -122,9 +138,15 @@ namespace ProjectHub.Controllers
         [HttpGet]
         public IActionResult Reviews(int id, string userKind)
         {
+            if (!this.userService.IsUserExists(id)
+                || !this.userKindService.IsValid(userKind))
+            {
+                return BadRequest();
+            }
+
             var userReviews = this.userService.GetUserReviews(id).ToList();
 
-            var loggedUserId = int.Parse(this.userManager.GetUserId(this.User));
+            var loggedUserId = int.Parse(this.User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             UserReviewsListViewModel user = new UserReviewsListViewModel
             {
@@ -133,24 +155,14 @@ namespace ProjectHub.Controllers
                 Id = id,
                 UserKind = userKind,
                 IsLoggedUser = loggedUserId.Equals(id),
-                AlreadyIsReviewedByTheLoggedUser = this.userService.CheckIfUserIsAlreadyReviewedByTheLoggedUser(id, loggedUserId)
+                AlreadyIsReviewedByTheLoggedUser = 
+                    this.userService.ReviewAlreadyExists(id, loggedUserId)
             };
 
-            Tuple<List<ReviewListingViewModel>, UserReviewsListViewModel> tuple =
-                new Tuple<List<ReviewListingViewModel>, UserReviewsListViewModel>(userReviews, user);
+            var tuple = new Tuple<List<ReviewListingViewModel>, UserReviewsListViewModel>(userReviews, user);
 
             return PartialView("UserReviewsPartial", tuple);
-        }
-
-        public IActionResult Discussions(int id, string userKind)
-        {
-            var userDiscussions = this.userService.GetUserDiscussions(id).ToList();
-
-            Tuple<List<DiscussionViewModel>, string> tuple =
-                new Tuple<List<DiscussionViewModel>, string>(userDiscussions, userKind);
-
-            return PartialView("UserDiscussionsPartial", tuple);
-        }
+        }       
 
         public string Recommendations(int authorId, int recipientId)
             => this.userService.GetUserRecommendationsCount(authorId, recipientId);

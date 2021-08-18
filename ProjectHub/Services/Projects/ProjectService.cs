@@ -23,18 +23,33 @@ namespace ProjectHub.Services.Projects
             this.mapper = mapper;
         }
 
-        public List<Project> GetAllProjectsOrderedByDateDescending(string city)
+        public List<Project> GetAllProjectsOrderedByDateDescending()
+             => this.data
+                    .Projects
+                    .Include(p => p.Investor)
+                    .OrderByDescending(p => p.Id)
+                    .ToList();
+
+        public List<ProjectCardViewModel> FilterByCity(string city)
         {
             var query = this.data
-                               .Projects
-                               .Include(p => p.Investor)
-                               .AsQueryable();
-            if (city!=null)
+                            .Projects
+                            .Include(p => p.Investor)
+                            .AsQueryable();
+
+            if (!String.IsNullOrWhiteSpace(city)
+                && city != "All")
             {
                 query = query.Where(p => p.City.Equals(city));
             }
 
-            return query.OrderByDescending(p => p.Id).ToList();
+            var projects = query.OrderByDescending(p => p.Id)
+                                .ToList();
+
+            var projectsModel = this.mapper
+                                    .Map<List<Project>, List<ProjectCardViewModel>>(projects);
+
+            return projectsModel;
         }
 
         public List<string> GetAllProjectCities()
@@ -42,7 +57,7 @@ namespace ProjectHub.Services.Projects
                    .Projects
                    .Select(p => p.City)
                    .Distinct()
-                   .OrderBy(c=>c)
+                   .OrderBy(c => c)
                    .ToList();
 
         public void AddProject(ProjectAddViewModel model, int investorId)
@@ -190,6 +205,6 @@ namespace ProjectHub.Services.Projects
                    .InvestorId
                    .Equals(investorId);
 
-        
+
     }
 }

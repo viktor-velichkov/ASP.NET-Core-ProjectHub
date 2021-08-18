@@ -1,5 +1,4 @@
-﻿using ProjectHub.Areas.Admin;
-using ProjectHub.Controllers;
+﻿using ProjectHub.Controllers;
 using ProjectHub.Data;
 using ProjectHub.Data.Models;
 using System;

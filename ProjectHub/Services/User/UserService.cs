@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using ProjectHub.Data;
 using ProjectHub.Data.Models;
@@ -26,6 +24,8 @@ namespace ProjectHub.Services.User
             this.mapper = mapper;
         }
 
+        public bool IsUserExists(int userId)
+            => this.data.Users.Any(u => u.Id.Equals(userId));
         public List<Investor> GetTopThreeInvestors()
             => this.data
                    .Investors
@@ -283,7 +283,7 @@ namespace ProjectHub.Services.User
             return this.data.Rates.Where(r => r.RecipientId.Equals(recipientId) && !r.IsPositive).Count().ToString();
         }
 
-        public bool CheckIfUserIsAlreadyReviewedByTheLoggedUser(int recipientId, int loggedUserId)
+        public bool ReviewAlreadyExists(int recipientId, int loggedUserId)
             => this.data.Reviews.Any(r => r.AuthorId.Equals(loggedUserId)
                                           && r.RecipientId.Equals(recipientId));
 

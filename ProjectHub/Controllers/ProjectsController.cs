@@ -49,18 +49,29 @@ namespace ProjectHub.Controllers
             this.disciplineService = disciplineService;
             this.userManager = userManager;
         }
-        public IActionResult All(string city)
+        public IActionResult All()
         {
-            var projects = this.projectService.GetAllProjectsOrderedByDateDescending(city);
+            var projects = this.projectService.GetAllProjectsOrderedByDateDescending();
 
             var modelProjects = this.mapper.Map<List<Project>, List<ProjectCardViewModel>>(projects);
 
-            var modelCities = this.projectService.GetAllProjectCities();
-            
-            var model = new AllProjectsViewModel { Projects = modelProjects, Cities=modelCities };
+            var modelCities = new List<string>() { "All" };
+
+            modelCities.AddRange(this.projectService.GetAllProjectCities());
+
+            var model = new AllProjectsViewModel { Projects = modelProjects, Cities = modelCities };
 
             return View(model);
         }
+
+        public IActionResult City(string city)
+        {
+            var projectsModel = this.projectService.FilterByCity(city);
+
+            return PartialView("~/Views/Projects/AllByCityPartial.cshtml", projectsModel);
+        }
+
+
         public IActionResult Add()
         {
             return View();
@@ -98,7 +109,7 @@ namespace ProjectHub.Controllers
 
             this.projectService.AddProject(model, investorId);
 
-            return RedirectToAction("Profile", "User");
+            return RedirectToAction("Profile", "User", new { id = investorId });
         }
 
         public IActionResult List()

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using ProjectHub.Data;
-using ProjectHub.Data.ExceptionMessages;
 using ProjectHub.Data.Models;
 using ProjectHub.Models.Offer;
 
